@@ -1,0 +1,9 @@
+*.o
+
+*.dylib
+
+*.txt
+
+/out
+
+/.vscode
