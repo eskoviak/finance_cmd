@@ -17,6 +17,7 @@ class pgutil
         const std::string & pguri() const {return _pguri;};
         lookup_map get_map(std::string, Lookup);
         voucher get_voucher(int);
+        voucher_details get_voucher_details(int);
     
 };
 

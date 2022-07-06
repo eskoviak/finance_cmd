@@ -14,6 +14,11 @@ int voucher_details::add_line_item(voucher_detail_line item)
     return _seq_num++;
 };
 
+void voucher_details::add_line_item(int split_seq_num, voucher_detail_line item)
+{
+    _voucher_line.insert(std::pair<int, voucher_detail_line>(split_seq_num, item));
+};
+
 voucher_details::~voucher_details()
 {};
 

@@ -81,5 +81,23 @@ voucher pgutil::get_voucher(int voucher_number)
     pqxx::row row = txn.exec1(stmt);
     return voucher(voucher_number, row[0].as<std::string>(), row[1].as<std::string>(), row[2].as<float>(), row[3].as<int>(),
       row[4].as<int>(), row[5].as<int>(),row[6].as<std::string>(),row[7].as<int>());
-}
+};
+
+voucher_details pgutil::get_voucher_details(int voucher_number){
+    std::string stmt =
+        "SELECT split_seq_number, account_number, amount, dimension_1, dimension_2, memo "
+        "FROM finance.voucher_detail "
+        "WHERE voucher_number = " + std::to_string(voucher_number) + ";";
+    pqxx::connection c{pguri()};
+    pqxx::work txn{c};
+    pqxx::result r = txn.exec(stmt);
+    voucher_details vd = voucher_details();
+    for(auto const &row: r)
+    {
+        voucher_detail_line vdl = voucher_detail_line(row[1].as<std::string>(), row[2].as<float>(), 
+            row[3].as<std::string>(),row[4].as<std::string>(),row[5].as<std::string>() );
+        vd.add_line_item(row[0].as<int>(), vdl);
+    }
+    return vd;
+};
 

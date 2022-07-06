@@ -26,8 +26,10 @@ class voucher_details
     public:
         voucher_details();
         int add_line_item(voucher_detail_line);
+        void add_line_item(int, voucher_detail_line);
         ~voucher_details();
         std::string c_str();
+        const std::map<int, voucher_detail_line> voucher_line() const {return _voucher_line;};
         //int begin();
         //int end();
 

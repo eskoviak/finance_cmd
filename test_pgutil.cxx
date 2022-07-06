@@ -117,8 +117,14 @@ int main(int argc, char**argv)
         
         msg = "Test 5: Get voucher from database ";
         print_header();
-        voucher v = finance.get_voucher(1001);
+        voucher v = finance.get_voucher(1002);
         std::cout << v.c_str() << std::endl;
+        print_pass();
+
+        msg = "Test 6:  Get voucher_detail from database ";
+        print_header();
+        voucher_details vd = finance.get_voucher_details(1002);
+        std::cout << vd.c_str() << std::endl;
         print_pass();
 
     }
