@@ -30,6 +30,7 @@ int main(int argc, char**argv)
 
     try
     {   
+        /*
         msg = "Test 0:  Get next voucher for schema " + schema;
         print_header();
         int next_voucher = finance.get_next_voucher_number(schema);
@@ -42,6 +43,7 @@ int main(int argc, char**argv)
         {
             print_pass();
         }
+        */
 
         msg = "Test 1:  Get vendors map for schema " + schema;
         print_header();
@@ -112,6 +114,13 @@ int main(int argc, char**argv)
         {
             print_pass();
         }
+        
+        msg = "Test 5: Get voucher from database ";
+        print_header();
+        voucher v = finance.get_voucher(1001);
+        std::cout << v.c_str() << std::endl;
+        print_pass();
+
     }
     catch (std::exception& e)
     {

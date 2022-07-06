@@ -1,26 +1,12 @@
 #include "pgutil.hxx"
+#include "voucher.hxx"
 #include <pqxx/pqxx>
-
 
 pgutil::pgutil()
 {};
 
 pgutil::~pgutil()
 {};
-
-int pgutil::get_next_voucher_number(std::string schema)
-{
-    int next = 0;
-    pqxx::connection c{pgutil::pguri()};
-    pqxx::work txn{c};
-    auto const r = txn.exec("select max(voucher_number) "
-        "from " + schema + ".voucher;");
-
-    txn.commit();
-
-    return r[0][0].as<int>() +1;
-    
-};
 
 int pgutil::insert_voucher_with_id(std::string schema, entry item)
 {
@@ -69,15 +55,31 @@ lookup_map pgutil::get_map(std::string schema, Lookup lookup_type)
 
         break;
     }
-    pqxx::connection c{"postgresql://postgres@localhost/finance"};
+    pqxx::connection c{pguri()};
     pqxx::work txn{c};
     pqxx::result r = txn.exec(stmt);
 
-    for(auto const &row:r)
-    {
-        map.insert(std::pair<int, std::string>(row[0].as<int>(), row[1].as<std::string>()));
+    for(auto row = r.begin(); row != r.end(); row++)
+    {        
+        map.insert(std::pair<int, std::string>(row[0].as<int>(),row[1].as<std::string>()));
     }
+    
     return map;
 
+};
+
+voucher pgutil::get_voucher(int voucher_number)
+{
+    
+    std::string stmt = 
+        "SELECT voucher_date, voucher_ref, voucher_amt, voucher_type_id, vendor_number, "
+        "  payment_type_id, payment_ref, payment_source_id "
+        "FROM finance.voucher "
+        "WHERE voucher_number = " + std::to_string(voucher_number) + ";";
+    pqxx::connection c{pguri()};
+    pqxx::work txn{c};
+    pqxx::row row = txn.exec1(stmt);
+    return voucher(voucher_number, row[0].as<std::string>(), row[1].as<std::string>(), row[2].as<float>(), row[3].as<int>(),
+      row[4].as<int>(), row[5].as<int>(),row[6].as<std::string>(),row[7].as<int>());
 }
 

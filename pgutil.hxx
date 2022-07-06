@@ -13,22 +13,11 @@ class pgutil
     public:
         pgutil();
         ~pgutil();
-        int get_next_voucher_number(std::string schema);
         int insert_voucher_with_id(std::string schema, entry);
         const std::string & pguri() const {return _pguri;};
         lookup_map get_map(std::string, Lookup);
-        //std::map<int, std::string> get_payment_type_map(std::string);
-        //std::map<int, std::string> get_payment_source_map(std::string);
-        //std::map<int, std::string> get_voucher_type_map(std::string);    
-
+        voucher get_voucher(int);
     
-        
-        // needs work
-        //pqxx::work get_txn() { 
-        //    pqxx::connection c {_pguri};
-        //    return pqxx::work{c};
-        //}; 
-
 };
 
 #endif
