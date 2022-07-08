@@ -24,6 +24,8 @@ voucher::voucher(
     _payment_source_id = payment_source_id;
 };
 
+voucher::voucher() {};
+
 voucher::~voucher()
 {};
 

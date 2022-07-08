@@ -15,6 +15,11 @@ class voucher_detail_line
         voucher_detail_line(std::string, float, std::string, std::string, std::string);
         ~voucher_detail_line();
         std::string c_str();
+        const std::string account_number() const { return _account_number;};
+        const float amount() const { return _amount; };
+        const std::string dim_1() const { return _dimension_1;};
+        const std::string dim_2() const { return _dimension_2;};
+        const std::string memo() const { return _memo; };
 };
 
 class voucher_details

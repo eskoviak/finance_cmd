@@ -23,7 +23,7 @@ map : map.cxx
 *.o : *.cxx
 	$(CC) $(CPPFLAGS) -c $? 
 
-libvoucher.dylib : voucher_detail_line.o voucher_details.o voucher.o pgutil.o
+libvoucher.dylib : voucher_details.o voucher_detail_line.o voucher.o pgutil.o
 	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@  $(LDFLAGS)
 
 test_voucher_detail : test_voucher_detail.cxx
@@ -34,4 +34,8 @@ test_voucher : test_voucher.cxx
 
 test_pgutil : test_pgutil.cxx
 	$(CC) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS) -L. -lvoucher
+
+ilac_console : ilac_console.cxx
+	$(CC) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS) -L. -lvoucher
+
 

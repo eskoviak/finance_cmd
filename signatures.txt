@@ -1,0 +1,21 @@
+FUNCTION finance.insert_voucher(timestamp with time zone, character varying, numeric, integer, integer, integer, integer, character varying)
+...
+DECLARE
+    voucher_date ALIAS for $1;
+    voucher_ref ALIAS for $2;
+    voucher_amt ALIAS for $3;
+    voucher_type ALIAS for $4;
+    vendor_number ALIAS for $5;
+    payment_type_id ALIAS for $6;
+    payment_source_id ALIAS for $7;
+    payment_ref ALIAS for $8;
+
+FUNCTION finance_tst.insert_voucher_detail(integer, integer, character varying, numeric, character varying, character varying, text)
+DECLARE
+    voucher_number ALIAS for $1;
+    split_seq_number ALIAS for $2;
+    account_number ALIAS for $3;
+    amount ALIAS for $4;
+    dimension_1 ALIAS for $5;
+    dimension_2 ALIAS for $6;
+    memo ALIAS for $7;

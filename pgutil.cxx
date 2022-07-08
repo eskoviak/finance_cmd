@@ -8,21 +8,6 @@ pgutil::pgutil()
 pgutil::~pgutil()
 {};
 
-int pgutil::insert_voucher_with_id(std::string schema, entry item)
-{
-    pqxx::connection c{pgutil::pguri()};
-    pqxx::work txc{c};
-    std::string stmt = "INSERT INTO " + schema + ".voucher "
-        "(voucher_number, voucher_date, voucher_ref, voucher_amt, voucher_type_id, vendor_number, "
-        "paymenbt_type_id, payment_ref, payment_source_id) "
-        "VALUES ( " +
-        std::to_string(item.header.voucher_number()) + "," +
-
-        ")";
-
-
-    return 0;
-};
 
 lookup_map pgutil::get_map(std::string schema, Lookup lookup_type)
 {
@@ -100,4 +85,3 @@ voucher_details pgutil::get_voucher_details(int voucher_number){
     }
     return vd;
 };
-

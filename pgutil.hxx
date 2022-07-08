@@ -13,7 +13,6 @@ class pgutil
     public:
         pgutil();
         ~pgutil();
-        int insert_voucher_with_id(std::string schema, entry);
         const std::string & pguri() const {return _pguri;};
         lookup_map get_map(std::string, Lookup);
         voucher get_voucher(int);
