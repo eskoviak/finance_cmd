@@ -25,6 +25,10 @@ map : map.cxx
 
 libvoucher.dylib : voucher_details.o voucher_detail_line.o voucher.o pgutil.o
 	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@  $(LDFLAGS)
+	cp libvoucher.dylib /usr/local/lib
+
+libpyctest.dylib : pyctest.cxx
+	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@
 
 test_voucher_detail : test_voucher_detail.cxx
 	$(CC) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS)
@@ -34,6 +38,9 @@ test_voucher : test_voucher.cxx
 
 test_pgutil : test_pgutil.cxx
 	$(CC) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS) -L. -lvoucher
+
+test_libpyctest : test_libpyctest.cxx
+	$(CC) $(CPPFLAGS) -o $(OUTDIR)$@ $? -L. -lpyctest
 
 ilac_console : ilac_console.cxx
 	$(CC) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS) -L. -lvoucher

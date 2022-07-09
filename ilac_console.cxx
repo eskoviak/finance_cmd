@@ -7,6 +7,8 @@ int main(int argc, char **argv)
 {
     char ch;
     std::string voucher_number;
+    int line_size = 80;
+    char line[line_size];
     std::string sval;
     float fval;
     int ival;
@@ -30,11 +32,12 @@ int main(int argc, char **argv)
                 continue;
             case 'e':
                 std::cout << "Enter the transaction date and time: ";
-                std::cin >> sval;
+                //std::cin.getline(line, line_size);
+                std::getline( std::cin, sval);
                 v.timestamp(sval);
-                std::cout << "Enter the transaction reference: ";
-                std::cin >> sval;
-                v.voucher_ref(sval);
+                //std::cout << "Enter the transaction reference: ";
+                //std::cin.getline(line, line_size);
+                //v.voucher_ref(std::string(line));
                 std::cout << v.c_str();
                 std::cout << "Enter to continue... ";
                 std::cin >> ch;
