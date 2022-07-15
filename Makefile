@@ -27,8 +27,9 @@ libvoucher.dylib : voucher_details.o voucher_detail_line.o voucher.o pgutil.o
 	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@  $(LDFLAGS)
 	cp libvoucher.dylib /usr/local/lib
 
-libpyctest.dylib : pyctest.cxx
+libpyctest.dylib : cli_test/libpyctest.dylib/libpyctest_dylib.cpp
 	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@
+	cp libpyctest.dylib /usr/local/lib
 
 test_voucher_detail : test_voucher_detail.cxx
 	$(CC) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS)

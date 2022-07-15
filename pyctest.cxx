@@ -12,3 +12,7 @@ extern "C" void pyctest::Print()
     std::cout << "Hello from inside the dylib" << std::endl;
 }
 
+extern "C" const int pyctest::get_int(){
+    return _my_int;
+}
+
