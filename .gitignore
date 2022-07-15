@@ -2,8 +2,10 @@
 
 *.dylib
 
-*.txt
+/data
 
 /out
 
 /.vscode
+
+.DS_Store

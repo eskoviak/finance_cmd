@@ -4,6 +4,8 @@
 #include <string>
 #include "voucher.hxx"
 
+typedef std::map<int, std::string> lookup_map;
+enum Lookup { vendors, payment_sources, voucher_types, payment_types };
 class pgutil
 {
     private:
@@ -11,9 +13,11 @@ class pgutil
     public:
         pgutil();
         ~pgutil();
-        int get_next_voucher_number(std::string schema);
-        int insert_voucher_with_id(std::string schema, entry);
-
+        const std::string & pguri() const {return _pguri;};
+        lookup_map get_map(std::string, Lookup);
+        voucher get_voucher(int);
+        voucher_details get_voucher_details(int);
+    
 };
 
 #endif
