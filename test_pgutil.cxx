@@ -24,7 +24,7 @@ int main(int argc, char**argv)
     {
         std::string arg = std::string(argv[i]);
         //std::cout << arg << std::endl;
-        if(arg.compare("-d") == 0 | arg.compare("--debug") == 0) schema = "finance_tst";
+        if((arg.compare("-d") == 0) | (arg.compare("--debug") == 0)) schema = "finance_tst";
     }
     pgutil finance = pgutil();
 
