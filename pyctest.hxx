@@ -1,13 +1,14 @@
-#include <string>
+#pragma once
 
-class pyctest
-{
-    private:
-        std::string _basic_string;
-    int _my_int;
-    public:
-        pyctest();
-        std::string basic_string();
-        void Print();
-        const int get_int();
-};
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void test_empty(void);
+float test_add(float x, float y);
+void test_passing_array(int* data, int len);
+//void get_vendors(char *, int);
+
+#ifdef __cplusplus
+}
+#endif

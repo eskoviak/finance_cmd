@@ -30,21 +30,11 @@ int main(int argc, char**argv)
 
     try
     {   
-        /*
-        msg = "Test 0:  Get next voucher for schema " + schema;
+ 
+        msg = "Test 0:  Print pguri for " + schema;
         print_header();
-        int next_voucher = finance.get_next_voucher_number(schema);
-        if(next_voucher == 0)
-        {
-            msg = "next_voucher NOT GREATER than 0";
-            print_fail();
-            throw assertfail;
-        } else 
-        {
-            print_pass();
-        }
-        */
-
+        std::cout << finance.pguri() << std::endl;
+ 
         msg = "Test 1:  Get vendors map for schema " + schema;
         print_header();
         lookup_map vendors = finance.get_map(schema, Lookup::vendors);
@@ -126,6 +116,11 @@ int main(int argc, char**argv)
         voucher_details vd = finance.get_voucher_details(1002);
         std::cout << vd.c_str() << std::endl;
         print_pass();
+
+        msg = "Test 7:  get_vendors_json";
+        print_header();
+        std::cout << finance.get_vendors_json() << std::endl;
+
 
     }
     catch (std::exception& e)

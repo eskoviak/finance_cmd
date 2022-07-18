@@ -20,16 +20,20 @@ map : map.cxx
 #voucher.o : voucher.cxx
 #	$(CC) -c $?
 
-*.o : *.cxx
+%.o : %.cxx
 	$(CC) $(CPPFLAGS) -c $? 
 
-libvoucher.dylib : voucher_details.o voucher_detail_line.o voucher.o pgutil.o
+libvoucher.dylib : voucher.o pgutil.o voucher_detail_line.o voucher_details.o
 	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@  $(LDFLAGS)
 	cp libvoucher.dylib /usr/local/lib
 
-libpyctest.dylib : cli_test/libpyctest.dylib/libpyctest_dylib.cpp
-	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@
-	cp libpyctest.dylib /usr/local/lib
+# Failed XCode 
+#libpyctest.dylib : cli_test/libpyctest.dylib/libpyctest_dylib.cpp
+#	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@
+#	cp libpyctest.dylib /usr/local/lib
+
+libpyctest.dylib : pyctest.o
+	$(CC) $(CPPFLAGS) -dynamiclib $? -o $@
 
 test_voucher_detail : test_voucher_detail.cxx
 	$(CC) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS)

@@ -85,3 +85,22 @@ voucher_details pgutil::get_voucher_details(int voucher_number){
     }
     return vd;
 };
+
+extern "C" char* get_vendors_json()
+{
+    pgutil pg = pgutil();
+    lookup_map vendors = pg.get_map("finance", Lookup::vendors);
+    std::string rv = "{ \x22vendors\x22 : [";
+    for(lookup_map::iterator it=vendors.begin(); it!=vendors.end(); ++it)
+    {
+        if(it!=vendors.begin()) rv.append(",");
+        rv.append("{ \"" + std::to_string(it->first) + "\" : \"" + it->second + "\"}");
+    
+    }
+    rv.append("]}");
+    return rv.data();
+}
+
+/*
+ * Begin extern C definitions 
+ */

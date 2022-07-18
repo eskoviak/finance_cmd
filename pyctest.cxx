@@ -1,18 +1,35 @@
 #include <iostream>
 #include "pyctest.hxx"
+//#include "pgutil.hxx"
 
-pyctest::pyctest(){
-    _basic_string = "(1, 'one')";    
-};
-
-std::string pyctest::basic_string() { return _basic_string;};
-
-extern "C" void pyctest::Print()
+void test_empty(void)
 {
-    std::cout << "Hello from inside the dylib" << std::endl;
+    puts("Hello from C");
 }
 
-extern "C" const int pyctest::get_int(){
-    return _my_int;
+float test_add(float x, float y)
+{
+    return x+y;
 }
 
+void test_passing_array(int * data, int len)
+{
+    printf("Data as received from Python\n");
+    for(int i = 0; i < len; ++i)
+    {
+        printf("%d ", data[i]);
+    }
+    puts("");
+    for(int i = 0; i < len; ++i){
+        data[i] = -i;
+    }
+}
+
+/*
+void get_vendors(char* buffer, int buf_size)
+{
+    strncpy(buffer, "{ \"vendors\" : [ { \"1000\" : \"don't remember\"}]", buf_size);
+    //buffer = json.c_str();
+
+}
+*/

@@ -9,3 +9,7 @@
 /.vscode
 
 .DS_Store
+
+/vpython3.10
+
+/__pycache__
