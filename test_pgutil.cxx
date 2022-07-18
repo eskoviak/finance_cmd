@@ -119,7 +119,7 @@ int main(int argc, char**argv)
 
         msg = "Test 7:  get_vendors_json";
         print_header();
-        std::cout << finance.get_vendors_json() << std::endl;
+        std::cout << get_vendors_json() << std::endl;
 
 
     }
