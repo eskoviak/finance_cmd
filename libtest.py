@@ -31,7 +31,7 @@ test_passing_array = libpyctest.test_passing_array
 test_passing_array.argtypes = [ctypes.POINTER(ctypes.c_int), ctypes.c_int]
 test_passing_array.restype = None
 
-get_vendors = libvoucher.get_vendors_json
+get_vendors = libvoucher.get_vendors_dict
 get_vendors.argtypes = None
 get_vendors.restype = ctypes.c_char_p
 

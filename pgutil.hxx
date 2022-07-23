@@ -20,6 +20,6 @@ class pgutil
 
 };
 
-extern "C" char * get_vendors_json(void);
+extern "C" char * get_vendors_dict(void);
 
 #endif
