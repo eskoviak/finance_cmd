@@ -103,4 +103,5 @@ extern "C" char* get_vendors_dict()
 
 /*
  * Begin extern C definitions 
+ *
  */

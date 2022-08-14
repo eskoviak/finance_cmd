@@ -9,7 +9,7 @@ enum Lookup { vendors, payment_sources, voucher_types, payment_types };
 class pgutil
 {
     private:
-        std::string _pguri = "postgresql://postgres@192.168.1.12/finance";
+        std::string _pguri = "postgresql://postgres@localhost/finance";
     public:
         pgutil();
         ~pgutil();

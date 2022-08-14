@@ -1,6 +1,6 @@
 #include <iostream>
 #include "pyctest.hxx"
-//#include "pgutil.hxx"
+#include "pgutil.hxx"
 
 void test_empty(void)
 {
@@ -25,11 +25,9 @@ void test_passing_array(int * data, int len)
     }
 }
 
-/*
+
 void get_vendors(char* buffer, int buf_size)
 {
     strncpy(buffer, "{ \"vendors\" : [ { \"1000\" : \"don't remember\"}]", buf_size);
-    //buffer = json.c_str();
 
 }
-*/

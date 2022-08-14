@@ -24,9 +24,9 @@ print("")
 print(f"Test 4:  get_vendors")
 
 print(f"Before the call\n====\n")
-#str = libtest.get_vendors().decode(encoding='utf8').replace('\"','"')
-#print(json.dumps(str, sort_keys=True, indent=4))
-#vendors = (json.loads(libtest.get_vendors().decode(encoding='utf8')))['vendors']
-#for vendor in vendors:
-print(libtest.get_vendors())
+buf_size = 128
+buffer = ctypes.create_string_buffer(b'\000' * buf_size)
+libtest.get_vendors(buffer, buf_size)
+print(buffer.value)
+
 print(f"After the call:\n====\n")

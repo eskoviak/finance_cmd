@@ -20,12 +20,15 @@ map : map.cxx
 #voucher.o : voucher.cxx
 #	$(CC) -c $?
 
+pgutil.o : pgutil.cxx
+	$(CC) -c $?
+
 %.o : %.cxx
 	$(CC) $(CPPFLAGS) -c $? 
 
-libvoucher.dylib : voucher.o pgutil.o voucher_detail_line.o voucher_details.o
+libvoucher.dylib : voucher.o voucher_detail_line.o voucher_details.o pgutil.o
 	$(CC) $(CPPFLAGS) -v -dynamiclib $? -o $@  $(LDFLAGS)
-	cp libvoucher.dylib /usr/local/lib
+
 
 # Failed XCode 
 #libpyctest.dylib : cli_test/libpyctest.dylib/libpyctest_dylib.cpp
