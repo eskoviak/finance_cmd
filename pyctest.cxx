@@ -31,3 +31,12 @@ void get_vendors(char* buffer, int buf_size)
     strncpy(buffer, "{ \"vendors\" : [ { \"1000\" : \"don't remember\"}]", buf_size);
 
 }
+
+vendor get_vendor(int vendor_number)
+{
+    vendor rv;
+    rv.vendor_number = vendor_number;
+    rv.vendor_short_desc = "Pick on, any one";
+    return rv;
+
+}
