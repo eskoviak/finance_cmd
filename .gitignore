@@ -15,3 +15,5 @@
 /__pycache__
 
 /cli_test
+
+**/voucher_entry.sql
