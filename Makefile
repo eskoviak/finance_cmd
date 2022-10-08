@@ -11,16 +11,16 @@ get_lookup_files : get_lookup_files.cxx
 map : map.cxx
 	$(CC) $(CPPFLAGS) -o $@ $? $(LDFLAGS)
 
-#voucher_details.o : voucher_details.cxx
-#	$(CC) -c $? 
+voucher_details.o : voucher_details.cxx
+	$(CC) -c $? 
 
-#voucher_detail_line.o : voucher_detail_line.cxx
-#	$(CC) -c $? 
+voucher_detail_line.o : voucher_detail_line.cxx
+	$(CC) -c $? 
 
-#voucher.o : voucher.cxx
-#	$(CC) -c $?
+voucher.o : voucher.cxx
+	$(CC) -c $?
 
-pgutil.o : pgutil.cxx
+pgutil.o : pgutil.cxx pgutil.hxx
 	$(CC) -c $?
 
 %.o : %.cxx
