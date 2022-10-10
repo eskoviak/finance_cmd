@@ -20,6 +20,13 @@ main(int argc, char** argv)
     PGresult    *res;
     int         nFields;
     int         i,j;
+    const char  *schema;
+    const char  *search_phrase;
+    const char  *command;
+    const Oid   *paramTypes;
+    const char  *paramValues[1];
+    int         paramLengths[1];
+    int         paramFormats[1];
 
     /*
      * Parse the command line
@@ -29,6 +36,9 @@ main(int argc, char** argv)
     else
         conninfo = "dbname = finance";
 
+    schema = "finance_tst";
+    search_phrase = "wal";
+    
     /*
      * Connect to the database
      */
@@ -44,70 +54,44 @@ main(int argc, char** argv)
     }
     else
     {
-        res = PQexec(conn, 
-                "SELECT pg_catalog.set_config('search_path', '', false)"
-        );
-        if (PQresultStatus(res) != PGRES_TUPLES_OK)
-        {
-            fprintf(stderr, "SET failed: %s", PQerrorMessage(conn));
-            PQclear(res);
-            exit_nicely(conn);
-        }
+        /* set safe search path */
+        //sprintf(command, "SET search_path = %s", schema);
+        //res = PQexec(conn, "SET search_path = 'finance_tst'");
+        //if (PQresultStatus(res) != PGRES_TUPLES_OK)
+        //{
+        //    fprintf(stderr, "SET failed: %s", PQerrorMessage(conn));
+        //    PQclear(res);
+        //    exit_nicely(conn);
+        //}
+        //PQclear(res);
 
-        PQclear(res);
+        /* 
+         * Test the parameterized search
+         * $1 = search phrase
+         */
+        command = "SELECT vendor_number, vendor_short_desc FROM finance_tst.vendors WHERE \
+            vendor_short_desc ILIKE '%$1%';";
 
-        /* Start a transaction block */
-        res = PQexec(conn, "BEGIN");
+        paramValues[0] = search_phrase;
+        paramLengths[0] = sizeof(search_phrase);
+        paramFormats[0] = 0;
 
-        if (PQresultStatus(res) != PGRES_COMMAND_OK )
-        {
-            fprintf(stderr, "BEGIN failed: %s", PQerrorMessage(conn));
-            PQclear(res);
-            exit_nicely(conn);
-        }
-        PQclear(res);
-
-        /* DECLARE the cursor */
-        res = PQexec(conn,
-                "DECLARE vendors CURSOR FOR SELECT finance.search_vendor('wal');"
-        );
-        if (PQresultStatus(res) != PGRES_COMMAND_OK )
-        {
-            fprintf(stderr, "DECLARE CURSOR failed: %s", PQerrorMessage(conn));
-            PQclear(res);
-            exit_nicely(conn);
-        }
-        PQclear(res);
-
-        res = PQexec(conn,
-                "FETCH ALL in vendors;"
-        );
+        res = PQexecParams(conn,
+                command,
+                1,
+                NULL,
+                paramValues,
+                paramLengths,
+                paramFormats,
+                0);
         if (PQresultStatus(res) != PGRES_TUPLES_OK )
         {
-            fprintf(stderr, "FETCH ALL failed: %s", PQerrorMessage(conn));
+            fprintf(stderr, "SELECT failed: %s", PQerrorMessage(conn));
             PQclear(res);
             exit_nicely(conn);
-        }
-
-        nFields = PQnfields(res);
-        /* print the results */
-        for (i = 0; i < PQntuples(res); i++)
-        {
-            for(j = 0; j < nFields; j++)
-            {
-                printf("%-15s", PQgetvalue(res, i, j));
-                printf("\n");
-            }
-        }
-        PQclear(res);
-
-        res = PQexec(conn, "CLOSE vendors;");
-        PQclear(res);
-
-        res = PQexec(conn,
-                "END;"
-        );
-        PQclear(res);
+        }        
+        PQclear(res);   
+        
 
         PQfinish(conn);
 
