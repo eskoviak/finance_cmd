@@ -37,7 +37,7 @@ main(int argc, char** argv)
         conninfo = "dbname = finance";
 
     schema = "finance_tst";
-    search_phrase = "wal";
+    search_phrase = "%wal%";
     
     /*
      * Connect to the database
@@ -70,7 +70,7 @@ main(int argc, char** argv)
          * $1 = search phrase
          */
         command = "SELECT vendor_number, vendor_short_desc FROM finance_tst.vendors WHERE \
-            vendor_short_desc ILIKE '%$1%';";
+            vendor_short_desc ilike $1";
 
         paramValues[0] = search_phrase;
         paramLengths[0] = sizeof(search_phrase);
@@ -89,10 +89,23 @@ main(int argc, char** argv)
             fprintf(stderr, "SELECT failed: %s", PQerrorMessage(conn));
             PQclear(res);
             exit_nicely(conn);
-        }        
-        PQclear(res);   
-        
+        }
 
+        /* Select succeeded
+         * Print column headers
+         */
+        nFields = PQnfields(res);
+        for(i = 0; i < nFields; i++) printf("%-15s", PQfname(res, i));
+        printf("\n\n");
+
+        /* print the results */
+        for (i = 0; i < PQntuples(res); i++)
+        {
+            for(j = 0; j < nFields; j++) printf("%-15s", PQgetvalue(res, i, j));
+            printf("\n");
+        }
+        
+        PQclear(res);
         PQfinish(conn);
 
         return 0;
