@@ -22,7 +22,7 @@ main(int argc, char** argv)
     int         i,j;
     const char  *schema;
     const char  *search_phrase;
-    const char  *command;
+    char        *command;
     const Oid   *paramTypes;
     const char  *paramValues[1];
     int         paramLengths[1];
@@ -37,7 +37,7 @@ main(int argc, char** argv)
         conninfo = "dbname = finance";
 
     schema = "finance_tst";
-    search_phrase = "%wal%";
+    search_phrase = "'%wal%'";
     
     /*
      * Connect to the database
@@ -49,28 +49,32 @@ main(int argc, char** argv)
      */
     if (PQstatus(conn) != CONNECTION_OK)
     {
-        fprintf(stderr, "%s", PQerrorMessage(conn));
+        fprintf(stderr, "%s\n", PQerrorMessage(conn));
         exit_nicely(conn);
     }
     else
     {
-        /* set safe search path */
-        //sprintf(command, "SET search_path = %s", schema);
-        //res = PQexec(conn, "SET search_path = 'finance_tst'");
-        //if (PQresultStatus(res) != PGRES_TUPLES_OK)
-        //{
-        //    fprintf(stderr, "SET failed: %s", PQerrorMessage(conn));
-        //    PQclear(res);
-        //    exit_nicely(conn);
-        //}
-        //PQclear(res);
+        /* set safe search path 
+        sprintf(command, "SET search_path = '%s';", schema);
+        fprintf(stderr, "SET search: %s\n", command);
+        res = PQexec(conn, command);
+        if (PQresultStatus(res) != PGRES_COMMAND_OK)
+        {
+            fprintf(stderr, "SET failed: %s", PQerrorMessage(conn));
+            PQclear(res);
+            exit_nicely(conn);
+        }
+        PQclear(res);
+        */
 
         /* 
          * Test the parameterized search
          * $1 = search phrase
          */
         command = "SELECT vendor_number, vendor_short_desc FROM finance_tst.vendors WHERE \
-            vendor_short_desc ilike $1";
+            vendor_short_desc ilike $1;";
+
+        fprintf(stderr, "SELECT: %s\n", command);
 
         paramValues[0] = search_phrase;
         paramLengths[0] = sizeof(search_phrase);
