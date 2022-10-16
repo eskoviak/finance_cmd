@@ -4,7 +4,10 @@ CCFLAGS = -I/usr/local/opt/libpq/include
 CC = clang
 CPP = clang++ -stdlib=libc++ -std=c++2a
 LDFLAGS = -L/usr/local/opt/libpqxx/lib -L/usr/local/opt/libpq/lib -lpqxx -lpq
-OUTDIR = out/
+OUTDIR = build
+SRCDIR =src
+
+LIBVOUCHEROBJ = $(addprefix $(OUTDIR)/, voucher.o voucher_detail_line.o voucher_details.o pgutil.o)
 
 get_lookup_files : get_lookup_files.cxx
 	$(CPP) $(CPPFLAGS) -o $@ $? $(LDFLAGS)
@@ -18,18 +21,22 @@ voucher_details.o : voucher_details.cxx
 voucher_detail_line.o : voucher_detail_line.cxx
 	$(CPP) -c $? 
 
-voucher.o : voucher.cxx
-	$(CPP) -c $?
+build/voucher.o : src/voucher.cxx src/voucher.hxx 
+	$(CPP) $(CPPFLAGS) -c -o $@ $<
+
 
 pgutil.o : pgutil.cxx pgutil.hxx
 	$(CPP) -c $?
 
-%.o : %.cxx
-	$(CPP) $(CPPFLAGS) -c $? 
+${OUTDIR}/%.o : ${SRCDIR}/%.cxx 
+	$(CPP) $(CPPFLAGS) -c -o $@ $<
 
-libvoucher.dylib : voucher.o voucher_detail_line.o voucher_details.o pgutil.o
+libvoucher.dylib : $(LIBVOUCHEROBJ)
 	$(CPP) $(CPPFLAGS) -v -dynamiclib $? -o $@  $(LDFLAGS)
+	mv $@ /usr/local/lib
 
+clean_libvoucher : 
+	rm ${LIBVOUCHEROBJ}
 
 # Failed XCode 
 #libpyctest.dylib : cli_test/libpyctest.dylib/libpyctest_dylib.cpp
@@ -46,7 +53,7 @@ test_voucher : test_voucher.cxx
 	$(CPP) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS)
 
 test_pgutil : test_pgutil.cxx
-	$(CPP) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS) -L. -lvoucher
+	$(CPP) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS) -lvoucher
 
 test_libpyctest : test_libpyctest.cxx
 	$(CPP) $(CPPFLAGS) -o $(OUTDIR)$@ $? -L. -lpyctest
@@ -56,3 +63,6 @@ ilac_console : ilac_console.cxx
 
 test_pgconn : test_pgconn.c
 	$(CC) $(CCFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS)
+
+move_objs:
+	mv *.o ${OUTDIR}

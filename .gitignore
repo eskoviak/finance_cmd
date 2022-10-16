@@ -17,3 +17,7 @@
 /cli_test
 
 **/voucher_entry.sql
+
+**/.env
+
+.vscode
