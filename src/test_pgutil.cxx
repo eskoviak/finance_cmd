@@ -117,9 +117,9 @@ int main(int argc, char**argv)
         std::cout << vd.c_str() << std::endl;
         print_pass();
 
-        msg = "Test 7:  get_vendors_json";
+        msg = "Test 7:  get_vendors_dict";
         print_header();
-        std::cout << get_vendors_json() << std::endl;
+        std::cout << get_vendors_dict() << std::endl;
 
 
     }

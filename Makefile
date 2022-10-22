@@ -52,8 +52,10 @@ test_voucher_detail : test_voucher_detail.cxx
 test_voucher : test_voucher.cxx
 	$(CPP) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS)
 
-test_pgutil : test_pgutil.cxx
-	$(CPP) $(CPPFLAGS) -o $(OUTDIR)$@ $? $(LDFLAGS) -lvoucher
+
+test_pgutil : $(SRCDIR)/test_pgutil.cxx
+	$(CPP) $(CPPFLAGS) -o $(OUTDIR)/$@ $? $(LDFLAGS) -lvoucher
+	
 
 test_libpyctest : test_libpyctest.cxx
 	$(CPP) $(CPPFLAGS) -o $(OUTDIR)$@ $? -L. -lpyctest
