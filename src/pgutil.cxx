@@ -1,3 +1,4 @@
+#include <memory>
 #include "pgutil.hxx"
 #include "voucher.hxx"
 #include <pqxx/pqxx>
@@ -86,11 +87,18 @@ voucher_details pgutil::get_voucher_details(int voucher_number){
     return vd;
 };
 
+/*
+ * Begin extern C definitions 
+ *
+ */
 extern "C" char* get_vendors_dict()
 {
     pgutil pg = pgutil();
+    std::string rv;
+
+
     lookup_map vendors = pg.get_map("finance", Lookup::vendors);
-    std::string rv = "{";
+    rv.append("{");
     for(lookup_map::iterator it=vendors.begin(); it!=vendors.end(); ++it)
     {
         if(it!=vendors.begin()) rv.append(",");
@@ -98,10 +106,18 @@ extern "C" char* get_vendors_dict()
     
     }
     rv.append("}");
-    return rv.data();
+
+    // now need to build the return memory section
+    std::allocator<std::string> dict;
+    // matching traits
+    using traits_t = std::allocator_traits<decltype(dict)>;
+    // Rebinding the allocator using the trait for strings gets the same type
+    traits_t::rebind_alloc<std::string> alloc_ = dict;
+
+    std::string* p = traits_t::allocate(dict, 1); // space for 1 strings    
+    traits_t::construct(dict, p, rv.c_str());
+
+    return p.c_str();
 }
 
-/*
- * Begin extern C definitions 
- *
- */
+

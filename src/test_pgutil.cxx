@@ -117,10 +117,10 @@ int main(int argc, char**argv)
         std::cout << vd.c_str() << std::endl;
         print_pass();
 
-        msg = "Test 7:  get_vendors_dict";
+        msg = "Test 7:  get_vendors_dict without search phrase";
         print_header();
         std::cout << get_vendors_dict() << std::endl;
-
+        print_pass();
 
     }
     catch (std::exception& e)

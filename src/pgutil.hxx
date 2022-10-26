@@ -12,6 +12,8 @@ class pgutil
     private:
     std::string _pguri = "postgresql://postgres:terces##@localhost:5432/finance";
     //std::string _pguri = "postgresql://edmundlskoviak@localhost/finance";
+
+    
     public:
         pgutil();
         ~pgutil();
@@ -22,6 +24,7 @@ class pgutil
 
 };
 
-extern "C" char * get_vendors_dict(void);
+//extern "C" char * get_vendors_dict(void);
+extern "C" const char* get_vendors_dict();
 
 #endif
