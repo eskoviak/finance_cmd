@@ -26,5 +26,11 @@ class pgutil
 
 //extern "C" char * get_vendors_dict(void);
 extern "C" const char* get_vendors_dict();
+extern "C" struct vendors
+{
+    int vendor_number;
+    char* vendor_short_desc;
+};
+extern "C" void get_vendors(struct vendors*, int);
 
 #endif

@@ -119,5 +119,7 @@ extern "C" char* get_vendors_dict()
 
     return p.c_str();
 }
+extern "C" void get_vendors(struct vendors*, int len)
+{
 
-
+}
