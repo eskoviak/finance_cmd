@@ -1,0 +1,9 @@
+<style>
+
+tr, th {
+    padding-right: 15px;
+}
+tr.labels {
+    background-color:#00FF00;
+}
+</style>

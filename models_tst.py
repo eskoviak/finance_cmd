@@ -89,7 +89,7 @@ class Voucher(Base):
     payment_ref = Column(String(50), nullable=True)
     payment_source_id = Column(None, ForeignKey("external_accounts.external_account_id"))
     payment_source = relationship("ExternalAccounts")
-    details = relationship("VoucherDetail")
+    details = relationship("VoucherDetail", back_populates="voucher")
 
     def __repr__(self):
         return f"Voucher: (number; {self.voucher_number}, date: {self.voucher_date}, ref: {self.voucher_ref}, amt: {self.voucher_amt}, type: {self.voucher_type.type_text}, details: {self.details})"
@@ -104,13 +104,16 @@ class VoucherDetail(Base):
 
     id = Column(Integer, primary_key=True)
     voucher_number = Column(None, ForeignKey("voucher.voucher_number"))
-    voucher = relationship("Voucher")
+    voucher = relationship("Voucher", back_populates="details")
     split_seq_number = Column(Integer, nullable=False)
     account_number = Column(String(10), nullable=False)
     amount = Column(Float, nullable=False)
     dimension_1 = Column(String(20), nullable=True)
     dimension_2 = Column(String, nullable=True)
     memo = Column(Text)
+
+    def __repr__(self):
+        return f"Details: (split: {self.split_seq_number}, account: {self.account_number}, amt: {self.amount})"
 
 #####
 # Executtion Wrapper -- if this class is executed, any/all classes will be 

@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{title}}</h1>
+        <p>{{description}}</p>
+        <table>
+            <tr class="labels">
+                <td>Number</td>
+                <td>Date</td>
+                <td>Reference</td>
+            </tr>
+            <tr>
+                <td>{{data["voucher_number"]}}</td>
+                <td>{{data["voucher_date"]}}</td>
+                <td>{{data["voucher_ref"]}}</td>
+            </tr>
+
+        </table>
+        <p>Details</p>
+        {% for line in data["Splits"] %}
+            <P>{{line["split_seq_number"]}}</P>    
+        {% endfor %}
+    </div>
+{% endblock %}

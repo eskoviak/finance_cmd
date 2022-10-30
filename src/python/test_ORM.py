@@ -9,7 +9,7 @@ from models_tst import (ExternalAccounts, PaymentType, Vendors, Voucher,
 
 engine = create_engine("postgresql://postgres:terces##@localhost:5432/finance")
 with Session(engine) as session:
-    results = session.execute(select(Voucher).where(Voucher.voucher_number == 100))
+    results = session.execute(select(Voucher).where(Voucher.voucher_number == 133))
     for row in results:
         
 
