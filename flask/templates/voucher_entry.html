@@ -16,6 +16,11 @@
                 <option value="{{account['external_account_id']}}">{{account['account_name']}}</option>
             {% endfor %}
         </select></p>
+        <p>Voucher Type: <select name="voucher_type" id="voucher-type-select">
+            {% for type in voucher_type_list %}
+                <option value="{{type['type_code']}}">{{type['type_text']}}</option>
+            {% endfor %}
+        </select></p>
         <p><input type="submit" value="submit"></p>
 
     </form>

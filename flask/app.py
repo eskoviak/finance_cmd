@@ -59,7 +59,8 @@ def enter_voucher():
         title='Voucher Entry',
         description='Enter voucher data',
         vendor_list=pg_utils.get_vendors(),
-        account_list = pg_utils.get_external_accounts()
+        account_list = pg_utils.get_external_accounts(),
+        voucher_type_list = pg_utils.get_voucher_types()
     )
 
 
