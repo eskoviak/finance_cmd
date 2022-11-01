@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>{{title}}</h1>
+    <p>{{description}}</p>
+    <form action="/voucher_result" method="POST">
+        <p>Voucher Date: <input type="text" name="voucher_date"></p>
+        <p>Vendor: <select name="vendor" id="vendor-select">
+            {% for vendor in vendor_list %}
+                <option value="{{vendor['vendor_number']}}">{{vendor['vendor_short_desc']}}</option>
+            {% endfor %}
+        </select></p>
+        <p>Payment Account: <select name="pmt_account" id="pmt-acct-select">
+            {% for account in account_list %}
+                <option value="{{account['external_account_id']}}">{{account['account_name']}}</option>
+            {% endfor %}
+        </select></p>
+        <p><input type="submit" value="submit"></p>
+
+    </form>
+</div>
+{% endblock %}

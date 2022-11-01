@@ -15,11 +15,55 @@
                 <td>{{data["voucher_date"]}}</td>
                 <td>{{data["voucher_ref"]}}</td>
             </tr>
-
         </table>
-        <p>Details</p>
-        {% for line in data["Splits"] %}
-            <P>{{line["split_seq_number"]}}</P>    
-        {% endfor %}
+        </br>
+        <table>
+            <tr class="labels">
+                <td>Type</td>
+                <td>Vendor</td>
+                <td>Amount</td>
+            </tr>
+            <tr>
+                <td>{{data["voucher_type"]}}</td>
+                <td>{{data["vendor"]}}</td>
+                <td>{{data["voucher_amt"]}}</td>
+            </tr>
+        </table>
+        </br>
+        <table>
+            <tr class="labels">
+                <td>Payment Type</td>
+                <td>Payment Source</td>
+                <td>Payment Reference</td>
+            </tr>
+            <tr>
+                <td>{{data["payment_type"]}}</td>
+                <td>{{data["payment_source"]}}</td>
+                <td>{{data["payment_ref"]}}</td>
+            </tr>
+        </table>
+        <p>Line Items</p>
+
+        <table>
+            <tr class="labels">
+                <td>Seq Num</td>
+                <td>Account Number</td>
+                <td>Amount</td>
+                <td>Dimension 1</td>
+                <td>Dimension 2</td>
+                <td>Memo</td>
+            </tr>
+            {% for line in data["Splits"] %}
+                <tr>
+                    <td>{{line["split_seq_number"]}}</td>    
+                    <td>{{line["account_number"]}}</td>
+                    <td>{{line["amount"]}}</td>
+                    <td>{{line["dimension_1"]}}</td>
+                    <td>{{line["dimension_2"]}}</td>
+                    <td>{{line["memo"]}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
     </div>
 {% endblock %}

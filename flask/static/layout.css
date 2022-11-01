@@ -1,9 +1,12 @@
 <style>
 
-tr, th {
-    padding-right: 15px;
+td {
+    margin: 10px 50px 20px 0;
 }
+
 tr.labels {
-    background-color:#00FF00;
+    background-color:#005eff;
+    color: #bbc6ed;
+    margin: 10px 50px 20px 0;
 }
 </style>

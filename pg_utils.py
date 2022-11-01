@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, select
 from sqlalchemy.orm import Session
 
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-from models_tst import (Voucher)
+from models_tst import (Voucher, Vendors, ExternalAccounts, VoucherType, PaymentType)
 
 pg_uri = "postgresql://postgres:terces##@localhost:5432/finance"
 
@@ -45,3 +45,38 @@ def get_voucher(voucher_number : int) -> dict:
             voucher_dict["Splits"] = voucher_detail
 
     return voucher_dict
+
+def get_vendors() -> list:
+    """gets the list of vendors
+
+    Returns:
+        dict: [{vendor_short_desc: vendor_number}, ...]
+    """
+    engine = create_engine(pg_uri)
+    with Session(engine) as session:
+        results = session.query(Vendors).order_by(Vendors.vendor_short_desc)
+        vendor_list = []
+        for row in results:
+            vendor = {}
+            vendor["vendor_short_desc"] = row.vendor_short_desc
+            vendor["vendor_number"] = row.vendor_number
+            vendor_list.append(vendor)
+
+        return vendor_list
+
+def get_external_accounts() -> list:
+    """gets the list of external accounts
+
+    Returns:
+        disc: [{account_name: external_account_id}]
+    """
+    with Session(create_engine(pg_uri)) as session:
+        results = session.query(ExternalAccounts).order_by(ExternalAccounts.account_name)
+        account_list = []
+        for row in results:
+            account = {}
+            account["account_name"] = row.account_name
+            account["external_account_id"] = row.external_account_id
+            account_list.append(account)
+
+        return account_list
