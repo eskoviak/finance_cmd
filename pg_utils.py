@@ -28,7 +28,7 @@ class PgUtils:
         Returns:
             A dict object
         """
-        engine = create_engine(self.config["PGURI"]) # type: ignore
+        engine = create_engine(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) # type: ignore
         with Session(engine) as session:
             results = session.execute(select(Voucher).where(Voucher.voucher_number == voucher_number))
             voucher_dict = {}
@@ -65,7 +65,7 @@ class PgUtils:
         """
         vendor_list = []
         try:
-            with Session(create_engine(self.config["PGURI"])) as session: # type: ignore
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
                 results = session.query(Vendors).order_by(Vendors.vendor_short_desc)
                 for row in results:
                     vendor = {}
@@ -81,11 +81,11 @@ class PgUtils:
         """gets the list of external accounts
 
         Returns:
-            disc: [{account_name: external_account_id}]
+            disc: [{account_name: external_account_id}, ...]
         """
         account_list = []
         try:
-            with Session(create_engine(self.config["PGURI"])) as session:  # type: ignore
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:  # type: ignore
                 results = session.query(ExternalAccounts).order_by(ExternalAccounts.account_name)
 
                 for row in results:
@@ -102,7 +102,7 @@ class PgUtils:
         """gets the list of voucher types
 
         Returns:
-            list: [{type_text, type_code}]
+            list: [{type_text, type_code}, ...]
         """
         voucher_types = []
         try:
@@ -118,3 +118,24 @@ class PgUtils:
             print (Exception.__name__)
 
         return voucher_types
+
+    def get_payment_types(self) -> list:
+        """gets the list of payment types
+
+        Returns:
+            list: [{payment_type_text: payment_type_id}, ...]
+        """
+        payment_types = []
+        try:
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:  # type: ignore
+                results = session.query(PaymentType).order_by(PaymentType.payment_type_text)
+
+                for row in results:
+                    pmt_type = {}
+                    pmt_type['payment_type_text'] = row.payment_type_text
+                    pmt_type['payment_type_id'] = row.payment_type_id
+                    payment_types.append(pmt_type)
+        except (Exception):
+            print (Exception.__name__)
+
+        return payment_types

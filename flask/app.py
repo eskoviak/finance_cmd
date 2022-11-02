@@ -1,10 +1,9 @@
 import sys
 
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-from crypt import methods
 
-import pg_utils
 from flask import Flask, render_template, request
+from pg_utils import PgUtils
 
 #import json
 
@@ -23,6 +22,7 @@ def home():
 
 @app.route("/voucher/<int:voucher_number>")
 def get_voucher(voucher_number):
+    pg_utils = PgUtils()
     voucher_dict = pg_utils.get_voucher(voucher_number)
     if len(voucher_dict) > 0:
         return render_template(
@@ -54,24 +54,26 @@ def enter_voucher():
     Returns:
         renders voucher_entry.html 
     """
+    pg_utils = PgUtils()
     return render_template(
         'voucher_entry.html',
         title='Voucher Entry',
         description='Enter voucher data',
         vendor_list=pg_utils.get_vendors(),
         account_list = pg_utils.get_external_accounts(),
-        voucher_type_list = pg_utils.get_voucher_types()
+        voucher_type_list = pg_utils.get_voucher_types(),
+        payment_type_list = pg_utils.get_payment_types()
     )
 
 
-@app.route("/voucher_result", methods=['POST', 'GET'])
+@app.route("/voucher_result", methods=['POST', 'GET']) # type: ignore
 def voucher_result():
 
     if request.method == 'POST':
         result = request.form
-    return render_template(
-        'voucher_result.html',
-        title="Voucher Entry Confirmation",
-        description="You entered the following data:",
-        result=result
-    )
+        return render_template(
+            'voucher_result.html',
+            title="Voucher Entry Confirmation",
+            description="You entered the following data:",
+            result=result
+        )

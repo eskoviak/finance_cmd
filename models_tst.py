@@ -2,7 +2,7 @@
 
 """
 from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData,
-                        String, create_engine, Text)
+                        String, Text, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 

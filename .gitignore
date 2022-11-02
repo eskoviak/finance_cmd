@@ -12,7 +12,7 @@
 
 /vpython3.10
 
-/__pycache__
+**/__pycache__
 
 /cli_test
 
