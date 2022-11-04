@@ -1,12 +1,14 @@
 import sys
 
-from sqlalchemy import create_engine, select
+from sqlalchemy import create_engine, select, text
 from sqlalchemy.orm import Session
 
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-from models_tst import (Voucher, Vendors, ExternalAccounts, VoucherType, PaymentType)
-
 from dotenv import dotenv_values
+
+from models_tst import (ExternalAccounts, PaymentType, Vendors, Voucher,
+                        VoucherType)
+
 
 class PgUtils:
     """This class encapsulates the various functions needed by the finance application
@@ -139,3 +141,17 @@ class PgUtils:
             print (Exception.__name__)
 
         return payment_types
+
+    def add_voucher(self, Voucher):
+
+        try:
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+                session.add(Voucher)
+                session.commit()
+                session.refresh(Voucher)
+                return Voucher.voucher_number
+        except (Exception):
+            print (Exception.__name__)
+            return Exception.__repr__
+
+        

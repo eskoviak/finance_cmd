@@ -4,6 +4,7 @@ sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from flask import Flask, render_template, request
 from pg_utils import PgUtils
+from models_tst import Voucher
 
 #import json
 
@@ -71,9 +72,20 @@ def voucher_result():
 
     if request.method == 'POST':
         result = request.form
+        voucher = Voucher(voucher_date = result["voucher_date"],
+            voucher_ref = result["voucher_ref"],
+            vendor_number = result["vendor"],
+            voucher_type_id = result["voucher_type"],
+            voucher_amt = result["voucher_amt"],
+            payment_type_id = result["payment_type"],
+            payment_source_id = result["pmt_account"],
+            payment_ref = result["payment_ref"])
+        pg_utils = PgUtils()
+        ret_voucher = pg_utils.add_voucher(voucher)
         return render_template(
             'voucher_result.html',
             title="Voucher Entry Confirmation",
             description="You entered the following data:",
-            result=result
+            result=result,
+            voucher_data=ret_voucher
         )

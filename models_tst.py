@@ -92,7 +92,10 @@ class Voucher(Base):
     details = relationship("VoucherDetail", back_populates="voucher")
 
     def __repr__(self):
-        return f"Voucher: (number; {self.voucher_number}, date: {self.voucher_date}, ref: {self.voucher_ref}, amt: {self.voucher_amt}, type: {self.voucher_type.type_text}, details: {self.details})"
+        return f"""Voucher: (number; {self.voucher_number}, date: {self.voucher_date},
+         ref: {self.voucher_ref}, amt: {self.voucher_amt}, type: {self.voucher_type_id}, 
+         vendor: {self.vendor_number}, payment_type_id: {self.payment_type_id}, 
+         payment_source_id: {self.payment_source_id}, payment_ref: {self.payment_ref}, details: {self.details})"""
 
 class VoucherDetail(Base):
     """VoucherDetail class
