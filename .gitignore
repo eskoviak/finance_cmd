@@ -9,3 +9,17 @@
 /.vscode
 
 .DS_Store
+
+/vpython3.10
+
+**/__pycache__
+
+/cli_test
+
+**/voucher_entry.sql
+
+**/.env
+
+.vscode
+
+/build

@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{title}}</h1>
+        <p>{{description}}</p>
+        <table border = 1>
+        {% for key, value in result.items() %}
+
+        <tr>
+            <th> {{ key }} </th>
+            <td> {{ value }} </td>
+        </tr>
+
+        {% endfor %}
+        </table>
+    </div>
+
+    
+{% endblock %}
