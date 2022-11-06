@@ -2,7 +2,7 @@ import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from flask import Flask, render_template, request
-from models_tst import Voucher
+from models_tst import Voucher, VoucherDetail
 from pg_utils import PgUtils
 
 
@@ -97,26 +97,45 @@ def voucher_result():
 @app.route("/detail_entry", methods=['POST'])
 @app.route("/detail_entry/<int:voucher_number>/<int:split_seq_number>", methods=['GET']) # type: ignore
 def detail_entry(voucher_number=None, split_seq_number=None):
-    if request.method == 'GET':
-        return render_template(
-            "detail_entry.html",
-            title="Voucher Detail Entry",
-            description="Enter the voucher detail line items",
-            voucher_number=voucher_number,
-            split_seq_number=split_seq_number
-        )
+    pg_utils = PgUtils()
     if request.method == 'POST':
-        pg_utils = PgUtils()
         result = request.form
         voucher_number = result['voucher_number'] # type: ignore
-        split_seq_num = pg_utils.get_next_split_number(int(voucher_number))
-        return f"In detail_entry =={voucher_number}:{split_seq_num}==" #type: ignore
+        split_seq_number = pg_utils.get_next_split_number(int(voucher_number))
+        #return f"In detail_entry =={voucher_number}:{split_seq_num}==" #type: ignore
+    return render_template(
+        "detail_entry.html",
+        title="Voucher Detail Entry",
+        description="Enter the voucher detail line items",
+        voucher_number=voucher_number,
+        split_seq_number=split_seq_number
+    )
+
+@app.route("/detail_result", methods = ['POST']) # type: ignore
+def detail_result():
+    if request.method == 'POST':
+        result = request.form
+        voucher_detail = VoucherDetail(
+            voucher_number = result["voucher_number"],
+            split_seq_number = result["split_seq_number"],
+            account_number = result["account_number"],
+            amount = result["amount"],
+            dimension_1 = result["dimension_1"],
+            dimension_2 = result["dimension_2"],
+            memo = result["memo"]
+        )
+        pg_utils = PgUtils()
+        ret_seq = pg_utils.add_voucher_details(voucher_detail)
+        voucher = pg_utils.get_voucher(int(voucher_detail.voucher_number))
+        return render_template(
+            'voucher_display.html',
+            title='Voucher Display',
+            description='Displays voucher data for the selected vouher',
+            data=voucher
+        )            
 
 
+        
 
-#@app.route("/detail_entry", methods=['POST'])  # type: ignore
-#def detail_entry():
-#   if request.method == 'POST':
-#        result = request.form
-#        voucher = result['voucher_data']
+
 

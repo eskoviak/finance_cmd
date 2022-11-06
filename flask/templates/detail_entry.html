@@ -4,7 +4,7 @@
 <div class="container">
     <h1>{{title}}</h1>
     <p>{{description}}</p>
-    <form action="/voucher_result" method="POST">
+    <form action="/detail_result" method="POST">
         <table>
             <tr class="labels">
                 <td>Voucher Number</td>
@@ -15,12 +15,12 @@
                 <td>Dimension 2</td>             
             </tr>
             <tr>
-                <td>{{voucher_number}}</td>
-                <td>{{split_seq_number}}</td>
+                <td><input type="text" name="voucher_number" value="{{voucher_number}}" readonly/></td>
+                <td><input type="text" name="split_seq_number" value="{{split_seq_number}}" readonly></td>
                 <td><input type="text" name="account_number"></td>
                 <td><input type="number" name="amount" step="any"></td>
                 <td><input type="text" name="dimension_1"></td>
-                <td><input type="text" name="dimension_1"></td>
+                <td><input type="text" name="dimension_2"></td>
             </tr>
             <tr class="labels" >
                 <td colspan="6">Memo</td>
@@ -29,6 +29,7 @@
                 <td colspan="6"><input type="text" name="memo"></td>
             </tr>
         </table>
+        <p><input type="submit" value="submit"></p>
     </form>    
 
 </div> 

@@ -6,7 +6,7 @@ from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData,
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
-metadata_obj = MetaData(schema='finance_tst')
+metadata_obj = MetaData(schema='finance')
 Base = declarative_base(metadata=metadata_obj)
 
 class Vendors(Base):

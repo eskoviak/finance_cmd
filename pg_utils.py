@@ -7,7 +7,7 @@ sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 from dotenv import dotenv_values
 
 from models_tst import (ExternalAccounts, PaymentType, Vendors, Voucher,
-                        VoucherType)
+                        VoucherType, VoucherDetail)
 
 
 class PgUtils:
@@ -153,12 +153,23 @@ class PgUtils:
             print (Exception.__name__)
             return Exception.__repr__
 
+    def add_voucher_details(self, VoucherDetail):
+        try:
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+                session.add(VoucherDetail)
+                session.commit()
+                session.refresh(VoucherDetail)
+                return VoucherDetail.id
+        except (Exception):
+            return Exception.__repr__            
+
     def get_next_split_number(self, voucher_number : int):
 
         try:
             with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
-                result = session.execute(text(f"SELECT COUNT(id) FROM voucher_detail WHERE voucher_number = {voucher_number}"))
-                return int(result.scalar()) + 1
+                result = session.query(VoucherDetail.id).where(VoucherDetail.voucher_number == voucher_number)
+                return len(result.all()) + 1 
+                #return int(result.scalar()) + 1
         except (Exception):
             return Exception.__repr__
         
