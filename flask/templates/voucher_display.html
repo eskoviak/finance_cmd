@@ -43,6 +43,12 @@
             </tr>
         </table>
         <p>Line Items</p>
+        <form method="POST" action="/detail_entry">
+            <input type="hidden" id="id_voucher_number" name="voucher_number" value="{{data["voucher_number"]}}"/>
+            <input type="hidden" id="id_splits_seq" name="splits" value="{{data["Splits"]}}"/>
+            <input type="submit" value="+" name="add_detail"/>
+        </form>
+        
 
         <table>
             <tr class="labels">

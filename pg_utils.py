@@ -30,8 +30,7 @@ class PgUtils:
         Returns:
             A dict object
         """
-        engine = create_engine(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) # type: ignore
-        with Session(engine) as session:
+        with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:
             results = session.execute(select(Voucher).where(Voucher.voucher_number == voucher_number))
             voucher_dict = {}
             voucher_detail = []
@@ -154,4 +153,12 @@ class PgUtils:
             print (Exception.__name__)
             return Exception.__repr__
 
+    def get_next_split_number(self, voucher_number : int):
+
+        try:
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+                result = session.execute(text(f"SELECT COUNT(id) FROM voucher_detail WHERE voucher_number = {voucher_number}"))
+                return int(result.scalar()) + 1
+        except (Exception):
+            return Exception.__repr__
         

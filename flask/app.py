@@ -1,10 +1,12 @@
 import sys
-
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from flask import Flask, render_template, request
-from pg_utils import PgUtils
 from models_tst import Voucher
+from pg_utils import PgUtils
+
+
+
 
 #import json
 
@@ -21,31 +23,23 @@ def home():
     )
 
 
-@app.route("/voucher/<int:voucher_number>")
+@app.route("/voucher/<int:voucher_number>", methods=['GET'] ) # type: ignore
 def get_voucher(voucher_number):
     pg_utils = PgUtils()
     voucher_dict = pg_utils.get_voucher(voucher_number)
-    if len(voucher_dict) > 0:
-        return render_template(
-            'voucher_display.html',
-            title='Voucher Display',
-            description='Displays voucher data for the selected vouher',
-            data=voucher_dict
-        )
-        #number = voucher_dict["voucher_number"],
-        #date = voucher_dict["voucher_date"],
-        #ref = voucher_dict["voucher_ref"],
-        #amount = voucher_dict["voucher_amt"],
-        #type = voucher_dict["voucher_type"],
-        #vendor = voucher_dict["vendor"],
-        #ptype = voucher_dict["payment_type"],
-        #psource = voucher_dict["payment_source"],
-        #pref = voucher_dict["payment_ref"],
-        #splits = voucher_dict["Splits"]
-        # )
-    else:
-        # TODO make pretty
-        return "Not Found"
+    if request.method == 'GET':
+        if len(voucher_dict) > 0:
+            return render_template(
+                'voucher_display.html',
+                title='Voucher Display',
+                description='Displays voucher data for the selected vouher',
+                data=voucher_dict
+            )
+        else:
+            # TODO make pretty
+            return "Not Found"
+
+
 
 
 @app.route("/voucher")
@@ -61,31 +55,68 @@ def enter_voucher():
         title='Voucher Entry',
         description='Enter voucher data',
         vendor_list=pg_utils.get_vendors(),
-        account_list = pg_utils.get_external_accounts(),
-        voucher_type_list = pg_utils.get_voucher_types(),
-        payment_type_list = pg_utils.get_payment_types()
+        account_list=pg_utils.get_external_accounts(),
+        voucher_type_list=pg_utils.get_voucher_types(),
+        payment_type_list=pg_utils.get_payment_types()
     )
 
 
-@app.route("/voucher_result", methods=['POST', 'GET']) # type: ignore
+@app.route("/voucher_result", methods=['POST', 'GET'])  # type: ignore
 def voucher_result():
 
     if request.method == 'POST':
         result = request.form
-        voucher = Voucher(voucher_date = result["voucher_date"],
-            voucher_ref = result["voucher_ref"],
-            vendor_number = result["vendor"],
-            voucher_type_id = result["voucher_type"],
-            voucher_amt = result["voucher_amt"],
-            payment_type_id = result["payment_type"],
-            payment_source_id = result["pmt_account"],
-            payment_ref = result["payment_ref"])
+        voucher = Voucher(voucher_date=result["voucher_date"],
+                          voucher_ref=result["voucher_ref"],
+                          vendor_number=result["vendor"],
+                          voucher_type_id=result["voucher_type"],
+                          voucher_amt=result["voucher_amt"],
+                          payment_type_id=result["payment_type"],
+                          payment_source_id=result["pmt_account"],
+                          payment_ref=result["payment_ref"])
         pg_utils = PgUtils()
         ret_voucher = pg_utils.add_voucher(voucher)
+        voucher = pg_utils.get_voucher(int(ret_voucher))  # type: ignore
+        # get_voucher(ret_voucher)
+        # return render_template(
+        #    'voucher_result.html',
+        #    title="Voucher Entry Confirmation",
+        #    description="You entered the following data:",
+        #    result=result,
+        #    voucher_data=ret_voucher
+        # )
         return render_template(
-            'voucher_result.html',
-            title="Voucher Entry Confirmation",
-            description="You entered the following data:",
-            result=result,
-            voucher_data=ret_voucher
+            'voucher_display.html',
+            title='Voucher Display',
+            description='Displays voucher data for the selected vouher',
+            data=voucher
         )
+
+
+# type: ignore
+@app.route("/detail_entry", methods=['POST'])
+@app.route("/detail_entry/<int:voucher_number>/<int:split_seq_number>", methods=['GET']) # type: ignore
+def detail_entry(voucher_number=None, split_seq_number=None):
+    if request.method == 'GET':
+        return render_template(
+            "detail_entry.html",
+            title="Voucher Detail Entry",
+            description="Enter the voucher detail line items",
+            voucher_number=voucher_number,
+            split_seq_number=split_seq_number
+        )
+    if request.method == 'POST':
+        pg_utils = PgUtils()
+        result = request.form
+        voucher_number = result['voucher_number'] # type: ignore
+        split_seq_num = pg_utils.get_next_split_number(int(voucher_number))
+        return f"In detail_entry =={voucher_number}:{split_seq_num}==" #type: ignore
+
+
+
+#@app.route("/detail_entry", methods=['POST'])  # type: ignore
+#def detail_entry():
+#   if request.method == 'POST':
+#        result = request.form
+#        voucher = result['voucher_data']
+
