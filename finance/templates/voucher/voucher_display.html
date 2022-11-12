@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container">
+        <h1>{{title}}</h1>
+        <p>{{description}}</p>
+        <p>
+            <label for="number">Voucher Number</label>
+            <input name="number" id="number" value="{{data['voucher_number']}}" readonly/>
+            <label for="date">Trans Date</label>
+            <input name="date" id="date" value="{{data['voucher_date']}}" readonly />
+            <label for="ref">Voucher Reference</label>
+            <input name="ref" id="ref" value="{{data['voucher_ref']}}" readonly />    
+        </p>
+        <p>
+            <label for="type">Type</label>
+            <input name="type" id="type" value="{{data['voucher_type']}}" readonly />
+            <label for"vendor">Vendor</label>
+            <input name="vendor" id="vendor" value="{{data['vendor']}}" readonly />
+            <label for="amount">Amount</label>
+            <input name="amount" id="amount" value="{{data['voucher_amt']}}" readonly />
+        </p>
+
+        <p>
+            <label for="pmt_type">Pmt Type</label>
+            <input name="pmt_type"id="pmt_type" value="{{data['payment_type']}}" readonly />
+            <label for="source">Pmt Source</label>
+            <input name="source" id="source" value="{{data['payment_source']}}" readonly />
+            <label for="pmt_ref">Payment Ref</label>
+            <input name="pmt_ref" id="pmt_ref" value="{{data['payment_ref']}}" readonly />
+        </p>
+        <p>Detail</p>
+        <form method="POST" action="/voucher/detail_entry">
+            <input type="hidden" id="id_voucher_number" name="voucher_number" value="{{data["voucher_number"]}}"/>
+            <input type="hidden" id="id_splits_seq" name="splits" value="{{data["Splits"]}}"/>
+            <input type="submit" value="+" name="add_detail"/>
+        </form>
+        
+
+        <table>
+            <tr class="labels">
+                <td>Seq Num</td>
+                <td>Account Number</td>
+                <td>Amount</td>
+                <td>Dimension 1</td>
+                <td>Dimension 2</td>
+                <td>Memo</td>
+            </tr>
+            {% for line in data["Splits"] %}
+                <tr>
+                    <td>{{line["split_seq_number"]}}</td>    
+                    <td>{{line["account_number"]}}</td>
+                    <td>{{line["amount"]}}</td>
+                    <td>{{line["dimension_1"]}}</td>
+                    <td>{{line["dimension_2"]}}</td>
+                    <td>{{line["memo"]}}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+{% endblock %}
