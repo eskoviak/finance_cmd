@@ -22,7 +22,8 @@ def get_voucher(voucher_number):
                 'voucher/voucher_display.html',
                 title='Voucher Display',
                 description='Displays voucher data for the selected vouher',
-                data=voucher_dict
+                data=voucher_dict,
+                detail_total=pg_utils.get_detail_total(voucher_number)
             )
         else:
             # TODO make pretty
@@ -62,14 +63,6 @@ def voucher_result():
         pg_utils = PgUtils()
         ret_voucher = pg_utils.add_voucher(voucher)
         voucher = pg_utils.get_voucher(int(ret_voucher))  # type: ignore
-        # get_voucher(ret_voucher)
-        # return render_template(
-        #    'voucher_result.html',
-        #    title="Voucher Entry Confirmation",
-        #    description="You entered the following data:",
-        #    result=result,
-        #    voucher_data=ret_voucher
-        # )
         return render_template(
             'voucher/voucher_display.html',
             title='Voucher Display',
@@ -114,5 +107,6 @@ def detail_result():
             'voucher/voucher_display.html',
             title='Voucher Display',
             description='Displays voucher data for the selected vouher',
-            data=voucher
+            data=voucher,
+            detail_total=pg_utils.get_detail_total(voucher_detail.voucher_number)
         )     

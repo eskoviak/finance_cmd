@@ -37,4 +37,26 @@ nav ul li a, nav ul li span, header .action { display: block; padding: 0.5rem; }
 input.danger { color: #cc2f2e; }
 input[type=submit] { align-self: start; min-width: 10em; }
 
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    background-color: #2196F3;
+    padding: 2px;
+  }
+  
+  .grid-header {
+    background-color: #005eff;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .grid-data {
+    background-color: #569cc5;
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 5px;
+    font-weight: normal;
+    text-align: right;    
+  }
 </style>

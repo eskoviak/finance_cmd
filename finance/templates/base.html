@@ -1,9 +1,24 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} - Finance</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}">
-<nav>
-  <h1>Finance</h1>
+<head>
+  {% block head %}
+    <title>{% block title %}{% endblock %} - Finance</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='layout.css') }}">
+  {% endblock %}
+</head>
+<body>
+  <nav>
+    {% include 'navigation.html' %}
+  </nav>
+  <div id="content">{% block content %}{% endblock %}</div>
+  <div id="footer">
+      {% block footer %}
+      &copy; Copyright 2022 by <a href="http://eskoviak.com/">Ed Skoviak Computing</a>.
+      {% endblock %}
+  </div>
 
+</body>
+<nav>
+  {% include 'navigation.html' %}
 </nav>
 <section class="content">
   <header>

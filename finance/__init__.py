@@ -18,9 +18,14 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
 
     # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        return 'Hello, World!'
+    @app.route('/')
+    @app.route('/home')
+    def home():
+        return render_template(
+            'home.html',
+            title='Home',
+            description='An accounting program.'
+        )
 
     from . import voucher
     app.register_blueprint(voucher.bp, )

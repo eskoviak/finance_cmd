@@ -1,6 +1,6 @@
 import sys
 
-from sqlalchemy import create_engine, select, text
+from sqlalchemy import create_engine, select, text, func
 from sqlalchemy.orm import Session
 
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
@@ -173,3 +173,11 @@ class PgUtils:
         except (Exception):
             return Exception.__repr__
         
+    def get_detail_total(self, voucher_number : int):
+        try:
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+                result = session.query(func.sum(VoucherDetail.amount)).where(VoucherDetail.voucher_number==voucher_number)
+                return result.scalar()
+        except Exception:
+            return Exception.__repr__
+
