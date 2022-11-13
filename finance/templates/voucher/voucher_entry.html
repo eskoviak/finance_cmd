@@ -1,9 +1,13 @@
 {% extends 'base.html' %}
-
+{% block title %}
+Voucher Entry
+{% endblock %}
+{% block header %}
+    <h1>{{ title }}</h1>
+    <p>{{ description }}</p>
+{% endblock %} 
 {% block content %}
 <div class="container">
-    <h1>{{title}}</h1>
-    <p>{{description}}</p>
     <form action="/voucher/voucher_result" method="POST">
         <table>
             <tr class="labels">
@@ -66,7 +70,7 @@
                 <td><input type="text" name="payment_ref" width="50"></td>
             </tr>
         </table>
-        <p><input type="submit" value="submit"></p>
+        <p><input type="submit" value="Submit"></p>
     </form>
 </div>
 {% endblock %}

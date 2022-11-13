@@ -24,7 +24,7 @@ def create_app(test_config=None):
         return render_template(
             'home.html',
             title='Home',
-            description='An accounting program.'
+            description='The Finance application home page'
         )
 
     from . import voucher

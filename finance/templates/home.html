@@ -1,6 +1,12 @@
 {% extends 'base.html' %}
+{% block title %}
+Home
+{% endblock %}
+{% block header %}
+    <h1>{{ title }}</h1>
+    <p>{{ description }}</p>
+{% endblock %} 
 {% block content %}
-    <div class="container">
-        <p>{{description}}</p>
-    </div>
+    <p>The Finance&copy; application is a multi-purpose account application which uses an underlying PostgresQL database to provide accounting functions.</p>    
+
 {% endblock %}

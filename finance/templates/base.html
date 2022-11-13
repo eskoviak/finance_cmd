@@ -9,23 +9,18 @@
   <nav>
     {% include 'navigation.html' %}
   </nav>
-  <div id="content">{% block content %}{% endblock %}</div>
+  <section class="content">
+    <header>
+      {% block header %}{% endblock %}
+    </header>
+    {% for message in get_flashed_messages() %}
+      <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+  </section>
   <div id="footer">
       {% block footer %}
       &copy; Copyright 2022 by <a href="http://eskoviak.com/">Ed Skoviak Computing</a>.
       {% endblock %}
   </div>
-
 </body>
-<nav>
-  {% include 'navigation.html' %}
-</nav>
-<section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
