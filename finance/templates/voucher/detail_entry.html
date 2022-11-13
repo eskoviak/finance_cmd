@@ -1,10 +1,14 @@
-{% extends 'layout.html' %}
-
-{% block content %}
-<div class="container">
+{% extends 'base.html' %}
+{% block title %}
+Detail Entry
+{% endblock %}
+{% block header %}
     <h1>{{title}}</h1>
     <p>{{description}}</p>
-    <form action="/detail_result" method="POST">
+{% endblock%}
+{% block content %}
+<div class="container">
+    <form action="/voucher/detail_result" method="POST">
         <table>
             <tr class="labels">
                 <td>Voucher Number</td>

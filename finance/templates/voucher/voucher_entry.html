@@ -1,10 +1,14 @@
-{% extends 'layout.html' %}
-
+{% extends 'base.html' %}
+{% block title %}
+Voucher Entry
+{% endblock %}
+{% block header %}
+    <h1>{{ title }}</h1>
+    <p>{{ description }}</p>
+{% endblock %} 
 {% block content %}
 <div class="container">
-    <h1>{{title}}</h1>
-    <p>{{description}}</p>
-    <form action="/voucher_result" method="POST">
+    <form action="/voucher/voucher_result" method="POST">
         <table>
             <tr class="labels">
                 <td>Transaction Date</td>
@@ -29,7 +33,7 @@
                 <td>
                     <select name="voucher_type" id="voucher-type-select">
                         {% for type in voucher_type_list %}
-                            <option value="{{type['type_code']}}">{{type['type_text']}}</option>
+                            <option value="{{type['type_code']}}" {% if type['type_code'] == 2 %} selected {% endif %}>{{type['type_text']}}</option>
                         {% endfor %}
                     </select>
 
@@ -66,7 +70,7 @@
                 <td><input type="text" name="payment_ref" width="50"></td>
             </tr>
         </table>
-        <p><input type="submit" value="submit"></p>
+        <p><input type="submit" value="Submit"></p>
     </form>
 </div>
 {% endblock %}
