@@ -1,2 +1,13 @@
-<a href="/">Home</a>&nbsp;
-<a href="/voucher">Voucher Entry</a>
+<div>
+    <a href="/">Home</a>&nbsp;
+    <a href="/voucher">Voucher Entry</a>&nbsp;
+    <a href={{ url_for("auth.logout")}}>Logout</a>&nbsp;
+</div>
+<div>
+    {% if g.user == None %}
+        <a href={{ url_for("auth.login")}}>Login</a>
+    {% else %}
+        {{ g.user['username']}}
+    {% endif %}
+</div>
+

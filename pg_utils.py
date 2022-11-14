@@ -7,7 +7,7 @@ sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 from dotenv import dotenv_values
 
 from models_tst import (ExternalAccounts, PaymentType, Vendors, Voucher,
-                        VoucherType, VoucherDetail)
+                        VoucherType, VoucherDetail, User)
 
 
 class PgUtils:
@@ -181,3 +181,71 @@ class PgUtils:
         except Exception:
             return Exception.__repr__
 
+    def add_user(self, username : str, password : str) -> int:
+        """add user to user table
+
+        Args:
+            username (str): user name
+            password (str): user password
+
+        Returns:
+            int: a positive number indicating the newly created user id, or -1 if the user exists
+
+        """
+        try:
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:
+                # See if the user exists
+                results = session.query(User).where(User.username == username)
+                if len(results.all()) != 0:
+                    return -1
+                # user didn't exist, continue to add
+                user = User(username=username, password=password)
+                session.add(user)
+                session.commit()
+                session.refresh(user)
+                return user.id
+        except Exception:
+            return Exception.__repr__
+
+    def get_user_by_name(self, username: str) -> dict:
+        """get the user based on the username, returns the User model if found, else None
+
+        Args:
+            username (str): the username
+
+        Returns:
+            dict: User object expressed as a dictionary
+        """
+        user_dict = {}
+        try:
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:
+                results = session.query(User).where(User.username == username)
+                for row in results:
+                    user_dict['id'] = row.id
+                    user_dict['username'] = row.username
+                    user_dict['password'] = row.password
+                
+                return user_dict
+        except Exception:
+            return Exception.__repr__
+
+    def get_user_by_id(self, user_id : int) -> dict:
+        """_summary_
+
+        Args:
+            user_id (int): _description_
+
+        Returns:
+            dict: User object expressed as a dictionary
+        """  
+        user_dict = {}
+        try:
+            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:
+                results = session.query(User).where(User.id == user_id)
+                for row in results:
+                    user_dict['id'] = row.id
+                    user_dict['username'] = row.username
+                    user_dict['password'] = row.password
+                return user_dict
+        except Exception:
+            return Exception.__repr__

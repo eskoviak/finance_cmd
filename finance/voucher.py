@@ -10,6 +10,8 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from finance.auth import login_required
+
 bp = Blueprint('voucher', __name__, url_prefix='/voucher')
 
 @bp.route("<int:voucher_number>", methods=['GET'] ) # type: ignore
@@ -30,6 +32,7 @@ def get_voucher(voucher_number):
             return "Not Found"
 
 @bp.route('/')
+@login_required
 def enter_voucher():
     """route /voucher -- create a voucher entry
 
@@ -72,6 +75,7 @@ def voucher_result():
 
 @bp.route("/detail_entry", methods=['POST'])
 @bp.route("/detail_entry/<int:voucher_number>/<int:split_seq_number>", methods=['GET']) # type: ignore
+@login_required
 def detail_entry(voucher_number=None, split_seq_number=None):
     pg_utils = PgUtils()
     if request.method == 'POST':
