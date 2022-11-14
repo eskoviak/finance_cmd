@@ -118,6 +118,24 @@ class VoucherDetail(Base):
     def __repr__(self):
         return f"Details: (split: {self.split_seq_number}, account: {self.account_number}, amt: {self.amount})"
 
+class User(Base):
+    """The user table is used to provided authorization to the app
+
+    Args:
+        base (_type_): _description_
+    """
+    __tablename__ = "user"
+
+    id = Column(Integer, primary_key=True)
+    username = Column(String(50), nullable=False)
+    password = Column(String(255), nullable=False)
+    first_name=Column(String(30), nullable=True)
+    last_name=Column(String(50), nullable=True)
+    email=Column(String(75), nullable=True)
+
+    def __repr__(self):
+        return f"User:  (id: {self.id}, username: {self.username})" 
+
 #####
 # Executtion Wrapper -- if this class is executed, any/all classes will be 
 # instantiated
@@ -126,7 +144,7 @@ if __name__ == '__main__':
     try:
         psycopg_uri = url = 'postgresql://postgres:terces##@localhost:5432/finance'
         engine = create_engine(psycopg_uri)
-        #Base.metadata.create_all(engine)
+        Base.metadata.create_all(engine)
     except Exception as e:
         print('Failed to connect to database.')
         print('{0}'.format(e))
