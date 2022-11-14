@@ -85,3 +85,5 @@ voucher_details pgutil::get_voucher_details(int voucher_number){
     }
     return vd;
 };
+
+/* Some bullshit to get to recompile and more bullshirt */

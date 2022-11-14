@@ -1,8 +1,8 @@
-CPPFLAGS = -I/usr/local/opt/libpqxx/include -fPIC -Wall
-#-I. -I/usr/local/include
+#CPPFLAGS = -I/usr/local/opt/libpqxx/include -fPIC -Wall
+CPPFLAGS = -I. -I/usr/local/include -fPIC -Wall
 CCLINUX = g++ -std=c++2a 
 CC = clang++ -stdlib=libc++ -std=c++2a
-LDFLAGS = -L/usr/local/opt/libpqxx/lib -L/usr/local/opt/libpq/lib -lpqxx -lpq
+#LDFLAGS = -L/usr/local/opt/libpqxx/lib -L/usr/local/opt/libpq/lib -lpqxx -lpq
 LDFLAGSLINUX = -lpqxx -lpq
 OUTDIR = out/
 
