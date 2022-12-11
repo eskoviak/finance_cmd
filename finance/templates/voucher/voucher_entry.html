@@ -9,67 +9,39 @@ Voucher Entry
 {% block content %}
 <div class="container">
     <form action="/voucher/voucher_result" method="POST">
-        <table>
-            <tr class="labels">
-                <td>Transaction Date</td>
-                <td>Transaction Reference</td>
-            </tr>
-            <tr>
-                <td><input type="text" name="voucher_date"></td>
-                <td><input type="text" name="voucher_ref" width="50"></td>
-            </tr>
-            <tr class="labels">
-                <td>Vendor Name</td>
-                <td>Voucher Type</td>
-            </tr>
-            <tr>
-                <td>
-                    <select name="vendor" id="vendor-select">
-                        {% for vendor in vendor_list %}
-                            <option value="{{vendor['vendor_number']}}">{{vendor['vendor_short_desc']}}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td>
-                    <select name="voucher_type" id="voucher-type-select">
-                        {% for type in voucher_type_list %}
-                            <option value="{{type['type_code']}}" {% if type['type_code'] == 2 %} selected {% endif %}>{{type['type_text']}}</option>
-                        {% endfor %}
-                    </select>
-
-                </td>
-            </tr>
-            <tr class="labels">
-                <td>Amount</td>
-                <td>Payment type</td>
-                <td>Payment Account</td>
-            </tr>
-            <tr>
-                <td>
-                    <input type="number" name="voucher_amt" step="any">
-                </td>
-                <td>
-                    <select name="payment_type" id="voucher-pay-type-select">
-                        {% for ptype in payment_type_list %}
-                            <option value="{{ptype['payment_type_id']}}" {% if ptype['payment_type_id'] == 6 %} selected {% endif %}>{{ptype['payment_type_text']}}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-                <td>
-                    <select name="pmt_account" id="pmt-acct-select">
-                        {% for account in account_list %}
-                            <option value="{{account['external_account_id']}}">{{account['account_name']}}</option>
-                        {% endfor %}
-                    </select>
-                </td>
-            </tr>
-            <tr class="labels">
-                <td>Payment Reference</td>
-            </tr>
-            <tr>
-                <td><input type="text" name="payment_ref" width="50"></td>
-            </tr>
-        </table>
+        <div>
+            <label for="voucher_date" class="label">Transaction Date</label>
+            <input type="text" id="voucher_date" name="voucher_date" autofocus required/>
+            <label for="voucher_ref">voucher Reference</label>
+            <input type="text" id="voucher_ref" name="voucher_ref" />
+        </div>       
+        <div>
+            <label for="vendor-select">Vendor</label>
+            <select name="vendor" id="vendor-select">
+                {% include 'voucher/vendor_select.html' %}
+            </select>
+            <label for="voucher-type-select">Voucher Type</label>
+            <select name="voucher_type" id="voucher-type-select">
+                {% include 'voucher/voucher_type_select.html' %}
+            </select>   
+        </div>
+        <div>
+            <label for="voucher_amt">Amount</label>
+            <input type="number" id="voucher_amt"name="voucher_amt" step="any"/>
+            <label for="voucher-pay-type-select">Payment Type</label>     
+            <select name="payment_type" id="voucher-pay-type-select">
+                {% include 'voucher/payment_type_select.html' %}
+            </select>
+            <label for="pmt-acct-select"></label>
+            <select name="pmt_account" id="pmt-acct-select">
+                {% include 'voucher/pmt_account_select.html' %}
+            </select>
+        </div>
+        <div>
+            <label for="payment_ref">Payment Reference</label>  
+            <input type="text" id="payment_ref" name="payment_ref"/>
+            </label>
+        </div>
         <p><input type="submit" value="Submit"></p>
     </form>
 </div>
