@@ -24,3 +24,5 @@
 .vscode
 
 /build
+
+/instance
