@@ -1,4 +1,4 @@
-# finance_cmd
+# Finance
 
 This repository is used to create access to the finance database using the following technology stack:
 
