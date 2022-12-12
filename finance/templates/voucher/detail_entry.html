@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}
+Detail Entry
+{% endblock %}
+{% block header %}
+    <h1>{{title}}</h1>
+    <p>{{description}}</p>
+{% endblock%}
+{% block content %}
+<div class="container">
+    <form action="/voucher/detail_result" method="POST">
+        <div>
+            <label for="voucher_number">Voucher Number</label>
+            <input type="text" id="voucher_number" name="voucher_number" value="{{voucher_number}}" readonly/>
+            <label for="split_seq_number">Split</label>
+            <input type="text" id="split_seq_number" name="split_seq_number" value="{{split_seq_number}}" readonly/>            
+            <label for="account_number">Ledger Acct</label>
+            <input type="text" id="account_number" name="account_number" autofocus required>
+        </div>
+        <div>               
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" name="amount" step="any" value="{{voucher_remain }}" required/>
+            <label for="dimension_1">Dimension 1</label>
+            <input type="text" id="dimension_1" name="dimension_1" required/>            
+            <label for="dimension_2">Dimension 2</label>
+            <input type="text" id="dimension_2" name="dimension_2"/>
+        </div>
+        <div>
+            <label for="memo">Line Item Memo</label>
+            <input type="text" id="memo" name="memo"/>            
+        </div>
+        <div>
+            <input type="submit" value="Submit">
+        </div>
+    </form>    
+    <form action="{{ url_for(".get_voucher", voucher_number=voucher_number) }}">
+        <input class="danger" type="submit" value="Cancel"/>
+    </form>
+</div> 
+{% endblock %} 
