@@ -4,7 +4,6 @@ from sqlalchemy import create_engine, select, text, func
 from sqlalchemy.orm import Session
 
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-from dotenv import dotenv_values
 
 from models_tst import (ExternalAccounts, PaymentType, Vendors, Voucher,
                         VoucherType, VoucherDetail, User)
@@ -14,12 +13,15 @@ class PgUtils:
     """This class encapsulates the various functions needed by the finance application
 
     """
+    def __init__(self, pguri):
+        self.pguri = pguri
 
-    config = {}
-
-    def __init__(self):
-        self.config = dotenv_values(".env")
-        #self.config["PGURI"] = "postgresql://postgres:terces##@localhost:5432/finance"
+    def get_pg_uri(self) -> str:
+        """Returns the detected uri
+        Returns:
+            str: the textual URI to the postgresz
+        """
+        return self.pguri
 
     def get_voucher(self, voucher_number : int) -> dict:
         """gets the voucher and vourcher details in JSON format for the given voucher_number
@@ -30,7 +32,7 @@ class PgUtils:
         Returns:
             A dict object
         """
-        with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:
+        with Session(create_engine(self.get_pg_uri())) as session:
             results = session.execute(select(Voucher).where(Voucher.voucher_number == voucher_number))
             voucher_dict = {}
             voucher_detail = []
@@ -66,7 +68,7 @@ class PgUtils:
         """
         vendor_list = []
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
                 results = session.query(Vendors).order_by(Vendors.vendor_short_desc)
                 for row in results:
                     vendor = {}
@@ -86,7 +88,7 @@ class PgUtils:
         """
         account_list = []
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:  # type: ignore
+            with Session(create_engine(self.get_pg_uri())) as session:  # type: ignore
                 results = session.query(ExternalAccounts).order_by(ExternalAccounts.account_name)
 
                 for row in results:
@@ -107,7 +109,7 @@ class PgUtils:
         """
         voucher_types = []
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:  # type: ignore
+            with Session(create_engine(self.get_pg_uri())) as session:  # type: ignore
                 results = session.query(VoucherType).order_by(VoucherType.type_text)
 
                 for row in results:
@@ -128,7 +130,7 @@ class PgUtils:
         """
         payment_types = []
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:  # type: ignore
+            with Session(create_engine(self.get_pg_uri())) as session:  # type: ignore
                 results = session.query(PaymentType).order_by(PaymentType.payment_type_text)
 
                 for row in results:
@@ -144,7 +146,7 @@ class PgUtils:
     def add_voucher(self, Voucher):
 
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
                 session.add(Voucher)
                 session.commit()
                 session.refresh(Voucher)
@@ -155,7 +157,7 @@ class PgUtils:
 
     def add_voucher_details(self, VoucherDetail):
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
                 session.add(VoucherDetail)
                 session.commit()
                 session.refresh(VoucherDetail)
@@ -166,20 +168,24 @@ class PgUtils:
     def get_next_split_number(self, voucher_number : int):
 
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
                 result = session.query(VoucherDetail.id).where(VoucherDetail.voucher_number == voucher_number)
                 return len(result.all()) + 1 
-                #return int(result.scalar()) + 1
         except (Exception):
-            return Exception.__repr__
-        
+            print(f"Exception in get_next_split_number: {Exception}")
+            return -1
+                
     def get_detail_total(self, voucher_number : int):
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session: # type: ignore
+            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
                 result = session.query(func.sum(VoucherDetail.amount)).where(VoucherDetail.voucher_number==voucher_number)
-                return result.scalar()
+                if result.scalar() == None:
+                    return 0
+                else: 
+                    return result.scalar()
         except Exception:
-            return Exception.__repr__
+            print(f"Exception in get_detail_total: {Exception}")
+            return 0
 
     def add_user(self, username : str, password : str) -> int:
         """add user to user table
@@ -192,8 +198,9 @@ class PgUtils:
             int: a positive number indicating the newly created user id, or -1 if the user exists
 
         """
+
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:
+            with Session(create_engine(self.get_pg_uri())) as session:
                 # See if the user exists
                 results = session.query(User).where(User.username == username)
                 if len(results.all()) != 0:
@@ -205,7 +212,8 @@ class PgUtils:
                 session.refresh(user)
                 return user.id
         except Exception:
-            return Exception.__repr__
+            print(f"Exception in add_user:  {Exception}")
+            return -2
 
     def get_user_by_name(self, username: str) -> dict:
         """get the user based on the username, returns the User model if found, else None
@@ -218,16 +226,16 @@ class PgUtils:
         """
         user_dict = {}
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:
+            with Session(create_engine(self.get_pg_uri())) as session:
                 results = session.query(User).where(User.username == username)
                 for row in results:
                     user_dict['id'] = row.id
                     user_dict['username'] = row.username
                     user_dict['password'] = row.password
-                
-                return user_dict
         except Exception:
-            return Exception.__repr__
+            print(f"Exception if get_user_by_name: {Exception}")
+        return user_dict
+        
 
     def get_user_by_id(self, user_id : int) -> dict:
         """_summary_
@@ -240,12 +248,12 @@ class PgUtils:
         """  
         user_dict = {}
         try:
-            with Session(create_engine("postgresql://postgres:terces##@localhost:5432/finance")) as session:
+            with Session(create_engine(self.get_pg_uri())) as session:
                 results = session.query(User).where(User.id == user_id)
                 for row in results:
                     user_dict['id'] = row.id
                     user_dict['username'] = row.username
                     user_dict['password'] = row.password
-                return user_dict
         except Exception:
-            return Exception.__repr__
+            print(f"Exception in get_user_by_id {Exception}")
+        return user_dict

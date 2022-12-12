@@ -6,7 +6,7 @@ from pg_utils import PgUtils
 from models_tst import Voucher, VoucherDetail
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -16,8 +16,10 @@ bp = Blueprint('voucher', __name__, url_prefix='/voucher')
 
 @bp.route("<int:voucher_number>", methods=['GET'] ) # type: ignore
 def get_voucher(voucher_number):
-    pg_utils = PgUtils()
+    pg_utils = PgUtils(current_app.config['PGURI'])
     voucher_dict = pg_utils.get_voucher(voucher_number)
+    session['voucher_amt'] = voucher_dict['voucher_amt']
+
     if request.method == 'GET':
         if len(voucher_dict) > 0:
             return render_template(
@@ -39,7 +41,8 @@ def enter_voucher():
     Returns:
         renders voucher_entry.html 
     """
-    pg_utils = PgUtils()
+    pg_utils = PgUtils(current_app.config['PGURI'])
+    session['voucher_amt'] = 0
     return render_template(
         'voucher/voucher_entry.html',
         title='Voucher Entry',
@@ -63,9 +66,10 @@ def voucher_result():
                           payment_type_id=result["payment_type"],
                           payment_source_id=result["pmt_account"],
                           payment_ref=result["payment_ref"])
-        pg_utils = PgUtils()
+        pg_utils = PgUtils(current_app.config['PGURI'])
         ret_voucher = pg_utils.add_voucher(voucher)
-        voucher = pg_utils.get_voucher(int(ret_voucher))  # type: ignore
+        voucher = pg_utils.get_voucher(int(ret_voucher))
+        session['voucher_amt'] = voucher['voucher_amt']
         return render_template(
             'voucher/voucher_display.html',
             title='Voucher Display',
@@ -77,18 +81,21 @@ def voucher_result():
 @bp.route("/detail_entry/<int:voucher_number>/<int:split_seq_number>", methods=['GET']) # type: ignore
 @login_required
 def detail_entry(voucher_number=None, split_seq_number=None):
-    pg_utils = PgUtils()
+    pg_utils = PgUtils(current_app.config['PGURI'])
+    voucher_remain = 0
     if request.method == 'POST':
         result = request.form
         voucher_number = result['voucher_number'] # type: ignore
         split_seq_number = pg_utils.get_next_split_number(int(voucher_number))
-        #return f"In detail_entry =={voucher_number}:{split_seq_num}==" #type: ignore
+        voucher_remain = session.get('voucher_amt' , 0)
+        voucher_remain -= pg_utils.get_detail_total(int(voucher_number))
     return render_template(
         "voucher/detail_entry.html",
         title="Voucher Detail Entry",
         description="Enter the voucher detail line items",
         voucher_number=voucher_number,
-        split_seq_number=split_seq_number
+        split_seq_number=split_seq_number,
+        voucher_remain = round(voucher_remain,2)
     )
 
 @bp.route("/detail_result", methods = ['POST']) # type: ignore
@@ -104,7 +111,7 @@ def detail_result():
             dimension_2 = result["dimension_2"],
             memo = result["memo"]
         )
-        pg_utils = PgUtils()
+        pg_utils = PgUtils(current_app.config['PGURI'])
         ret_seq = pg_utils.add_voucher_details(voucher_detail)
         voucher = pg_utils.get_voucher(int(voucher_detail.voucher_number))
         return render_template(
