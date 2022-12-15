@@ -121,8 +121,9 @@ class PgUtils:
                     type["type_text"] = row.type_text
                     type["type_code"] = row.type_code
                     voucher_types.append(type)
-        except (Exception):
-            print (Exception)
+        except Exception as ex:
+            print(f"get_voucher_types: An exception of type {ex} occurred. Arguments:\n{ex.args}")
+        
 
         return voucher_types
 
