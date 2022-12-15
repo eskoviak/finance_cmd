@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}
+Login
+{% endblock %}
+{% block header %}
+    <h1>{{ title }}</h1>
+    <p>{{ description }}</p>
+{% endblock %} 
+
+{% block content %}
+  <form method="post">
+    <label for="username">Username</label>
+    <input name="username" id="username" required autofocus>
+    <label for="password">Password</label>
+    <input type="password" name="password" id="password" required>
+    <input type="submit" value="Log In">
+  </form>
+{% endblock %}

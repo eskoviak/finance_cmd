@@ -5,8 +5,12 @@ from sqlalchemy.orm import Session
 
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
-from models_tst import (ExternalAccounts, PaymentType, Vendors, Voucher,
-                        VoucherType, VoucherDetail, User)
+#from models_tst import (ExternalAccounts, PaymentType)
+
+from finance.models.user import User
+from finance.models.vendors import Vendors
+from finance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
+from finance.models.entities import (ExternalAccounts, PaymentType)
 
 
 class PgUtils:
@@ -118,7 +122,7 @@ class PgUtils:
                     type["type_code"] = row.type_code
                     voucher_types.append(type)
         except (Exception):
-            print (Exception.__name__)
+            print (Exception)
 
         return voucher_types
 

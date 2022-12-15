@@ -3,7 +3,7 @@ import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 from pg_utils import PgUtils
 
-from models_tst import User
+#from models_tst import User
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app

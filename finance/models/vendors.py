@@ -1,10 +1,8 @@
-from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData,
-                        String, Text, create_engine)
+from sqlalchemy import (Column, Integer, MetaData, String)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+#from sqlalchemy.orm import relationship
 
-metadata_obj = MetaData(schema='finance')
-Base = declarative_base(metadata=metadata_obj)
+Base = declarative_base(metadata=MetaData(schema='finance'))
 
 class Vendors(Base):
     """The Vendors class--a collection of the system vendors
