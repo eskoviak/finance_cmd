@@ -1,9 +1,9 @@
 import functools
 import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-from pg_utils import PgUtils
+from finance.utils.pg_utils import PgUtils
 
-from models_tst import Voucher, VoucherDetail
+from archive.models_tst import Voucher, VoucherDetail
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app

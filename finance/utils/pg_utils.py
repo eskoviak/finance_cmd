@@ -1,11 +1,5 @@
-import sys
-
 from sqlalchemy import create_engine, select, text, func
 from sqlalchemy.orm import Session
-
-sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-
-#from models_tst import (ExternalAccounts, PaymentType)
 
 from finance.models.user import User
 from finance.models.vendors import Vendors
@@ -215,7 +209,7 @@ class PgUtils:
                 session.add(user)
                 session.commit()
                 session.refresh(user)
-                return user.id
+                return user.id.cast(int)
         except Exception:
             print(f"Exception in add_user:  {Exception}")
             return -2
