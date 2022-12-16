@@ -1,6 +1,3 @@
-"""models.py -- contains the ORM models used in the application
-
-"""
 from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData,
                         String, Text, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
@@ -11,8 +8,7 @@ Base = declarative_base(metadata=metadata_obj)
 
 ## MOVED ##
 class Vendors(Base):
-    """The Vendors class--a collection of the system vendors
-
+    """The Vendor model
     Args:
         Base (_type_): _description_
     """
