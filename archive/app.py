@@ -2,7 +2,7 @@ import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from flask import Flask, render_template, request
-from models_tst import Voucher, VoucherDetail
+from archive.models_tst import Voucher, VoucherDetail
 from pg_utils import PgUtils
 
 

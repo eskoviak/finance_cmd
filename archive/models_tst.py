@@ -6,6 +6,7 @@ from sqlalchemy.orm import relationship
 metadata_obj = MetaData(schema='finance')
 Base = declarative_base(metadata=metadata_obj)
 
+## MOVED ##
 class Vendors(Base):
     """The Vendor model
     Args:
@@ -114,6 +115,7 @@ class VoucherDetail(Base):
     def __repr__(self):
         return f"Details: (split: {self.split_seq_number}, account: {self.account_number}, amt: {self.amount})"
 
+## MOVED ##
 class User(Base):
     """The user table is used to provided authorization to the app
 

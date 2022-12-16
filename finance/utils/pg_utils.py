@@ -1,12 +1,10 @@
-import sys
-
 from sqlalchemy import create_engine, select, text, func
 from sqlalchemy.orm import Session
 
-sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-
-from models_tst import (ExternalAccounts, PaymentType, Vendors, Voucher,
-                        VoucherType, VoucherDetail, User)
+from finance.models.user import User
+from finance.models.vendors import Vendors
+from finance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
+from finance.models.entities import (ExternalAccounts, PaymentType)
 
 
 class PgUtils:
@@ -117,8 +115,9 @@ class PgUtils:
                     type["type_text"] = row.type_text
                     type["type_code"] = row.type_code
                     voucher_types.append(type)
-        except (Exception):
-            print (Exception.__name__)
+        except Exception as ex:
+            print(f"get_voucher_types: An exception of type {ex} occurred. Arguments:\n{ex.args}")
+        
 
         return voucher_types
 
@@ -210,7 +209,7 @@ class PgUtils:
                 session.add(user)
                 session.commit()
                 session.refresh(user)
-                return user.id
+                return user.id.cast(int)
         except Exception:
             print(f"Exception in add_user:  {Exception}")
             return -2
