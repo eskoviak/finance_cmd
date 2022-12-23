@@ -231,8 +231,8 @@ class PgUtils:
                     user_dict['id'] = row.id
                     user_dict['username'] = row.username
                     user_dict['password'] = row.password
-        except Exception:
-            print(f"Exception if get_user_by_name: {Exception}")
+        except Exception as ex:
+            print(f"Exception in get_user_by_name: {ex.args[0]}")
         return user_dict
         
 
