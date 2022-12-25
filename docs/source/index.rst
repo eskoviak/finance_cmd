@@ -1,5 +1,5 @@
 ===================
-Finance Application
+MyFinance Application
 ===================
 
 .. toctree::

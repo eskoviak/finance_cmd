@@ -1,3 +1,0 @@
-{% for ptype in payment_type_list %}
-<option value="{{ptype['payment_type_id']}}" {% if ptype['payment_type_id'] == 6 %} selected {% endif %}>{{ptype['payment_type_text']}}</option>
-{% endfor %}
