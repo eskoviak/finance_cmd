@@ -3,7 +3,7 @@ sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from flask import Flask, render_template, request, redirect, url_for
 from archive.models_tst import Voucher, VoucherDetail
-from finance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import PgUtils
 
 
 # The application factory

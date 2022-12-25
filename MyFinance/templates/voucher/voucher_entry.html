@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}
+Voucher Entry
+{% endblock %}
+{% block header %}
+    <h1>{{ title }}</h1>
+    <p>{{ description }}</p>
+{% endblock %} 
+{% block content %}
+<div class="container">
+    <form class="row" action="/voucher/voucher_result" method="POST">
+        <div class="row">
+            <div class="col">
+                <label for="voucher_date" class="visually-hidden">Transaction Date</label>
+                <input type="text" id="voucher_date" class="form-control" name="voucher_date" placeholder="Transaction Date" autofocus required/>    
+            </div>
+            <div class="col">
+                <label for="voucher_ref" class="visually-hidden">Voucher Reference</label>
+                <input type="text" id="voucher_ref" class="form-control" name="voucher_ref" placeholder="Voucher Reference" />    
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <label for="vendor-select">Vendor</label>
+                <select name="vendor" id="vendor-select" placeholder="Vendor">
+                    {% include 'voucher/vendor_select.html' %}
+                </select>    
+            </div>
+            <div class="col">
+                <label for="voucher-type-select">Voucher Type</label>
+                <select name="voucher_type" id="voucher-type-select" placeholder="Type">
+                    {% include 'voucher/voucher_type_select.html' %}
+                </select>
+            </div>
+            <div class="col">
+                <label for="voucher_amt">Amount</label>
+                <input type="number" id="voucher_amt"name="voucher_amt" step="any"/>
+            </div>
+        </div>
+
+        <div>
+
+            <label for="voucher-pay-type-select">Pmt Type</label>     
+            <select name="payment_type" id="voucher-pay-type-select">
+                {% include 'voucher/payment_type_select.html' %}
+            </select>
+            <label for="pmt-acct-select">Pmt Source</label>
+            <select name="pmt_account" id="pmt-acct-select">
+                {% include 'voucher/pmt_account_select.html' %}
+            </select>
+        </div>
+        <div>
+            <label for="payment_ref">Payment Reference</label>  
+            <input type="text" id="payment_ref" name="payment_ref"/>
+            </label>
+        </div>
+        <input type="submit" value="Submit" class="btn btn-primary mb-3">
+    </form>
+</div>
+{% endblock %}

@@ -4,8 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
 
 Base = declarative_base(metadata=MetaData(schema='finance'))
-from finance.models.entities import ExternalAccounts, PaymentType
-from finance.models.vendors import Vendors
+from MyFinance.models.entities import ExternalAccounts, PaymentType
+from MyFinance.models.vendors import Vendors
 
 class Voucher(Base):
     """Voucher Class

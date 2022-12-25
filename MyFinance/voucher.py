@@ -1,7 +1,7 @@
 import functools
 import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-from finance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import PgUtils
 
 from archive.models_tst import Voucher, VoucherDetail
 
@@ -10,7 +10,7 @@ from flask import (
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from finance.auth import login_required
+from MyFinance.auth import login_required
 
 bp = Blueprint('voucher', __name__, url_prefix='/voucher')
 

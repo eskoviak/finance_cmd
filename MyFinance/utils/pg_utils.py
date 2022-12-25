@@ -1,10 +1,10 @@
 from sqlalchemy import create_engine, select, text, func
 from sqlalchemy.orm import Session
 
-from finance.models.user import User
-from finance.models.vendors import Vendors
-from finance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
-from finance.models.entities import (ExternalAccounts, PaymentType)
+from MyFinance.models.user import User
+from MyFinance.models.vendors import Vendors
+from MyFinance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
+from MyFinance.models.entities import (ExternalAccounts, PaymentType)
 
 
 class PgUtils:
