@@ -120,4 +120,26 @@ def detail_result():
             description='Displays voucher data for the selected vouher',
             data=voucher,
             detail_total=pg_utils.get_detail_total(voucher_detail.voucher_number)
-        )     
+        )
+
+@bp.route("/search", methods = ['POST']) # type: ignore
+def search():
+    if request.method == 'POST':
+        search_phrase = request.form["search_phrase"]
+        #print(f"In search:  phase is { search_phrase}")
+        #print(f"type: {type(search_phrase)}")
+        try:
+            voucher_number = int(search_phrase)
+            #print(f"success converting")
+            if voucher_number > 0:
+                redirect('voucher/' + str(voucher_number))
+            else:
+                flash('Voucher Number less than zero', 'error')
+        except Exception as ex:
+            print(f"Exception in voucher.search: { ex.args[0]}")
+
+        return render_template(
+            'home.html'
+        )
+
+        
