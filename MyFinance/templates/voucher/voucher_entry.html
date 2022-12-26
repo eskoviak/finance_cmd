@@ -3,59 +3,105 @@
 Voucher Entry
 {% endblock %}
 {% block header %}
-    <h1>{{ title }}</h1>
-    <p>{{ description }}</p>
-{% endblock %} 
+<h1>{{ title }}</h1>
+<p>{{ description }}</p>
+{% endblock %}
 {% block content %}
 <div class="container">
-    <form class="row" action="/voucher/voucher_result" method="POST">
-        <div class="row">
-            <div class="col">
-                <label for="voucher_date" class="visually-hidden">Transaction Date</label>
-                <input type="text" id="voucher_date" class="form-control" name="voucher_date" placeholder="Transaction Date" autofocus required/>    
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Launch demo modal
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <form action="/voucher/voucher_result" method="POST">
+        <div class="row gx-5">
+            <div class="col-auto form-floating">
+                <input type="text" id="voucher_date" class="form-control" name="voucher_date"
+                    placeholder="Transaction Date" autofocus required />
+                <label class="px-5" for="voucher_date">Transaction Date</label>
+                <div id="dateHelpBlock" class="form-text">
+                    MM/DD/YY HH:MM TZ
+                </div>                
             </div>
-            <div class="col">
-                <label for="voucher_ref" class="visually-hidden">Voucher Reference</label>
-                <input type="text" id="voucher_ref" class="form-control" name="voucher_ref" placeholder="Voucher Reference" />    
+            <div class="col-auto form-floating">
+                <input type="text" id="voucher_ref" class="form-control" name="voucher_ref"
+                    placeholder="Voucher Reference" />
+                <label class="px-5" for="voucher_ref">Voucher Reference</label>
+                <div id="voucherRefHelpBlock" class="form-text">
+                    Enter identifying information from the voucher, such as the voucher number.
+                </div>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col">
-                <label for="vendor-select">Vendor</label>
-                <select name="vendor" id="vendor-select" placeholder="Vendor">
+        <div class="row gx-5 py-3">
+            <div class="col-auto form-floating">
+                <select name="vendor" id="vendor-select" placeholder="Vendor" class="form-select">
                     {% include 'voucher/vendor_select.html' %}
-                </select>    
+                </select>
+                <label class="px-5" for="vendor-select">Vendor</label>
             </div>
-            <div class="col">
-                <label for="voucher-type-select">Voucher Type</label>
-                <select name="voucher_type" id="voucher-type-select" placeholder="Type">
+            <div class="col form-floating">
+                <select name="voucher_type" id="voucher-type-select" placeholder="Type" class="form-select">
                     {% include 'voucher/voucher_type_select.html' %}
                 </select>
+                <label class="px-5" for="voucher-type-select">Voucher Type</label>
             </div>
-            <div class="col">
-                <label for="voucher_amt">Amount</label>
-                <input type="number" id="voucher_amt"name="voucher_amt" step="any"/>
+            <div class="col-auto form-floating">
+                <input type="number" id="voucher_amt" name="voucher_amt" step="any" class="form-control"/>
+                <label class="px-5" for="voucher_amt">Amount</label>
             </div>
         </div>
 
-        <div>
+        <div class="row gx-5">
+            <div class="col-auto form-floating">
+                <select name="payment_type" id="voucher-pay-type-select" class="form-select">
+                    {% include 'voucher/payment_type_select.html' %}
+                </select>
+                <label class="px-5" for="voucher-pay-type-select">Payment Type</label>
+            </div>
+            <div class="col-auto form-floating">
+                <select name="pmt_account" id="pmt-acct-select" class="form-select">
+                    {% include 'voucher/pmt_account_select.html' %}
+                </select>
+                <label class="px-5" for="pmt-acct-select">Payment Source</label>
+            </div>
+        </div>
 
-            <label for="voucher-pay-type-select">Pmt Type</label>     
-            <select name="payment_type" id="voucher-pay-type-select">
-                {% include 'voucher/payment_type_select.html' %}
-            </select>
-            <label for="pmt-acct-select">Pmt Source</label>
-            <select name="pmt_account" id="pmt-acct-select">
-                {% include 'voucher/pmt_account_select.html' %}
-            </select>
+        <div class="row gx-5 py-3">
+            <div class="col-auto form-floating">
+                <input type="text" id="payment_ref" name="payment_ref" class="form-control" placeholder="Payment Reference"/>
+                <label class="px-5" for="payment_ref" class="visually-hidden">Payment Reference</label>
+                <div id="paymentRefHelpBlock" class="form-text">
+                    Enter additional information, such as location, the nature of the service or the vendor for a generic vendor which will appear in the ledger.
+                </div>
+            </div>
         </div>
-        <div>
-            <label for="payment_ref">Payment Reference</label>  
-            <input type="text" id="payment_ref" name="payment_ref"/>
-            </label>
-        </div>
-        <input type="submit" value="Submit" class="btn btn-primary mb-3">
+
+        <div class="row gx-5">
+            <div>
+                <input type="submit" value="Submit" class="btn btn-primary mb-3">
+            </div>
+        </div>  
     </form>
 </div>
 {% endblock %}

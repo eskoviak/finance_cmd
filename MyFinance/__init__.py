@@ -28,7 +28,7 @@ def create_app(test_config=None):
         return render_template(
             'home.html',
             title='Home',
-            description='The Finance application home page'
+            description='The MyFinance application home page'
         )
 
     @app.route('/login')
