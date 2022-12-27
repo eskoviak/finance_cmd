@@ -1,14 +1,14 @@
-import functools
-import sys
-sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
+#import functools
+#import sys
+#sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 from MyFinance.utils.pg_utils import PgUtils
 
-from archive.models_tst import Voucher, VoucherDetail
+from MyFinance.models.vouchers import Voucher, VoucherDetail
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
 )
-from werkzeug.security import check_password_hash, generate_password_hash
+#from werkzeug.security import check_password_hash, generate_password_hash
 
 from MyFinance.auth import login_required
 
@@ -16,12 +16,14 @@ bp = Blueprint('voucher', __name__, url_prefix='/voucher')
 
 @bp.route("<int:voucher_number>", methods=['GET'] ) # type: ignore
 def get_voucher(voucher_number):
-    pg_utils = PgUtils(current_app.config['PGURI'])
-    voucher_dict = pg_utils.get_voucher(voucher_number)
-    session['voucher_amt'] = voucher_dict['voucher_amt']
-
     if request.method == 'GET':
+        pg_utils = PgUtils(current_app.config['PGURI'])
+        voucher_dict = pg_utils.get_voucher(voucher_number)
         if len(voucher_dict) > 0:
+            try:
+                session['voucher_amt'] = voucher_dict['voucher_amt']
+            except KeyError as ke:
+                session['voucher_amt'] = 0
             return render_template(
                 'voucher/voucher_display.html',
                 title='Voucher Display',
@@ -30,8 +32,12 @@ def get_voucher(voucher_number):
                 detail_total=pg_utils.get_detail_total(voucher_number)
             )
         else:
-            # TODO make pretty
-            return "Not Found"
+            current_app.logger.warning(f'In get_voucher: no data for voucher_number {voucher_number}')
+            return render_template(
+                'not_found.html',
+                title='No Such Voucher',
+                description=f'The voucher {voucher_number} was not found'
+            )
 
 @bp.route('/')
 @login_required
@@ -126,20 +132,19 @@ def detail_result():
 def search():
     if request.method == 'POST':
         search_phrase = request.form["search_phrase"]
-        #print(f"In search:  phase is { search_phrase}")
-        #print(f"type: {type(search_phrase)}")
         try:
             voucher_number = int(search_phrase)
-            #print(f"success converting")
             if voucher_number > 0:
-                redirect('voucher/' + str(voucher_number))
+                return redirect(str(voucher_number))
             else:
                 flash('Voucher Number less than zero', 'error')
+                return render_template(
+                    'home.html'
+                )
         except Exception as ex:
-            print(f"Exception in voucher.search: { ex.args[0]}")
-
-        return render_template(
-            'home.html'
-        )
+            current_app.logger.error(f"Exception in voucher.search: { ex.args[0]}")
+            return render_template(
+                'home.html'
+            )
 
         

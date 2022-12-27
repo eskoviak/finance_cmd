@@ -1,6 +1,7 @@
 import functools
-import sys
-sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
+#import sys
+#sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
+
 from MyFinance.utils.pg_utils import PgUtils
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
@@ -27,6 +28,7 @@ def register():
                 error = 'User exists'
             else:        
                 return redirect(url_for('auth.login'))
+        current_app.logger.warning('Error in register: {error}')
         flash(error)
     return render_template('auth/register.html',
         title='Regiser User',
@@ -50,6 +52,7 @@ def login():
             session['user_id'] = user['id']
             return redirect(url_for('home'))
         else:
+            current_app.logger.warning('Error in login: {error}')
             flash(error)
     return render_template('auth/login.html',
         title='Login',

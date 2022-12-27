@@ -21,7 +21,7 @@ def create_app(test_config=None):
         # load the test config if passed in
         app.config.from_mapping(test_config)
 
-    # a simple page that says hello
+    # The Home page
     @app.route('/')
     @app.route('/home')
     def home():
@@ -31,6 +31,12 @@ def create_app(test_config=None):
             description='The MyFinance application home page'
         )
 
+    @app.route('/help')
+    def help():
+        return render_template(
+            'help/index.html'
+        )
+    
     @app.route('/login')
     def login():
         return redirect(url_for('auth.login'))
