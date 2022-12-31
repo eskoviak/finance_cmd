@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{{title}}</h1>
+<p>{{description}}</p>
+{% endblock %}
+{% block content %}
+    <div class="container">
+        <div>
+            <div class="form-text">
+                <h3>Header</h3>
+            </div>
+
+            <div class="row gx-5">
+                <div class="col-auto form-floating">
+                    <input name="number" id="number" class="form-control" value="{{data['voucher_number']}}" readonly/>
+                    <label class="px-5" for="number">Voucher Number</label>
+                </div>
+                <div class="col-auto form-floating">
+                    <input name="date" id="date" class="form-control" value="{{data['voucher_date']}}" readonly />
+                    <label class="px-5" for="date">Trans Date</label>
+                </div>
+                <div class="col-auto form-floating">
+                    <input name="ref" id="ref"  class="form-control"value="{{data['voucher_ref']}}" readonly />
+                    <label class="px-5" for="ref">Voucher Reference</label>
+                </div>
+            </div>
+            
+            <div class="row gx-5">
+                <div class="col-auto form-floating">
+                    <input name="vendor" id="vendor" class="form-control" value="{{data['vendor']}}" readonly />
+                    <label class="px-5" for"vendor">Vendor</label>
+                </div>
+                <div class="col-auto form-floating">
+                    <input name="amount" id="amount" class="form-control" value="{{data['voucher_amt']}}" readonly />
+                    <label class="px-5" for="amount">Amount</label>
+                </div>
+            </div>
+            <div class="row gx-5">
+                <div class="col-auto form-floating">
+                    <input name="pmt_type"id="pmt_type" class="form-control" value="{{data['payment_type']}}" readonly />
+                    <label class="px-5" for="pmt_type">Pmt Type</label>
+                </div>
+                <div class="col-auto form-floating">
+                    <input name="source" id="source" class="form-control" value="{{data['payment_source']}}" readonly />
+                    <label class="px-5" for="source">Pmt Source</label>
+                </div>
+                <div class="col-auto form-floating">
+                    <input name="pmt_ref" id="pmt_ref" class="form-control" value="{{data['payment_ref']}}" readonly />
+                    <label class="px-5" for="pmt_ref">Payment Ref</label>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <div class="form-text">
+                <h3>Detail</h3>
+            </div>
+            <table class="table">
+                <thead>
+                    <th scope="col">#</th>
+                    <th scope="col">Ledger Acct</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Dim 1</th>
+                    <th scope="col">Dim 2</th>
+                    <th scope="col">Memo</th>
+                </thead>
+                <tbody>
+                    {% for line in data["Splits"] %}
+                        <tr>
+                            <th scope="row">{{line["split_seq_number"]}}</th>
+                            <td>{{line["account_number"]}}</td>
+                            <td>{{line["amount"]}}</td>
+                            <td>{{line["dimension_1"]}}</td>
+                            <td>{{line["dimension_2"]}}</td>
+                            <td>{{line["memo"]}}</td>
+                        </tr>
+                    {% endfor %}                
+                </tbody>
+            </table>
+        </div>
+
+        <div>
+            <div class="form-text">
+                <h4>Total allocated:  {{detail_total}}</h4>
+            </div>
+            <form method="POST" action="/voucher/detail_entry">
+                <input type="hidden" id="id_voucher_number" name="voucher_number" value="{{data["voucher_number"]}}"/>
+                <input type="hidden" id="id_splits_seq" name="splits" value="{{data["Splits"]}}"/>
+                <input type="submit" class="btn btn-primary mb-3" value="+" name="add_detail"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}

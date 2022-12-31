@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 import json
-from finance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import PgUtils
 import unittest
 
 # TODO Tests don't work with config from dotenv (false positive)
