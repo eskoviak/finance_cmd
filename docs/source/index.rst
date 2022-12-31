@@ -8,6 +8,7 @@ An application to track the finances of a small company.
    :maxdepth: 2
    :caption: Contents:
 
+   sections/MyFinance/index
 
 Indices and tables
 ==================
