@@ -6,7 +6,7 @@ from MyFinance.utils.pg_utils import PgUtils
 from MyFinance.models.vouchers import Voucher, VoucherDetail
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
+    Blueprint, flash, g, redirect, render_template, request, session, current_app
 )
 #from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -74,7 +74,7 @@ def voucher_result():
                           payment_ref=result["payment_ref"])
         pg_utils = PgUtils(current_app.config['PGURI'])
         ret_voucher = pg_utils.add_voucher(voucher)
-        voucher = pg_utils.get_voucher(int(ret_voucher))
+        voucher = pg_utils.get_voucher(int(ret_voucher)) # type: ignore
         session['voucher_amt'] = voucher['voucher_amt']
         return render_template(
             'voucher/voucher_display.html',
@@ -118,14 +118,14 @@ def detail_result():
             memo = result["memo"]
         )
         pg_utils = PgUtils(current_app.config['PGURI'])
-        ret_seq = pg_utils.add_voucher_details(voucher_detail)
-        voucher = pg_utils.get_voucher(int(voucher_detail.voucher_number))
+        pg_utils.add_voucher_details(voucher_detail)
+        voucher = pg_utils.get_voucher(int(voucher_detail.voucher_number)) #type: ignore
         return render_template(
             'voucher/voucher_display.html',
             title='Voucher Display',
             description='Displays voucher data for the selected vouher',
             data=voucher,
-            detail_total=pg_utils.get_detail_total(voucher_detail.voucher_number)
+            detail_total=pg_utils.get_detail_total(int(voucher_detail.voucher_number)) #type: ignore
         )
 
 @bp.route("/search", methods = ['POST']) # type: ignore

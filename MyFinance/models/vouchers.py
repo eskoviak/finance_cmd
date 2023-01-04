@@ -7,6 +7,8 @@ Base = declarative_base(metadata=MetaData(schema='finance'))
 from MyFinance.models.entities import ExternalAccounts, PaymentType
 from MyFinance.models.vendors import Vendors
 
+from flask import current_app
+
 class Voucher(Base):
     """Voucher Class
 
