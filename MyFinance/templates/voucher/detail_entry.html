@@ -9,29 +9,30 @@ Detail Entry
 {% block content %}
 <div class="container">
     <form action="/voucher/detail_result" method="POST">
-        <div class="row gx-5">
-            <div class="col-auto form-floating">
+        <div class="row gx-3">
+            <div class="col-3 form-floating">
                 <input type="text" id="voucher_number" class="form-control" name="voucher_number" value="{{voucher_number}}" readonly/>
                 <label class="px-5" for="voucher_number">Voucher Number</label>
             </div>
-            <div class="col-auto form-floating">
+            <div class="col-2 form-floating">
                 <input type="text" id="split_seq_number" class="form-control" name="split_seq_number" value="{{split_seq_number}}" readonly/>
                 <label class="px-5" for="split_seq_number">Split</label>
             </div>
-            <div class="col-auto form-floating">
+            <div class="col-5 form-floating">
                 <input type="text" id="account_number" class="form-control" name="account_number" autofocus required>
                 <label class="px-5" for="account_number">Ledger Acct</label>
             </div>
+            <div class="col-2 form-floating">
+                <button type="button" class="btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#acctHintsModal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                </button>                
+            </div>
 
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#acctHintsModal">
-                Hints
-            </button>
         </div>
 
-        <div class="row gx-5">               
+        <div class="row gx-3">               
             <div class="col-auto form-floating">
-                <input type="number" id="amount" class="form-control" name="amount" step="any" value="{{voucher_remain }}" required/>
+                <input type="number" id="amount" class="form-control" name="amount" step="any" value="{{voucher_remain}}" required/>
                 <label class="px-5" for="amount">Amount</label>
             </div>
             <div class="col-auto form-floating">
@@ -44,7 +45,7 @@ Detail Entry
             </div>
         </div>
 
-        <div class="row gx-5">
+        <div class="row gx-3">
             <div class="col-auto form-floating">
                 <input type="text" id="memo" class="form-control" name="memo"/>
                 <label class="px-5" for="memo">Line Item Memo</label>
@@ -64,7 +65,7 @@ Detail Entry
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Help</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

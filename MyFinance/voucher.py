@@ -80,7 +80,8 @@ def voucher_result():
             'voucher/voucher_display.html',
             title='Voucher Display',
             description='Displays voucher data for the selected vouher',
-            data=voucher
+            data=voucher,
+            detail_total=0
         )
 
 @bp.route("/detail_entry", methods=['POST'])
