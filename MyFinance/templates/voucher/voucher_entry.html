@@ -36,10 +36,7 @@ Voucher Entry
 
         <div class="row gx-5 py-3">
             <div class="col-auto form-floating">
-                <select name="vendor" id="vendor-select" placeholder="Vendor" class="form-select">
-                    {% include 'voucher/vendor_select.html' %}
-                </select>
-                <label class="px-5" for="vendor-select">Vendor</label>
+                {% include 'common/vendor_select.html' %}
             </div>
             <div class="col form-floating">
                 <select name="voucher_type" id="voucher-type-select" placeholder="Type" class="form-select">

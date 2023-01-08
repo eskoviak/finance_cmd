@@ -1,7 +1,15 @@
-from sqlalchemy import (Column, Integer, MetaData, String, Text, create_engine)
+import sys
+sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
+
+from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData, String, Text, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Session
-from flask import current_app
+from sqlalchemy.orm import relationship
+
+from MyFinance.models.vendors import Vendors
+#from MyFinance.models.vouchers import Voucher
+
+#from sqlalchemy.orm import Session
+#from flask import current_app
 from pathlib import Path
 import os
 
@@ -16,7 +24,7 @@ class ExternalAccounts(Base):
     __tablename__ = "external_accounts"
 
     external_account_id = Column(Integer, primary_key=True)
-    account_name = Column(String(20), nullable=False)
+    account_name = Column(String(100), nullable=False)
     account_number = Column(String(10), nullable=False)
     qualified = Column(String(1), nullable=True)
 
@@ -53,10 +61,9 @@ class CoA(Base):
 
     def __repr__(self):
         return f"CoA: (id: {self.id}, account_title: {self.account_title}, ledger_account: {self.ledger_account}, alt_ledger_account: {self.alt_ledger_account}, depth: {self.depth}, balance: {self.balance}, category: {self.category}\n)"
-    
 
 #####
-# Executtion Wrapper -- if this class is executed, any/all classes will be 
+# Execution Wrapper -- if this class is executed, any/all classes will be 
 # instantiated/modified
 #####
 if __name__ == '__main__':

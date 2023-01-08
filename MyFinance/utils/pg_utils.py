@@ -5,6 +5,9 @@ from MyFinance.models.user import User
 from MyFinance.models.vendors import Vendors
 from MyFinance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
 from MyFinance.models.entities import (ExternalAccounts, PaymentType)
+from MyFinance.models.payables import (AccountsPayable)
+
+from flask import current_app
 
 
 class PgUtils:
@@ -256,3 +259,30 @@ class PgUtils:
         except Exception:
             print(f"Exception in get_user_by_id {Exception}")
         return user_dict
+    
+    ### PAYABLE ###
+
+    def get_payable(self, payable_id) -> dict:
+        """gets AccountPayable by id
+
+        :param payable_id: the id of the payable to display
+        :type payable_id: integer
+        :return: dictionary of payables
+        :rtype: dict
+        """
+        payable_dict = {}
+        try:
+            with Session(create_engine(self.get_pg_uri())) as session:
+                results = session.query(AccountsPayable).where(AccountsPayable.id == payable_id)
+                for row in results:
+                    payable_dict['id'] = row.id
+                    payable_dict['vendor_short_desc'] = row.vendor_short_desc.vendor_short_desc
+                    payable_dict['stmt_dt'] = row.stmt_dt
+                    payable_dict['stmt_amt'] = row.stmt_amt
+                    payable_dict['payment_due_dt'] = row.payment_due_dt
+                    payable_dict['payment_source'] = row.payment_source.account_name
+                    payable_dict['payment_voucher_id'] = row.payment_voucher_id
+        except Exception as ex:
+            current_app.logger.error(f'Error in get_payable: {ex.args[0]}')
+
+        return payable_dict
