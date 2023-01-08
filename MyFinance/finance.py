@@ -2,7 +2,7 @@ import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from flask import Flask, render_template, request, redirect, url_for
-from archive.models_tst import Voucher, VoucherDetail
+#from archive.models_tst import Voucher, VoucherDetail
 from MyFinance.utils.pg_utils import PgUtils
 
 
@@ -55,5 +55,8 @@ def create_app(test_config=None):
 
     from . import auth
     app.register_blueprint(auth.bp)
+
+    from . import payable
+    app.register_blueprint(payable.bp)
 
     return app
