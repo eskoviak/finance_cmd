@@ -1,0 +1,9 @@
+<select name="voucher_type" id="voucher-type-select" placeholder="Type" class="form-select">
+    {% for type in voucher_type_list %}
+        <option value="{{type['type_code']}}" {% if type['type_code'] == 2 %} selected {% endif %}>{{type['type_text']}}</option>
+    {% endfor %}
+</select>
+<label class="ps-2" for="voucher-type-select">Type</label>
+<div id="voucherTypeHelpBlock" class="form-text">
+    <small>Select the type of voucher</small>
+</div>
