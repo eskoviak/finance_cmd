@@ -2,7 +2,6 @@
      vendor { vendor_number : vendor_short_desc } 
 -->
 <select name="vendor" id="vendor-select" class="form-select">
-    <option selected>Select a vendor</option>
     {% for vendor in vendor_list %}
     <option value="{{vendor['vendor_number']}}">{{vendor['vendor_short_desc']}}</option>
     {% endfor %}                    

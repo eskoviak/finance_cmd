@@ -13,41 +13,41 @@
         <div class="row gx-3">
             <div class="col-3 form-floating">
                 <input name="number" id="number" class="form-control" value="{{data['voucher_number']}}" readonly />
-                <label class="px-5" for="number">Voucher Number</label>
+                <label class="px-2" for="number">Number</label>
             </div>
             <div class="col-4 form-floating">
                 <input name="date" id="date" class="form-control" value="{{data['voucher_date']}}" readonly />
-                <label class="px-5" for="date">Trans Date</label>
+                <label class="px-2" for="date">Trans Date</label>
             </div>
             <div class="col-4 form-floating">
                 <input name="ref" id="ref" class="form-control" value="{{data['voucher_ref']}}" readonly />
-                <label class="px-5" for="ref">Voucher Reference</label>
+                <label class="px-2" for="ref">Reference</label>
             </div>
         </div>
 
         <div class="row gx-3">
             <div class="col-auto form-floating">
                 <input name="vendor" id="vendor" class="form-control" value="{{data['vendor']}}" readonly />
-                <label class="px-5" for"vendor">Vendor</label>
+                <label class="px-2" for"vendor">Vendor</label>
             </div>
             <div class="col-auto form-floating">
                 <input name="amount" id="amount" class="form-control" value={{ "${:,.2f}" .format(data['voucher_amt'])
                     }} readonly />
-                <label class="px-5" for="amount">Amount</label>
+                <label class="px-2" for="amount">Amount</label>
             </div>
         </div>
         <div class="row gx-3">
             <div class="col-auto form-floating">
                 <input name="pmt_type" id="pmt_type" class="form-control" value="{{data['payment_type']}}" readonly />
-                <label class="px-5" for="pmt_type">Pmt Type</label>
+                <label class="px-2" for="pmt_type">Pmt Type</label>
             </div>
             <div class="col-auto form-floating">
                 <input name="source" id="source" class="form-control" value="{{data['payment_source']}}" readonly />
-                <label class="px-5" for="source">Pmt Source</label>
+                <label class="px-2" for="source">Pmt Source</label>
             </div>
             <div class="col-auto form-floating">
                 <input name="pmt_ref" id="pmt_ref" class="form-control" value="{{data['payment_ref']}}" readonly />
-                <label class="px-5" for="pmt_ref">Payment Ref</label>
+                <label class="px-2" for="pmt_ref">Pmt Ref</label>
             </div>
         </div>
     </div>

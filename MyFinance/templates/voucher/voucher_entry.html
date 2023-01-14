@@ -46,17 +46,23 @@ Voucher Entry
         </div>
 
         <div class="row gx-2 gy-1">
-            <div class="col-md-6 form-floating">
+            <div class="col-md-4 form-floating">
                 <select name="payment_type" id="voucher-pay-type-select" class="form-select">
                     {% include 'voucher/payment_type_select.html' %}
                 </select>
                 <label class="ps-2" for="voucher-pay-type-select">Payment Type</label>
+                <div id="paymentTypeHelpBlock" class="form-text">
+                    <small>The type of the payment</small>
+                </div>
             </div>
-            <div class="col-md-6 form-floating">
+            <div class="col-md-4 form-floating">
                 <select name="pmt_account" id="pmt-acct-select" class="form-select">
                     {% include 'voucher/pmt_account_select.html' %}
                 </select>
                 <label class="ps-2" for="pmt-acct-select">Payment Source</label>
+                <div id="paymentAcctHelpBlock" class="form-text">
+                    <small>The source of the payment</small>
+                </div>  
             </div>
         </div>
 
@@ -66,8 +72,10 @@ Voucher Entry
                     placeholder="Payment Reference" />
                 <label class="ps-2" for="payment_ref">Payment Reference</label>
                 <div id="paymentRefHelpBlock" class="form-text">
-                    Enter additional information, such as location, the nature of the service or the vendor for a
-                    generic vendor which will appear in the ledger.
+                    <small>
+                        Enter additional information, such as location, the nature of the service or the vendor for a
+                        generic vendor which will appear in the ledger.
+                    </small>
                 </div>
             </div>
             <div class="col-md-4">
