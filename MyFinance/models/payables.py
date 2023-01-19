@@ -39,6 +39,7 @@ class Liabilities(Base):
     pmt_due_amt = Column(Float, nullable=False)
     pmt_due_dt = Column(DateTime, nullable=False)
     payment_voucher_id = Column(None, ForeignKey(Voucher.voucher_number))
+    period_int = Column(Float, nullable=True)
 
     def __repr__(self):
         return f"Liability (id: {self.id}, account_name: {self.account_name}, account_name {self.account_name}, ...)"

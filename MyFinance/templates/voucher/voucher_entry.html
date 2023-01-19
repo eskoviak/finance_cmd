@@ -11,10 +11,9 @@ Voucher Entry
     <form action="/voucher/voucher_result" method="POST">
         <div class="row gx-2 gy-1">
             <div class="col-md-4 form-floating">
-                <input type="text" id="voucher_date" class="form-control" name="voucher_date" placeholder="" autofocus
-                    required />
-                <label class="ps-2" for="voucher_date" data-bs-toggle="tooltip"
-                    data-bs-title="MM/DD/YY HH:MM TZ">Transaction Date</label>
+                <input type="text" id="date" class="form-control" name="voucher_date" placeholder="" autofocus required />
+                <label class="ps-2" for="date" data-bs-toggle="tooltip" data-bs-title="MM/DD/YY HH:MM TZ">Item
+                    Date</label>
                 <div id="dateHelpBlock" class="form-text">
                     <small>MM/DD/YY HH:MM TZ</small>
                 </div>
@@ -62,7 +61,7 @@ Voucher Entry
                 <label class="ps-2" for="pmt-acct-select">Payment Source</label>
                 <div id="paymentAcctHelpBlock" class="form-text">
                     <small>The source of the payment</small>
-                </div>  
+                </div>
             </div>
         </div>
 
