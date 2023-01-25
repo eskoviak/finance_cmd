@@ -7,49 +7,60 @@ Voucher Entry
 <p>{{ description }}</p>
 {% endblock %}
 {% block content %}
+{% from 'common/forms.html' import input as input_control, select as select_control %}
 <div class="container-md">
     <form action="/payable/payable_result" method="POST">
+
+        {% if mode!='enter' %}
         <div class="row gx-2 gy-1">
             <div class="col-md-4 form-floating">
-                <input type="text" id="date" class="form-control" name="stmt_dt" placeholder="" autofocus required />
-                <label class="ps-2" for="date" data-bs-toggle="tooltip" data-bs-title="MM/DD/YY HH:MM TZ">Item Date</label>
-                <div id="dateHelpBlock" class="form-text">
-                    <small>MM/DD/YY HH:MM TZ</small>
-                </div>    
+                <input type="text" id="id" class="form-control" name="id" placeholder=""
+                    value="{{payable['id']}}" readonly/>
+                <label class="ps-2" for="id" data-bs-toggle="tooltip" data-bs-title="ID">Invoice Id</label>
+                <div id="idHelpBlock" class="form-text">
+                    <small>The internal Invoice ID</small>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="row gx-2 gy-1">
+            <div class="col-md-4 form-floating">
+                {{ input_control('stmt_dt', value=None,
+                  modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}
             </div>
             <div class="col-md-4 form-floating">
-                {% include 'common/vendor_select.html' %}
+                {{ select_control('vendor', id='vendor', option_list=vendor_list, option_key='vendor_number', option_value='vendor_short_desc', 
+                  label='Vendor', helptext='Enter the Vendor') }}                
             </div>
             <div class="col-md-4 form-floating">
-                <input ype="number" id="stmt_amt" name="stmt_amt" step="any" class="form-control"/>
+                {{ input_control('invoice_id', value=None, label='Invoice',
+                  helptext='The reference number on the invoice') }}
+            </div>
+        </div>
+
+        <div class="row gx-2 gy-1">
+            <div class="col-md-3 form-floating">
+                <input ype="number" id="stmt_amt" name="stmt_amt" step="any" class="form-control" />
                 <label class="ps-2" for="stmt_amt">Stmt Amount</label>
                 <div id="" class="form-text">
                     <small>The amount on the invoice</small>
                 </div>
             </div>
-        </div>
-
-        <div class="row gx-2 gy-1">
             <div class="col-md-4 form-floating">
-                <input type="text" id="payment_due_dt" class="form-control" name="payment_due_dt" placeholder="" autofocus required />
-                <label class="ps-2" for="payment_due_dt" data-bs-toggle="tooltip" data-bs-title="MM/DD/YY HH:MM TZ">Pmt Due Date</label>
-                <div id="dateHelpBlock" class="form-text">
-                    <small>MM/DD/YY HH:MM TZ</small>
-                </div>    
+                    {{ input_control('payment_due_dt', value=None,
+                      modifiers='autofocus required', label='Pmt Due Date', helptext='MM/DD/YY HH:MM TZ') }}                
+            </div>
+            <div class="col-md-3 form-floating">
+                {{ select_control('payment_source', id='pmt-acct-select', option_list=account_list, option_key='external_account_id', option_value='account_name',
+                  label='Pmt Source', helptext='The voucher id when payment is made')  }}
             </div>
             <div class="col-md-4 form-floating">
-                <select name="payment_source" id="pmt-acct-select" class="form-select">
-                    {% include 'voucher/pmt_account_select.html' %}
-                </select>
-                <label class="ps-2" for="payment_source">Payment Source</label>
-                <div id="paymentAcctHelpBlock" class="form-text">
-                    <small>The source of the payment</small>
-                </div>
+                {{ input_control('payment_voucher_id', label='Pmt Vouche Id',
+                  helptext='The voucher number which issued payment (if known)') }}
+            </div>
         </div>
-
-
+        <input type="submit" value="Submit" class="btn btn-primary mb-3">
     </form>
 </div>
 
-{% endblock %
-}
+{% endblock %}

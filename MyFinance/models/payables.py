@@ -64,6 +64,7 @@ class AccountsPayable(Base):
     id = Column(Integer, primary_key=True)
     vendor_number = Column(None, ForeignKey(Vendors.vendor_number))
     vendor_short_desc : Vendors = relationship(Vendors)
+    invoice_id = Column(String, nullable=True)
     stmt_dt = Column(DateTime, nullable=False)
     stmt_amt = Column(Float, nullable=False)
     payment_due_dt = Column(DateTime, nullable=False)

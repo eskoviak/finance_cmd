@@ -7,75 +7,50 @@ Voucher Entry
 <p>{{ description }}</p>
 {% endblock %}
 {% block content %}
+{% from 'common/forms.html' import input as input_control, select as select_control %}
 <div class="container-md">
     <form action="/voucher/voucher_result" method="POST">
         <div class="row gx-2 gy-1">
             <div class="col-md-4 form-floating">
-                <input type="text" id="date" class="form-control" name="voucher_date" placeholder="" autofocus required />
-                <label class="ps-2" for="date" data-bs-toggle="tooltip" data-bs-title="MM/DD/YY HH:MM TZ">Item
-                    Date</label>
-                <div id="dateHelpBlock" class="form-text">
-                    <small>MM/DD/YY HH:MM TZ</small>
-                </div>
+                {{ input_control('voucher_date', value=None,
+                  modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
             </div>
             <div class="col-md-8 form-floating">
-                <input type="text" id="voucher_ref" class="form-control" name="voucher_ref"
-                    placeholder="Voucher Reference" />
-                <label class="ps-2" for="voucher_ref">Voucher Reference</label>
-                <div id="voucherRefHelpBlock" class="form-text">
-                    <small>Enter identifying information from the voucher, such as the voucher or invoice number</small>
-                </div>
+                {{ input_control('voucher_ref', value=None,
+                  label='Voucher Reference', helptext='Enter identifying information from the voucher, such as the voucher or invoice number') }}
             </div>
         </div>
 
         <div class="row gx-2 gy-1">
             <div class="col-md-6 form-floating">
-                {% include 'common/vendor_select.html' %}
+                {{ select_control('vendor', id='vendor', option_list=vendor_list, option_key='vendor_number', option_value='vendor_short_desc', 
+                  label='Vendor', helptext='Enter the Vendor') }}
             </div>
             <div class="col-md-3 form-floating">
-                {% include 'common/voucher_type_select.html' %}
+                {{ select_control('voucher_type', id='voucher_type', option_list=voucher_type_list, option_key='type_code', option_value='type_text',
+                  label='Type', helptext='The type of the voucher') }}
             </div>
             <div class="col-md-3 form-floating">
-                <input type="number" id="voucher_amt" name="voucher_amt" step="any" class="form-control" />
-                <label class="ps-2" for="voucher_amt">Amount</label>
-                <div id="amountHelpBlock" class="form-text">
-                    <small>The amount of the voucher</small>
-                </div>
+                {{ input_control('voucher_amt', type='number', value=None,
+                  label='Amount', helptext='The amount of the voucher' ) }}
             </div>
         </div>
 
         <div class="row gx-2 gy-1">
             <div class="col-md-4 form-floating">
-                <select name="payment_type" id="voucher-pay-type-select" class="form-select">
-                    {% include 'voucher/payment_type_select.html' %}
-                </select>
-                <label class="ps-2" for="voucher-pay-type-select">Payment Type</label>
-                <div id="paymentTypeHelpBlock" class="form-text">
-                    <small>The type of the payment</small>
-                </div>
+                {{ select_control('payment_type', id='voucher-pay-type-select', option_list=payment_type_list, option_key='payment_type_id', 
+                  option_value='payment_type_text', label='Pmt Type', helptext='The type of the payment')}}
             </div>
             <div class="col-md-4 form-floating">
-                <select name="pmt_account" id="pmt-acct-select" class="form-select">
-                    {% include 'voucher/pmt_account_select.html' %}
-                </select>
-                <label class="ps-2" for="pmt-acct-select">Payment Source</label>
-                <div id="paymentAcctHelpBlock" class="form-text">
-                    <small>The source of the payment</small>
-                </div>
+                {{ select_control('pmt_account', option_list=account_list, option_key='external_account_id', option_value='account_name',
+                    label='Payment Source', helptext='The source of the payment')}}
             </div>
         </div>
 
         <div class="row gx-2 gy-1">
             <div class="col-md-8 form-floating">
-                <input type="text" id="payment_ref" name="payment_ref" class="form-control"
-                    placeholder="Payment Reference" />
-                <label class="ps-2" for="payment_ref">Payment Reference</label>
-                <div id="paymentRefHelpBlock" class="form-text">
-                    <small>
-                        Enter additional information, such as location, the nature of the service or the vendor for a
-                        generic vendor which will appear in the ledger.
-                    </small>
-                </div>
+                {{ input_control('payment_ref', value=None, label='Payment Reference', 
+                  helptext='Enter additional information, such as location, the nature of the service or the vendor for a generic vendor which will appear in the ledger.') }}
             </div>
             <div class="col-md-4">
                 <input type="submit" value="Submit" class="btn btn-primary mb-3">

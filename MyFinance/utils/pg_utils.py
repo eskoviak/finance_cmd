@@ -277,6 +277,7 @@ class PgUtils:
                 for row in results:
                     payable_dict['id'] = row.id
                     payable_dict['vendor_short_desc'] = row.vendor_short_desc.vendor_short_desc
+                    payable_dict['invoice_id'] = row.invoice_id
                     payable_dict['stmt_dt'] = row.stmt_dt
                     payable_dict['stmt_amt'] = row.stmt_amt
                     payable_dict['payment_due_dt'] = row.payment_due_dt
@@ -286,3 +287,14 @@ class PgUtils:
             current_app.logger.error(f'Error in get_payable: {ex.args[0]}')
 
         return payable_dict
+
+    def add_payable(self, payable : AccountsPayable) -> int:
+        try:
+            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
+                session.add(payable)
+                session.commit()
+                session.refresh(payable)
+                return payable.id  #type: ignore
+        except Exception as ex:
+            current_app.logger.error(f'Error in add_payable: {ex.args[0]}')
+            return 0
