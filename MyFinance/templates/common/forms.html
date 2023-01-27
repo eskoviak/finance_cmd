@@ -18,5 +18,14 @@
     </div>
 {%- endmacro %}
 
+{% macro display(label, value) -%}
+<div class="row g-0">
+    <div class="col-auto"><small>{{label}}</small></div>
+</div>
+<div class="row g-0">
+    <div class="col-auto">{{value}}</div>
+</div>
+{%- endmacro %}
+
 
 

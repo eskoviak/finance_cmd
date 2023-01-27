@@ -17,13 +17,10 @@ def get_payable(payable_id):
             payable_dict = pg_utils.get_payable(payable_id)
             if len(payable_dict) > 0:
                     return render_template(
-                        'payable/payable_entry.html',
+                        'payable/payable_display.html',
                         title='Payable',
                         description='Display a payable',
-                        vendor_list=pg_utils.get_vendors(),
-                        account_list=pg_utils.get_external_accounts(),
-                        payable=payable_dict,
-                        mode='display'                               
+                        payable=payable_dict
                     )
             else:
                 current_app.logger.warning(f'In payable.get_payable: no data return for payable_id: {payable_id}')
@@ -77,14 +74,10 @@ def payable_result():
                 ret_payable = pg_utils.add_payable(payable)
                 payable = pg_utils.get_payable(ret_payable)
                 return render_template(
-                        'payable/payable_entry.html',
+                        'payable/payable_dipsplay.html',
                         title='Payable',
                         description='Display a payable',
-                        payable=payable,
-                        vendor_list=pg_utils.get_vendors(),
-                        account_list=pg_utils.get_external_accounts(),
-                        mode='display'                        
-
+                        payable=payable
                 )
                            
                 
