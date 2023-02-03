@@ -49,6 +49,10 @@ def enter_payable():
                 #payment_type_list=pg_utils.get_payment_types()
         )
 
+@bp.route('/edit/<int:payable_id>', methods=['POST', 'GET']) #type: ignore
+def edit_payable(payable_id):
+        return f'Coming soon, {payable_id}'
+
 @bp.route('payable_result', methods=['POST', 'GET']) #type: ignore
 def payable_result():
         """/payable/payable_result
@@ -74,7 +78,7 @@ def payable_result():
                 ret_payable = pg_utils.add_payable(payable)
                 payable = pg_utils.get_payable(ret_payable)
                 return render_template(
-                        'payable/payable_dipsplay.html',
+                        'payable/payable_display.html',
                         title='Payable',
                         description='Display a payable',
                         payable=payable

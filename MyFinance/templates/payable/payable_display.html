@@ -18,6 +18,11 @@
         <div class="col-4">{{ display('Pmt Account', payable['payment_source']) }}</div>
         <div class="col-2">{{ display('Pmt Voucher', payable['payment_voucher_id']) }}</div>
     </div>
+    <div class="row justify-content-end">
+        <div class="col-auto">
+            <a class="btn button-outline-primary" href={{url_for('payable.edit_payable', payable_id=payable['id'])}}>Edit</a>
+        </div> 
+    </div>
 
 </div>
 {% endblock %}

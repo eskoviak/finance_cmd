@@ -9,6 +9,8 @@ from MyFinance.models.payables import (AccountsPayable)
 
 from flask import current_app
 
+import logging
+
 
 class PgUtils:
     """This class encapsulates the various functions needed by the finance application
@@ -153,9 +155,9 @@ class PgUtils:
                 session.commit()
                 session.refresh(Voucher)
                 return Voucher.voucher_number
-        except (Exception):
-            print (Exception.__name__)
-            return Exception.__repr__
+        except Exception as ex:
+            logging.error(f'Error in {__name__}:  {ex.args[0]}')
+            return f'Error in {__name__}:  {ex.args[0]}'
 
     def add_voucher_details(self, VoucherDetail):
         try:
@@ -164,8 +166,9 @@ class PgUtils:
                 session.commit()
                 session.refresh(VoucherDetail)
                 return VoucherDetail.id
-        except (Exception):
-            return Exception.__repr__            
+        except Exception as ex:
+            logging.error(f'Error in {__name__}:  {ex.args[0]}')
+            return f'Error in {__name__}:  {ex.args[0]}'
 
     def get_next_split_number(self, voucher_number : int):
 
@@ -238,7 +241,6 @@ class PgUtils:
             print(f"Exception in get_user_by_name: {ex.args[0]}")
         return user_dict
         
-
     def get_user_by_id(self, user_id : int) -> dict:
         """_summary_
 
