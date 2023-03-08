@@ -11,8 +11,8 @@ SELECT v.voucher_date
 FROM finance.voucher v
 JOIN finance.voucher_detail vd on v.voucher_number = vd.voucher_number
 JOIN finance.vendors ve on v.vendor_number = ve.vendor_number
-WHERE v.vendor_number = 1001
-  AND voucher_date > '12/1/22'
+WHERE v.vendor_number = (select vendor_number from vendors where vendor_short_desc ilike '%keller%')
+  --AND voucher_date > '12/1/22'
 --WHERE account_number IN (
 --  SELECT DISTINCT account_number FROM finance.voucher_detail
 --)
