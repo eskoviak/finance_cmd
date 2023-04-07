@@ -26,8 +26,8 @@ def get_payable(payable_id):
                 current_app.logger.warning(f'In payable.get_payable: no data return for payable_id: {payable_id}')
                 return render_template(
                         'not_found.html',
-                        description='The payable {payable_id} as not found',
-                        title='No such payable'
+                        description='The payable {payable_id} was not found',
+                        title='No Such payable'
                 )
             
 @bp.route('/') #type: ignore

@@ -59,4 +59,7 @@ def create_app(test_config=None):
     from . import payable
     app.register_blueprint(payable.bp)
 
+    from . import liability
+    app.register_blueprint(liability.bp)
+
     return app

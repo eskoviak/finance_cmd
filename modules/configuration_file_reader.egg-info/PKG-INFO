@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: configuration-file-reader
+Version: 0.0.4
+Summary: reads file in instance for configuration dictionary
+Home-page: http://packages.python.org/an_example_pypi_project
+Author: Ed Skoviak
+Author-email: eskoviak@eskoviak.com
+License: BSD
+Keywords: example documentation tutorial
+Platform: UNKNOWN
+Classifier: Development Status :: 3 - Alpha
+Classifier: Topic :: Utilities
+Classifier: License :: OSI Approved :: BSD License
+
+UNKNOWN
+

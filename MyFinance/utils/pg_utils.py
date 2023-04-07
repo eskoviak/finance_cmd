@@ -5,7 +5,7 @@ from MyFinance.models.user import User
 from MyFinance.models.vendors import Vendors
 from MyFinance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
 from MyFinance.models.entities import (ExternalAccounts, PaymentType)
-from MyFinance.models.payables import (AccountsPayable)
+from MyFinance.models.payables import (AccountsPayable, Liabilities)
 
 from flask import current_app
 
@@ -300,3 +300,29 @@ class PgUtils:
         except Exception as ex:
             current_app.logger.error(f'Error in add_payable: {ex.args[0]}')
             return 0
+        
+    def get_liability(self, liability_id : int) -> dict:
+        """gets liability by id
+
+        :param liability_id: the id of the payable to display
+        :type liability: integer
+        :return: dictionary of liability
+        :rtype: dict
+        """
+        liability_dict = {}
+        try:
+            with Session(create_engine(self.get_pg_uri())) as session:
+                results = session.query(Liabilities).where(Liabilities.id == liability_id)
+                for row in results:
+                    liability_dict['id'] = row.id
+                    liability_dict['account_name'] = row.account_name.account_name
+                    liability_dict['original_amt'] = row.original_amt
+                    liability_dict['current_balance_amt'] = row.current_balance_amt
+                    liability_dict['current_balance_dt'] = row.current_balance_dt
+                    liability_dict['pmt_due_amt'] = row.pmt_due_amt
+                    liability_dict['pmt_due_dt'] = row.pmt_due_dt
+                    liability_dict['payment_voucher_id'] = row.payment_voucher_id
+                    liability_dict['period_int'] = row.period_int
+        except Exception as ex:
+            current_app.logger.error(f'Error in get_liability: {ex.args[0]}')
+        return liability_dict
