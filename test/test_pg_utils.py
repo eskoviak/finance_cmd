@@ -15,8 +15,9 @@ class TestPGUtils(unittest.TestCase):
 
     
     def setUp(self) -> None:
-        config = self.util.get_config(os.path.abspath('/Users/edmundlskoviak/Documents/repos/finance_cmd'))
-        self.pg_utils = PgUtils(config['PGURI'])
+        #config = self.util.get_config(os.path.abspath('/Users/edmundlskoviak/Documents/repos/finance_cmd'))
+        #self.pg_utils = PgUtils(config['PGURIT'])
+        self.pg_utils = PgUtils('postgresql://postgres:terces##@localhost:5432/finance')
         return super().setUp()
     
     def test_get_voucher(self):
@@ -53,6 +54,12 @@ class TestPGUtils(unittest.TestCase):
         result = self.pg_utils.get_liability(test_liability_number)
         self.assertIs(type(result), dict, 'Result is not a dict')
         self.assertEqual(result['current_balance_amt'], 4480.68, 'Current balance amount not matched')
+
+    def test_get_liability_by_account(self):
+        test_account_number = 21005
+        result = self.pg_utils.get_liability_by_account(test_account_number)
+        self.assertIs(type(result), list, 'Result is not a list')
+        self.assertEqual(len(result), 3, 'List is not 3 items long')
 
     
 

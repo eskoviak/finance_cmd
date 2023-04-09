@@ -326,3 +326,37 @@ class PgUtils:
         except Exception as ex:
             current_app.logger.error(f'Error in get_liability: {ex.args[0]}')
         return liability_dict
+
+    def get_liability_by_account(self, account_number : int) -> list:
+        """gets liability by account_number
+
+        :param vendor_number: the account number being sought
+        :type vendor_number: integer
+        :return: list of liabilities
+        :rtype: list
+        """        
+        Liabilities_list = []
+        try:
+            with Session(create_engine(self.get_pg_uri())) as session:
+                stmt = select(Liabilities.id, ExternalAccounts.account_name, Liabilities.original_amt, 
+                            Liabilities.current_balance_amt, Liabilities.current_balance_dt,
+                            Liabilities.pmt_due_amt, Liabilities.pmt_due_dt, Liabilities.payment_voucher_id,
+                            Liabilities.period_int).join(ExternalAccounts).where(ExternalAccounts.external_account_id == account_number)
+                print(stmt)
+                results = session.execute(stmt)
+                for row in results:
+                    tmp = {}
+                    tmp['id'] = row.id
+                    tmp['account_name'] = row.account_name
+                    tmp['original_amt'] = row.original_amt
+                    tmp['current_balance_amt'] = row.current_balance_amt
+                    tmp['current_balance_dt'] = row.current_balance_dt
+                    tmp['pmt_due_amt'] = row.pmt_due_amt
+                    tmp['pmt_due_dt'] = row.pmt_due_dt
+                    tmp['payment_voucher_id'] = row.payment_voucher_id
+                    tmp['period_int'] = row.period_int
+                    Liabilities_list.append(tmp)  
+        except Exception as ex:
+            current_app.logger.error(f'Error in get_liability_by_account: {ex.args[0]}')       
+            #print(ex.args[0])     
+        return Liabilities_list

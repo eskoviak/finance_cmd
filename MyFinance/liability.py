@@ -29,3 +29,24 @@ def get_liability(liability_id):
                 description='The liability {liability_id} was not found',
                 title='No Such Liablity'
         )        
+
+@bp.route('/liability/<int:account_number>', methods=['GET']) #type: ignore
+def get_liabiity_list(account_number):
+    pg_utils = PgUtils(current_app.config['PGURI'])
+    liability_list = pg_utils.get_liability_by_account(account_number)
+    if len(liability_list) > 0:
+        return render_template(
+            'liability/liability_list.html',
+            title='List Liabilities',
+            description=f"Current liabilities for {account_number}",
+            liability_list=liability_list
+        )
+    else:
+        current_app.logger.warning(f'In liability.get_liabiity_list: no data return for account_number: {account_number}')
+        return render_template(
+                'not_found.html',
+                description='The account {account_number} was not found',
+                title='No Such Liablity'
+        )          
+
+    
