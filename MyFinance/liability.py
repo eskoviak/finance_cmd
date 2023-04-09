@@ -11,6 +11,24 @@ from MyFinance.auth import login_required
 
 bp = Blueprint('liability', __name__, url_prefix='/liability')
 
+@bp.route('/', methods=['GET']) #type: ignore
+def enter_liability():
+    pg_utils = PgUtils(current_app.config['PGURI'])
+    
+    return render_template(
+        'liability/liability_entry.html',
+        title='Liability',
+        description = 'Enter liability information',
+        mode='enter',
+        account_list=pg_utils.get_external_accounts()
+    )
+
+@bp.route('liability_result', methods=['GET', 'POST']) #type: ignore
+def liability_result():
+    if request.method == 'POST':
+        results = request.form
+        return results
+
 @bp.route('<int:liability_id>', methods=['GET']) #type: ignore
 def get_liability(liability_id):
     pg_utils = PgUtils(current_app.config['PGURI'])
