@@ -1,6 +1,6 @@
 from MyFinance.utils.pg_utils import PgUtils
 
-from MyFinance.models.payables import AccountsPayable
+from MyFinance.models.payables import AccountsPayable,Liabilities
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, current_app
@@ -27,6 +27,36 @@ def enter_liability():
 def liability_result():
     if request.method == 'POST':
         results = request.form
+        pg_utils = PgUtils(current_app.config['PGURI']) 
+        new_id = pg_utils.get_next_liability_id()
+
+        ## Need to guard against empty string in int field
+        if results['payment_voucher_id'] == '':
+            pmt_voucher_id = None
+        else:
+            pmt_voucher_id = int(results['payment_voucher_id'])   
+
+        liability = Liabilities( 
+            id = new_id,
+            payment_voucher_id = pmt_voucher_id,
+            external_account_id = results['external_account_id'],
+            current_balance_dt = results['current_balance_dt'],
+            current_balance_amt = results['current_balance_amt'],
+            pmt_due_dt = results['pmt_due_dt'],
+            pmt_due_amt = results['pmt_due_amt'],
+            period_int = results['period_int']
+        )
+
+        pg_utils.add_liability(liability)
+        liability_dict = pg_utils.get_liability(int(new_id)) #type: ignore
+        return render_template(
+            'liability/liability_display.html',
+            title='Liability',
+            description = 'Display a liability',
+            liability=liability_dict            
+
+        )
+
         return results
 
 @bp.route('<int:liability_id>', methods=['GET']) #type: ignore

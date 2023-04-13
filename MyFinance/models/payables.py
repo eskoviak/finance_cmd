@@ -43,7 +43,7 @@ class Liabilities(Base):
 
     def __repr__(self):
         return f"Liability (id: {self.id}, account_name: {self.account_name}, account_name {self.account_name}, ...)"
-
+    
 class AccountsPayable(Base):
     """AccountsPayable Class
 

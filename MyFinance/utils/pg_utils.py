@@ -1,5 +1,5 @@
-from sqlalchemy import create_engine, select, text, func
-from sqlalchemy.orm import Session
+from sqlalchemy import create_engine, select, text, func, Sequence
+from sqlalchemy.orm import Session, sessionmaker
 
 from MyFinance.models.user import User
 from MyFinance.models.vendors import Vendors
@@ -18,6 +18,8 @@ class PgUtils:
     """
     def __init__(self, pguri):
         self.pguri = pguri
+        self.engine = create_engine(pguri)
+        self.Session = sessionmaker(self.engine)
 
     def get_pg_uri(self) -> str:
         """Returns the detected uri
@@ -91,7 +93,7 @@ class PgUtils:
         """
         account_list = []
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:  # type: ignore
+            with self.Session.begin() as session:  # type: ignore
                 results = session.query(ExternalAccounts).order_by(ExternalAccounts.account_name)
 
                 for row in results:
@@ -99,8 +101,9 @@ class PgUtils:
                     account["account_name"] = row.account_name
                     account["external_account_id"] = row.external_account_id
                     account_list.append(account)
-        except (Exception):
-            print(Exception.__name__)
+        except Exception as ex:
+            print(f"Exception in get_external_accounts: {ex.args[0]}")
+            return account_list
 
         return account_list
 
@@ -262,7 +265,9 @@ class PgUtils:
             print(f"Exception in get_user_by_id {Exception}")
         return user_dict
     
-    ### PAYABLE ###
+    #####
+    ## Payables
+    #####
 
     def get_payable(self, payable_id) -> dict:
         """gets AccountPayable by id
@@ -289,6 +294,18 @@ class PgUtils:
             current_app.logger.error(f'Error in get_payable: {ex.args[0]}')
 
         return payable_dict
+    
+    def get_payable_by_account(self, account_number : int) -> list:
+        """gets a list of accounts_payable by account number
+
+        :param account_number: the account number being sought
+        :type vendor_number: integer
+        :return: list of payables
+        :rtype: list
+        """
+        payables_list = []
+
+        return payables_list
 
     def add_payable(self, payable : AccountsPayable) -> int:
         try:
@@ -301,6 +318,10 @@ class PgUtils:
             current_app.logger.error(f'Error in add_payable: {ex.args[0]}')
             return 0
         
+
+    ######
+    ## Liabilities
+    ######
     def get_liability(self, liability_id : int) -> dict:
         """gets liability by id
 
@@ -360,3 +381,20 @@ class PgUtils:
             current_app.logger.error(f'Error in get_liability_by_account: {ex.args[0]}')       
             #print(ex.args[0])     
         return Liabilities_list
+    
+    def add_liability(self, liability : Liabilities) -> int:
+        try:
+            with self.Session.begin() as session:                
+                session.add(liability)
+                return 1
+        except Exception as ex:
+            current_app.logger.error(f'Error in add_liability: {ex.args[0]}')   
+            return -1  
+
+    def get_next_liability_id(self) -> int: #type: ignore
+        try:
+            with self.Session() as session:
+                return session.execute(Sequence(name='liabilities_id_seq', schema='finance')) #type: ignore
+        except Exception as ex:
+            current_app.logger.error(f'Error in get_next_liability_id: {ex.args[0]}')
+            return 0
