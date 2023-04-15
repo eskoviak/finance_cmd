@@ -53,6 +53,21 @@ def enter_payable():
 def edit_payable(payable_id):
         return f'Coming soon, {payable_id}'
 
+@bp.route('/list/<int:vendor_number>', methods=['GET']) #type: ignore
+def get_payable_by_vendor(vendor_number : int):
+        """gets a list of payables by vendor
+        
+        <param vendor_number> : 
+        """
+        pg_utils = PgUtils(current_app.config['PGURI'])
+        return render_template(
+                'payable/payable_list.html',
+                title = 'Payables',
+                description = f'List of payables by Vendor_number {vendor_number}',
+                payable_list = pg_utils.get_payable_by_vendor(vendor_number)
+        )
+
+
 @bp.route('payable_result', methods=['POST', 'GET']) #type: ignore
 def payable_result():
         """/payable/payable_result

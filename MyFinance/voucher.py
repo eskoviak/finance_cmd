@@ -129,6 +129,7 @@ def detail_result():
             detail_total=pg_utils.get_detail_total(int(voucher_detail.voucher_number)) #type: ignore
         )
 
+### Deprecate in favor of search.py
 @bp.route("/search", methods = ['POST']) # type: ignore
 def search():
     if request.method == 'POST':

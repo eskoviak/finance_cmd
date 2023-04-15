@@ -65,7 +65,7 @@ class PgUtils:
 
         return voucher_dict
 
-    def get_vendors(self) -> list:
+    def get_vendors(self,filter=None) -> list:
         """gets the list of vendors
 
         Returns:
@@ -73,15 +73,23 @@ class PgUtils:
         """
         vendor_list = []
         try:
-            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
-                results = session.query(Vendors).order_by(Vendors.vendor_short_desc)
-                for row in results:
-                    vendor = {}
-                    vendor["vendor_short_desc"] = row.vendor_short_desc
-                    vendor["vendor_number"] = row.vendor_number
-                    vendor_list.append(vendor)
-        except (Exception):
-            print(Exception.__name__)
+            if filter == None:
+                with self.Session() as session: # type: ignore
+                    results = session.query(Vendors).order_by(Vendors.vendor_short_desc)
+
+            else:
+                with self.Session() as session: #type: ignore
+                    results = session.query(Vendors).where(Vendors.vendor_short_desc.ilike(f"%{filter}%",))                
+                    #stmt = select(Vendors).where(Vendors.vendor_short_desc ILIKE f'%{filter}%')
+                    #results = session.execute(stmt)
+            for row in results:
+                vendor = {}
+                vendor["vendor_short_desc"] = row.vendor_short_desc
+                vendor["vendor_number"] = row.vendor_number
+                vendor_list.append(vendor)
+        except Exception as ex:
+            #current_app.logger.error(f'Error in get_vendors: {ex.args[0]}')
+            print(ex.args[0])
 
         return vendor_list
 
@@ -295,7 +303,7 @@ class PgUtils:
 
         return payable_dict
     
-    def get_payable_by_account(self, account_number : int) -> list:
+    def get_payable_by_vendor(self, vendor_number : int) -> list:
         """gets a list of accounts_payable by account number
 
         :param account_number: the account number being sought
@@ -304,6 +312,26 @@ class PgUtils:
         :rtype: list
         """
         payables_list = []
+        try:
+            with self.Session() as session:
+                stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id,
+                    AccountsPayable.stmt_dt, AccountsPayable.stmt_amt,AccountsPayable.payment_due_dt, ExternalAccounts.account_name,
+                    AccountsPayable.payment_voucher_id).join(ExternalAccounts).join(Vendors).where(AccountsPayable.vendor_number== vendor_number).order_by(AccountsPayable.payment_due_dt)
+                print(stmt)
+                results = session.execute(stmt)
+                for row in results:
+                    tmp = {}
+                    tmp['id'] = row.id
+                    tmp['vendor'] = row.vendor_short_desc
+                    tmp['invoice_id'] = row.invoice_id
+                    tmp['stmt_dt'] = row.stmt_dt
+                    tmp['stmt_amt'] = row.stmt_amt
+                    tmp['payment_due_dt'] = row.payment_due_dt
+                    tmp['account_name]'] = row.account_name
+                    tmp['payment_voucher_id'] = row.payment_voucher_id
+                    payables_list.append(tmp)        
+        except Exception as ex:
+            current_app.logger.error(f'Error in get_payable_by_account: {ex.args[0]}')
 
         return payables_list
 

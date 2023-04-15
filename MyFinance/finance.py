@@ -62,4 +62,7 @@ def create_app(test_config=None):
     from . import liability
     app.register_blueprint(liability.bp)
 
+    from . import search
+    app.register_blueprint(search.bp)
+
     return app
