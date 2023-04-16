@@ -9,9 +9,39 @@ from flask import (
 
 from MyFinance.auth import login_required
 
+import inspect
+
 bp = Blueprint('search', __name__, url_prefix='/search')
-@bp.route('<str>:search_phrase>', methods=['POST']) #type: ignore
-def search_objects(self, search_phrase : str):
+@bp.route('/', methods=['POST']) #type: ignore
+def search_objects():
+    if request.method == 'POST':
+        search_phrase = request.form["search_phrase"]
+        voucher_list = []
+        vendor_list = []
+        ## is the search phrase a number? Must be an id
+        pg_utils = PgUtils(current_app.config['PGURI'])
+        try:
+            if search_phrase.isdigit():
+                ## Voucher
+                voucher_list.append(pg_utils.get_voucher(int(search_phrase)))
+            else:
+                ## Vendor
+                current_app.logger.info(f'{inspect.stack()[0][0].f_code.co_name} Search Phrase: {search_phrase}')
+                vendor_list = pg_utils.get_vendors(filter=str(search_phrase))
+                current_app.logger.info(f'DB call returned {len(vendor_list)}')
+            return render_template(
+                'search/global_search.html',
+                title='Global Search',
+                description='Global Search Results',
+                vouchers=voucher_list,
+                vendors=vendor_list
+            )
+            
+        except Exception as ex:
+            current_app.logger.error(f"Exception in search.search_objects: { ex.args[0]}")
+            return render_template(
+                'home.html'
+            )
     
     
 

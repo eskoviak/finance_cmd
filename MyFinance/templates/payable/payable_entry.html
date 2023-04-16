@@ -11,7 +11,7 @@ Voucher Entry
 <div class="container-md">
     <form action="/payable/payable_result" method="POST">
 
-        {% if mode!='enter' %}
+        {% if mode=='edit' %}
         <div class="row gx-2 gy-1">
             <div class="col-md-4 form-floating">
                 <input type="text" id="id" class="form-control" name="id" placeholder=""

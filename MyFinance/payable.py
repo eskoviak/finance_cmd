@@ -9,9 +9,12 @@ from flask import (
 
 from MyFinance.auth import login_required
 
+import inspect
+
 bp = Blueprint('payable', __name__, url_prefix='/payable')
 
 @bp.route('<int:payable_id>', methods=['GET']) #type: ignore
+@login_required
 def get_payable(payable_id):
             pg_utils = PgUtils(current_app.config['PGURI'])
             payable_dict = pg_utils.get_payable(payable_id)
@@ -20,10 +23,10 @@ def get_payable(payable_id):
                         'payable/payable_display.html',
                         title='Payable',
                         description='Display a payable',
-                        payable=payable_dict
+                        payable=payable_dict                        
                     )
             else:
-                current_app.logger.warning(f'In payable.get_payable: no data return for payable_id: {payable_id}')
+                current_app.logger.warning(f'{inspect.stack()[0][0].f_code.co_name}: no data return for payable_id: {payable_id}')
                 return render_template(
                         'not_found.html',
                         description='The payable {payable_id} was not found',
@@ -45,13 +48,11 @@ def enter_payable():
                 vendor_list=pg_utils.get_vendors(),
                 account_list=pg_utils.get_external_accounts(),
                 mode='enter'
-                #voucher_type_list=pg_utils.get_voucher_types()
-                #payment_type_list=pg_utils.get_payment_types()
         )
 
 @bp.route('/edit/<int:payable_id>', methods=['POST', 'GET']) #type: ignore
 def edit_payable(payable_id):
-        return f'Coming soon, {payable_id}'
+        pass
 
 @bp.route('/list/<int:vendor_number>', methods=['GET']) #type: ignore
 def get_payable_by_vendor(vendor_number : int):

@@ -19,7 +19,8 @@ Voucher Entry
     </div>
     {% for item in payable_list %}
         <div class="row">
-            <div class="col-1">{{ item.id }}</div>
+            <div class="col-1">
+                <a href={{ url_for('payable.get_payable', payable_id=item.id) }}>{{ item.id }}</a></div>
             <div class="col-2">{{ item.vendor }}</div>
             <div class="col-2">{{ item.stmt_amt }}</div>
             <div class="col-3">{{ item.payment_due_dt }}</div>

@@ -44,7 +44,7 @@
             <div class="navbar-nav me-auto mb-2 mb-md-0">
                 <a href={{ url_for("help") }}>Help</a>
             </div>
-            <form class="d-flex" action={{ url_for("voucher.search") }} method="post">
+            <form class="d-flex" action={{ url_for("search.search_objects") }} method="post">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
                     name="search_phrase">
                 <button class="btn btn-outline-success" type="submit">Search</button>

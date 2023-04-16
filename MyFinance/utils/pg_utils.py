@@ -9,7 +9,7 @@ from MyFinance.models.payables import (AccountsPayable, Liabilities)
 
 from flask import current_app
 
-import logging
+import logging,inspect
 
 
 class PgUtils:
@@ -317,7 +317,7 @@ class PgUtils:
                 stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id,
                     AccountsPayable.stmt_dt, AccountsPayable.stmt_amt,AccountsPayable.payment_due_dt, ExternalAccounts.account_name,
                     AccountsPayable.payment_voucher_id).join(ExternalAccounts).join(Vendors).where(AccountsPayable.vendor_number== vendor_number).order_by(AccountsPayable.payment_due_dt)
-                print(stmt)
+                #print(stmt)
                 results = session.execute(stmt)
                 for row in results:
                     tmp = {}
@@ -327,11 +327,11 @@ class PgUtils:
                     tmp['stmt_dt'] = row.stmt_dt
                     tmp['stmt_amt'] = row.stmt_amt
                     tmp['payment_due_dt'] = row.payment_due_dt
-                    tmp['account_name]'] = row.account_name
+                    tmp['account_name'] = row.account_name
                     tmp['payment_voucher_id'] = row.payment_voucher_id
                     payables_list.append(tmp)        
         except Exception as ex:
-            current_app.logger.error(f'Error in get_payable_by_account: {ex.args[0]}')
+            current_app.logger.error(f'{inspect.stack()[0][0].f_code.co_name}: {ex.args[0]}')
 
         return payables_list
 
