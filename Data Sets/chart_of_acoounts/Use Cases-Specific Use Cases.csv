@@ -1,0 +1,25 @@
+Vendor/Service,Account_Number,Dim 1,Dim 2,Example
+ATM Fee,060311,Fees,,
+CC ,050203,Credit Pmt,,
+Domains,050103,<Vendor>,Domain Registration,
+Donation,060401,Donation,,
+Equipment,050107,Ofc Eq,<item>,Printer
+Equipment,050107,Electronics,<item>,
+Internet,050103,Internet,,
+Meals,050202,Personal | Business,Entertainment,Meals
+Other Expense,060102,Gym Mmem,,
+Other Expense,060102,Moving Expense,,
+Payment Fees,050202,Payment Fee,,
+Property,050101,CapEx,<item>,Tools
+Recreational ,060102,Recreation,Biking;..,
+Rent,050104,Apt Rent,,
+Storage,050104,Storage Unit,,
+Subscriptions,050103,Subscription,Product,
+UMS,050103,City Services,,
+Vehicle,050202,Vehicle,Fuel,
+Vehicle,050202,Vehicle,Carwash,
+Vehicle,050202,Vehicle,Insurance,
+Vehicle,050202,Vehicle,Maintenance,
+Vehicle,050202,Vehicle,Accessories,
+Verizon,050103,Wireless Svc,,
+Xcel,050103,Electric,,

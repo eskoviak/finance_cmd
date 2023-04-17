@@ -25,11 +25,6 @@ Detail Entry
                     <small>The ledger account to which this should be charged</small>
                 </div>
             </div>
-            <div class="col-2 form-floating">
-                <button type="button" class="btn-link btn-sm" data-bs-toggle="modal" data-bs-target="#acctHintsModal">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-info"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                </button>                
-            </div>
 
         </div>
 
@@ -76,21 +71,4 @@ Detail Entry
     </form>
 </div>
 
-<div class="modal fade" id="acctHintsModal" tabindex="-1" aria-labelledby="acctHintsModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Help</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                {% include 'voucher/account_hints.html' %}
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <!--<button type="button" class="btn btn-primary">Save changes</button> -->
-            </div>
-        </div>
-    </div>
-</div>
 {% endblock %} 
