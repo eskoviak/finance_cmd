@@ -11,8 +11,10 @@ def create_app(test_config=None):
     """
     Creates an Application Factory for the python (WSGI or Flask) application,
 
-    :param test_cofnig: Optional dictionary of configuration parmeters to be used
-    :type kind: dict
+    :param test_config: Optional dictionary of configuration parmeters to be used.  If this value is not passed in, then the function looks in a
+        top level folder ``instancd`` for a file named ``config.py``.  In either case, the values in will be stored in ``flask.current_app.config`` and may
+        accessed from any child (configured blueprint).
+    :type test_config: dict
     :return: app
     :rtype: Flask app object
 

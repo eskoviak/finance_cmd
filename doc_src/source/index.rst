@@ -2,7 +2,7 @@
 MyFinance Application
 =====================
 
-An application to track the finances of a small company.
+An application to track the finances of a small company.  Designed to run on a computer.
 
 .. toctree::
    :maxdepth: 2
