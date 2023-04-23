@@ -13,6 +13,11 @@ bp = Blueprint('liability', __name__, url_prefix='/liability')
 
 @bp.route('/', methods=['GET']) #type: ignore
 def enter_liability():
+    """Ender liability:  displays the template `liability_entry.html` to capture the data for a liability (loan, long term payable).
+    
+    :return: none
+    :rtype: none
+    """
     pg_utils = PgUtils(current_app.config['PGURI'])
     
     return render_template(

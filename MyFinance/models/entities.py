@@ -16,10 +16,10 @@ import os
 Base = declarative_base(metadata=MetaData(schema='finance'))
 
 class ExternalAccounts(Base):
-    """ExteranlAccounts class
+    """SQLAlchemy class to model the table `external_accounts`
 
-    Args:
-        Base (_type_): _description_
+    :param Base: The base for all SQLAlchemy ORM data classes
+    :type Base: sqlalchemy.ext.declarative.declara
     """
     __tablename__ = "external_accounts"
 
