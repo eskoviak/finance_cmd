@@ -29,8 +29,25 @@
     </div>
     {% for vendor in vendors %}
     <div class="row">
-        <div class="col-4 gy-2">{{ vendor.vendor_number }}</div>
+        <div class="col-4">{{ vendor.vendor_number }}</div>
         <div class="col-4">{{ vendor.vendor_short_desc }}</div>
+    </div>
+    {% endfor %}
+    <h3>Payables</h3>
+    <div class="row">
+        <div class="col-2 gy-2">Id</div>
+        <div class="col-4">Date</div>
+        <div class="col-2">Amt</div>
+        <div class="col-4">Vendor</div>
+    </div>
+    {% for item in payables %}
+    <div class="row">
+        <div class="col-2 gy-2">
+            <a href={{ url_for('payable.get_payable', payable_id = item.id) }}>{{ item.id }}</a>
+        </div>
+        <div class="col-4">{{ item.stmt_dt }}</div>
+        <div class="col-2">{{ item.stmt_amt }}</div>
+        <div class="col-4">{{ item.vendor_short_desc }}</div>
     </div>
     {% endfor %}
 </div>
