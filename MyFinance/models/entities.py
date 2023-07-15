@@ -58,9 +58,11 @@ class CoA(Base):
     depth = Column(Integer, nullable=False)
     balance = Column(String(12), nullable=False)
     category = Column(Text, nullable=True)
+    dimension_1 = Column(Text, nullable=True)
+    dimension_2 = Column(Text, nullable=True)
 
     def __repr__(self):
-        return f"CoA: (id: {self.id}, account_title: {self.account_title}, ledger_account: {self.ledger_account}, alt_ledger_account: {self.alt_ledger_account}, depth: {self.depth}, balance: {self.balance}, category: {self.category}\n)"
+        return f"CoA: (id: {self.id}, Account Title: {self.account_title}, Account Number: {self.ledger_account}, alt_ledger_account: {self.alt_ledger_account}, depth: {self.depth}, balance: {self.balance}, category: {self.category}\n)"
 
 #####
 # Execution Wrapper -- if this class is executed, any/all classes will be 
