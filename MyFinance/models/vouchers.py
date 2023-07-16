@@ -1,7 +1,7 @@
 from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData,
                         String, Text)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import (relationship, Mapped, mapped_column)
 
 Base = declarative_base(metadata=MetaData(schema='finance'))
 from MyFinance.models.entities import ExternalAccounts, PaymentType
@@ -24,12 +24,12 @@ class Voucher(Base):
     voucher_type_id = Column(None, ForeignKey("voucher_type.type_code") )
     voucher_type = relationship("VoucherType")
     vendor_number = Column(None, ForeignKey(Vendors.vendor_number))
-    vendor : Vendors= relationship(Vendors)
+    vendor = relationship(Vendors)
     payment_type_id = Column(None, ForeignKey(PaymentType.payment_type_id))
-    payment_type : PaymentType = relationship(PaymentType)
+    payment_type = relationship(PaymentType)
     payment_ref = Column(String(50), nullable=True)
     payment_source_id = Column(None, ForeignKey(ExternalAccounts.external_account_id))
-    payment_source : ExternalAccounts = relationship(ExternalAccounts)
+    payment_source  = relationship(ExternalAccounts)
     details = relationship("VoucherDetail", back_populates="voucher")
 
     def __repr__(self):

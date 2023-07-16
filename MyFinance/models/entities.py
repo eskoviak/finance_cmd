@@ -3,7 +3,7 @@ sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData, String, Text, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import (relationship)
 
 from MyFinance.models.vendors import Vendors
 #from MyFinance.models.vouchers import Voucher
@@ -37,7 +37,9 @@ class PaymentType(Base):
     __tablename__ = "payment_type"
 
     payment_type_id = Column(Integer, primary_key=True)
+    #payment_type_id : Mapped[int] = mapped_column(primary_key=True)
     payment_type_text = Column(String(20), nullable=False)
+    #payment_type_text : Mapped[str] = mapped_column(nullable=False)
 
     def __repr__(self):
         return(f"Payment Type: (payment_type_id: {self.payment_type_id}, payment_type_text: {self.payment_type_text})")

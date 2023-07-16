@@ -3,7 +3,7 @@ sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData, String, Text, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import (relationship, Mapped, mapped_column)
 
 from MyFinance.models.entities import ExternalAccounts
 from MyFinance.models.vendors import Vendors
@@ -11,6 +11,7 @@ from MyFinance.models.vouchers import Voucher
 
 #from sqlalchemy.orm import Session
 #from flask import current_app
+from datetime import datetime
 from pathlib import Path
 import os
 
@@ -32,7 +33,7 @@ class Liabilities(Base):
 
     id = Column(Integer, primary_key=True)
     external_account_id = Column(None, ForeignKey(ExternalAccounts.external_account_id))
-    account_name : ExternalAccounts = relationship(ExternalAccounts)
+    account_name = relationship(ExternalAccounts)
     original_amt = Column(Float, nullable=True)
     current_balance_amt = Column(Float, nullable=True)
     current_balance_dt = Column(DateTime, nullable=True)
@@ -63,13 +64,13 @@ class AccountsPayable(Base):
 
     id = Column(Integer, primary_key=True)
     vendor_number = Column(None, ForeignKey(Vendors.vendor_number))
-    vendor_short_desc : Vendors = relationship(Vendors)
+    vendor_short_desc = relationship(Vendors)
     invoice_id = Column(String, nullable=True)
     stmt_dt = Column(DateTime, nullable=False)
     stmt_amt = Column(Float, nullable=False)
     payment_due_dt = Column(DateTime, nullable=False)
     payment_source_id = Column(None, ForeignKey(ExternalAccounts.external_account_id))
-    payment_source : ExternalAccounts = relationship(ExternalAccounts)
+    payment_source = relationship(ExternalAccounts)
     payment_voucher_id = Column(None, ForeignKey(Voucher.voucher_number))
     
 
@@ -87,10 +88,14 @@ class Periods(Base):
 
     __tablename__ = 'periods'
 
-    id = Column(Integer, primary_key=True)
-    period_number = Column(Integer, nullable=False)
-    period_start_dt = Column(DateTime, nullable=False)
-    period_end_dt = Column(DateTime, nullable=False)
+    #id = Column(Integer, primary_key=True)
+    id : Mapped[int] = mapped_column(primary_key=True)
+    #period_number = Column(Integer, nullable=False)
+    period_number : Mapped[int] = mapped_column(nullable=False)
+    #period_start_dt = Column(DateTime, nullable=False)
+    period_start_dt : Mapped[datetime] = mapped_column(nullable=False)
+    #period_end_dt = Column(DateTime, nullable=False)
+    period_end_dt : Mapped[datetime] = mapped_column(nullable=False)
 
     def __repr__(self):
         return f'Period: (id: {self.id}, period_number: {self.period_number}, period_start-dt: {self.period_start_dt}, period_end_date: {self.period_end_dt})'

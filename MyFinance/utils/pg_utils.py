@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session, sessionmaker
 from MyFinance.models.user import User
 from MyFinance.models.vendors import Vendors
 from MyFinance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
-from MyFinance.models.entities import (ExternalAccounts, PaymentType)
-from MyFinance.models.payables import (AccountsPayable, Liabilities)
+from MyFinance.models.entities import (ExternalAccounts, PaymentType, CoA)
+from MyFinance.models.payables import (AccountsPayable, Liabilities, Periods)
 
 from flask import current_app
 
@@ -426,3 +426,33 @@ class PgUtils:
         except Exception as ex:
             current_app.logger.error(f'Error in get_next_liability_id: {ex.args[0]}')
             return 0
+        
+    ######
+    ## CoA
+    ######
+    def get_ledger_account(self, alt_ledger_account : str) -> CoA:
+        coa = CoA()
+        try:
+            with self.Session() as session:
+                stmt = select(CoA.account_title, CoA.ledger_account, CoA.alt_ledger_account, CoA.balance,
+                    CoA.depth, CoA.category).where(CoA.alt_ledger_account == alt_ledger_account)
+                results = session.execute(stmt)
+                row = results.one()
+                coa.account_title = row.account_title
+        except Exception as ex:
+            current_app.logger.error(f'Error in get_get_ledger_account: {ex.args[0]}')
+        return coa
+    
+    ######
+    ## Periods
+    ######
+    def get_period(self, period_number : int) -> tuple:
+        try:
+            with self.Session() as session:
+                stmt = select(Periods.period_start_dt, Periods.period_end_dt).where(Periods.period_number == period_number)
+                results = session.execute(stmt)
+                row = results.one()
+                return (row[0], row[1])
+        except Exception as ex:
+            current_app.logger.error(f'Error in get_period: {ex.args[0]}')
+            return tuple()
