@@ -3,7 +3,7 @@ sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData, String, Text, create_engine)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import (relationship)
+from sqlalchemy.orm import (relationship, Mapped, mapped_column)
 
 from MyFinance.models.vendors import Vendors
 #from MyFinance.models.vouchers import Voucher
@@ -23,23 +23,27 @@ class ExternalAccounts(Base):
     """
     __tablename__ = "external_accounts"
 
-    external_account_id = Column(Integer, primary_key=True)
-    account_name = Column(String(100), nullable=False)
-    account_number = Column(String(10), nullable=False)
-    qualified = Column(String(1), nullable=True)
+    #external_account_id = Column(Integer, primary_key=True)
+    external_account_id : Mapped[int] = mapped_column(primary_key=True)
+    #account_name = Column(String(100), nullable=False)
+    account_name : Mapped[str] = mapped_column(nullable=False)
+    #account_number = Column(String(10), nullable=False)
+    account_number : Mapped[str] = mapped_column(nullable=False)
+    #qualified = Column(String(1), nullable=True)
+    qualified : Mapped[str]
 
 class PaymentType(Base):
-    """PaymentType class
+    """PaymentType class represents the types of payment that can be made, such as Credit Card, Cash and ACH.
 
-    Args:
-        Base (_type_): _description_
+    :param Base: The base for all SQLAlchemy ORM data classes
+    :type Base: sqlalchemy.ext.declarative.declara
     """
     __tablename__ = "payment_type"
 
-    payment_type_id = Column(Integer, primary_key=True)
-    #payment_type_id : Mapped[int] = mapped_column(primary_key=True)
-    payment_type_text = Column(String(20), nullable=False)
-    #payment_type_text : Mapped[str] = mapped_column(nullable=False)
+    #payment_type_id = Column(Integer, primary_key=True)
+    payment_type_id : Mapped[int] = mapped_column(primary_key=True)
+    #payment_type_text = Column(String(20), nullable=False)
+    payment_type_text : Mapped[str] = mapped_column(nullable=False)
 
     def __repr__(self):
         return(f"Payment Type: (payment_type_id: {self.payment_type_id}, payment_type_text: {self.payment_type_text})")
@@ -53,15 +57,24 @@ class CoA(Base):
     """
     __tablename__ = 'coa'
 
-    id = Column(Integer, primary_key=True)
-    account_title = Column(String(100), nullable=False)
-    ledger_account = Column(String(15), nullable=False)
-    alt_ledger_account = Column(String(15), nullable=False)
-    depth = Column(Integer, nullable=False)
-    balance = Column(String(12), nullable=False)
-    category = Column(Text, nullable=True)
-    dimension_1 = Column(Text, nullable=True)
-    dimension_2 = Column(Text, nullable=True)
+    #id = Column(Integer, primary_key=True)
+    id : Mapped[int] = mapped_column(primary_key=True)
+    #account_title = Column(String(100), nullable=False)
+    account_title : Mapped[str] = mapped_column(nullable=False)
+    #ledger_account = Column(String(15), nullable=False)
+    ledger_account : Mapped[str] = mapped_column(nullable=False)
+    #alt_ledger_account = Column(String(15), nullable=False)
+    alt_ledger_account : Mapped[str] = mapped_column(nullable=False)
+    #depth = Column(Integer, nullable=False)
+    depth : Mapped[int] = mapped_column(nullable=False)
+    #balance = Column(String(12), nullable=False)
+    balance : Mapped[str] = mapped_column(nullable=False)
+    #category = Column(Text, nullable=True)
+    category : Mapped[str]
+    #dimension_1 = Column(Text, nullable=True)
+    dimension_1 : Mapped[str]
+    #dimension_2 = Column(Text, nullable=True)
+    dimension_2 : Mapped[str]
 
     def __repr__(self):
         return f"CoA: (id: {self.id}, Account Title: {self.account_title}, Account Number: {self.ledger_account}, alt_ledger_account: {self.alt_ledger_account}, depth: {self.depth}, balance: {self.balance}, category: {self.category}\n)"
@@ -72,17 +85,18 @@ class CoA(Base):
 #####
 if __name__ == '__main__':
     try:
-        config = {}
-        home = Path(os.environ['HOME']+'/Documents/repos/finance_cmd')
-        print(home)
-        f = open( home / 'instance' / 'config.py')
-        for line in f.readlines():
-            s = line.split('=')
-            config[s[0]] = s[1].replace("'",'').replace('\n', '')        
-        engine = create_engine(config['PGURI'])
+        #config = {}
+        #home = Path(os.environ['HOME']+'/Documents/repos/finance_cmd')
+        #print(home)
+        #f = open( home / 'instance' / 'config.py')
+        #for line in f.readlines():
+        #    s = line.split('=')
+        #    config[s[0]] = s[1].replace("'",'').replace('\n', '')        
+        #engine = create_engine(config['PGURI'])
+        engine = create_engine(os.environ.get('PGURI')) #type: ignore
         Base.metadata.create_all(engine)
-    except FileNotFoundError as fnfe:
-        print(f'Config file open error: {fnfe.args}')
+    #except FileNotFoundError as fnfe:
+    #    print(f'Config file open error: {fnfe.args}')
     except Exception as e:
         print('Failed to connect to database.')
         print('{0}'.format(e))

@@ -288,15 +288,20 @@ class PgUtils:
         payable_dict = {}
         try:
             with Session(create_engine(self.get_pg_uri())) as session:
-                results = session.query(AccountsPayable).where(AccountsPayable.id == payable_id)
+                #results = session.query(AccountsPayable).where(AccountsPayable.id == payable_id)
+                stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id, 
+                        AccountsPayable.stmt_dt, AccountsPayable.stmt_amt, AccountsPayable.payment_due_dt,
+                        ExternalAccounts.account_name,
+                        AccountsPayable.payment_voucher_id).join(ExternalAccounts).join(Vendors).where(AccountsPayable.id == payable_id)
+                results = session.execute(stmt)
                 for row in results:
                     payable_dict['id'] = row.id
-                    payable_dict['vendor_short_desc'] = row.vendor_short_desc.vendor_short_desc
+                    payable_dict['vendor_short_desc'] = row.vendor_short_desc
                     payable_dict['invoice_id'] = row.invoice_id
                     payable_dict['stmt_dt'] = row.stmt_dt
                     payable_dict['stmt_amt'] = row.stmt_amt
                     payable_dict['payment_due_dt'] = row.payment_due_dt
-                    payable_dict['payment_source'] = row.payment_source.account_name
+                    payable_dict['payment_source'] = row.account_name
                     payable_dict['payment_voucher_id'] = row.payment_voucher_id
         except Exception as ex:
             current_app.logger.error(f'Error in get_payable: {ex.args[0]}')
@@ -361,10 +366,15 @@ class PgUtils:
         liability_dict = {}
         try:
             with Session(create_engine(self.get_pg_uri())) as session:
-                results = session.query(Liabilities).where(Liabilities.id == liability_id)
+                #results = session.query(Liabilities).where(Liabilities.id == liability_id)
+                stmt = select(Liabilities.id, ExternalAccounts.account_name, Liabilities.original_amt, 
+                    Liabilities.current_balance_amt, Liabilities.current_balance_dt, Liabilities.pmt_due_amt,
+                    Liabilities.pmt_due_dt, Liabilities.payment_voucher_id, 
+                    Liabilities.period_int).join(ExternalAccounts).where(Liabilities.id == liability_id)
+                results = session.execute(stmt)
                 for row in results:
                     liability_dict['id'] = row.id
-                    liability_dict['account_name'] = row.account_name.account_name
+                    liability_dict['account_name'] = row.account_name
                     liability_dict['original_amt'] = row.original_amt
                     liability_dict['current_balance_amt'] = row.current_balance_amt
                     liability_dict['current_balance_dt'] = row.current_balance_dt
@@ -438,7 +448,7 @@ class PgUtils:
                     CoA.depth, CoA.category).where(CoA.alt_ledger_account == alt_ledger_account)
                 results = session.execute(stmt)
                 row = results.one()
-                coa.account_title = row.account_title
+                coa.account_title = row[0]
         except Exception as ex:
             current_app.logger.error(f'Error in get_get_ledger_account: {ex.args[0]}')
         return coa

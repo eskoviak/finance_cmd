@@ -61,12 +61,12 @@ class TestPGUtils(unittest.TestCase):
         self.assertIs(type(result), list, 'Result is not a list')
         self.assertEqual(len(result), 5, 'List is not 3 items long')
 
-    #def test_get_ledger_account(self):
-    #    test_ledger_account = '050101'
-    #    result = self.pg_utils.get_ledger_account(test_ledger_account)
+    def test_get_ledger_account(self):
+        test_ledger_account = '050101'
+        result = self.pg_utils.get_ledger_account(test_ledger_account)
     #    print(result)
-    #    self.assertIs(len(result), 1, 'Result is not one item long')
-    #    self.assertEqual(result.account_title, 'Material And Merchandise', 'Incorrect Account Title')
+        self.assertIs(len(result), 1, 'Result is not one item long')
+        self.assertEqual(result.account_title, 'Material And Merchandise', 'Incorrect Account Title')
 
     def test_get_period(self):
         test_period = 14

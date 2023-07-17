@@ -20,7 +20,7 @@ Base = declarative_base(metadata=MetaData(schema='finance'))
 class Liabilities(Base):
     """Liablities Class
 
-        This class is used to model entities which have an initial value and paid over time, such as a load.  An entity
+        This class is used to model entities which have an initial value and paid over time, such as a loan.  An entity
         which is contractual based (such as a service or subscription) and has a fixed or viable payment should be
         modeled as an account_payable.
     
@@ -31,16 +31,25 @@ class Liabilities(Base):
 
     __tablename__ = 'liabilities'
 
-    id = Column(Integer, primary_key=True)
-    external_account_id = Column(None, ForeignKey(ExternalAccounts.external_account_id))
-    account_name = relationship(ExternalAccounts)
-    original_amt = Column(Float, nullable=True)
-    current_balance_amt = Column(Float, nullable=True)
-    current_balance_dt = Column(DateTime, nullable=True)
-    pmt_due_amt = Column(Float, nullable=False)
-    pmt_due_dt = Column(DateTime, nullable=False)
-    payment_voucher_id = Column(None, ForeignKey(Voucher.voucher_number))
-    period_int = Column(Float, nullable=True)
+    #id = Column(Integer, primary_key=True)
+    id : Mapped[int] = mapped_column(primary_key=True)
+    #external_account_id = Column(None, ForeignKey(ExternalAccounts.external_account_id))
+    external_account_id : Mapped[int] = mapped_column(ForeignKey(ExternalAccounts.external_account_id))
+    #account_name = relationship(ExternalAccounts)
+    #original_amt = Column(Float, nullable=True)
+    original_amt : Mapped[float]
+    #current_balance_amt = Column(Float, nullable=True)
+    current_balance_amt : Mapped[float]
+    #current_balance_dt = Column(DateTime, nullable=True)
+    current_balance_dt : Mapped[datetime]
+    #pmt_due_amt = Column(Float, nullable=False)
+    pmt_due_amt : Mapped[float] = mapped_column(nullable=False)
+    #pmt_due_dt = Column(DateTime, nullable=False)
+    pmt_due_dt : Mapped[datetime] = mapped_column(nullable=False)
+    #payment_voucher_id = Column(None, ForeignKey(Voucher.voucher_number))
+    payment_voucher_id : Mapped[int] = mapped_column(ForeignKey(Voucher.voucher_number))
+    #period_int = Column(Float, nullable=True)
+    period_int : Mapped[float]
 
     def __repr__(self):
         return f"Liability (id: {self.id}, account_name: {self.account_name}, account_name {self.account_name}, ...)"
@@ -62,16 +71,24 @@ class AccountsPayable(Base):
 
     __tablename__ = 'accounts_payable'
 
-    id = Column(Integer, primary_key=True)
-    vendor_number = Column(None, ForeignKey(Vendors.vendor_number))
-    vendor_short_desc = relationship(Vendors)
-    invoice_id = Column(String, nullable=True)
-    stmt_dt = Column(DateTime, nullable=False)
-    stmt_amt = Column(Float, nullable=False)
-    payment_due_dt = Column(DateTime, nullable=False)
-    payment_source_id = Column(None, ForeignKey(ExternalAccounts.external_account_id))
-    payment_source = relationship(ExternalAccounts)
-    payment_voucher_id = Column(None, ForeignKey(Voucher.voucher_number))
+    #id = Column(Integer, primary_key=True)
+    id : Mapped[int] = mapped_column(primary_key=True)
+    #vendor_number = Column(None, ForeignKey(Vendors.vendor_number))
+    vendor_number : Mapped[int] = mapped_column(ForeignKey(Vendors.vendor_number))
+    #vendor_short_desc = relationship(Vendors)
+    #invoice_id = Column(String, nullable=True)
+    invoice_id : Mapped[str]
+    #stmt_dt = Column(DateTime, nullable=False)
+    stmt_dt : Mapped[datetime] = mapped_column(nullable=False)
+    #stmt_amt = Column(Float, nullable=False)
+    stmt_amt : Mapped[float] = mapped_column(nullable=False)
+    #payment_due_dt = Column(DateTime, nullable=False)
+    payment_due_dt : Mapped[datetime] = mapped_column(nullable=False)
+    #payment_source_id = Column(None, ForeignKey(ExternalAccounts.external_account_id))
+    payment_source_id : Mapped[int] = mapped_column(ForeignKey(ExternalAccounts.external_account_id))
+    #payment_source = relationship(ExternalAccounts)
+    #payment_voucher_id = Column(None, ForeignKey(Voucher.voucher_number))
+    payment_voucher_id : Mapped[int] = mapped_column(ForeignKey(Voucher.voucher_number))
     
 
     def __repr__(self):
@@ -106,14 +123,14 @@ class Periods(Base):
 #####
 if __name__ == '__main__':
     try:
-        config = {}
-        home = Path(os.environ['HOME']+'/Documents/repos/finance_cmd')
-        print(home)
-        f = open( home / 'instance' / 'config.py')
-        for line in f.readlines():
-            s = line.split('=')
-            config[s[0]] = s[1].replace("'",'').replace('\n', '')        
-        engine = create_engine(config['PGURI'])
+        #config = {}
+        #home = Path(os.environ['HOME']+'/Documents/repos/finance_cmd')
+        #print(home)
+        #f = open( home / 'instance' / 'config.py')
+        #for line in f.readlines():
+        #    s = line.split('=')
+        #    config[s[0]] = s[1].replace("'",'').replace('\n', '')        
+        engine = create_engine(os.environ.get('PGURI'))
         Base.metadata.create_all(engine)
     except FileNotFoundError as fnfe:
         print(f'Config file open error: {fnfe.args}')
