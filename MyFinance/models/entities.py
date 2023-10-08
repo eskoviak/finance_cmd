@@ -23,13 +23,9 @@ class ExternalAccounts(Base):
     """
     __tablename__ = "external_accounts"
 
-    #external_account_id = Column(Integer, primary_key=True)
     external_account_id : Mapped[int] = mapped_column(primary_key=True)
-    #account_name = Column(String(100), nullable=False)
     account_name : Mapped[str] = mapped_column(nullable=False)
-    #account_number = Column(String(10), nullable=False)
     account_number : Mapped[str] = mapped_column(nullable=False)
-    #qualified = Column(String(1), nullable=True)
     qualified : Mapped[str]
 
 class PaymentType(Base):
@@ -40,9 +36,7 @@ class PaymentType(Base):
     """
     __tablename__ = "payment_type"
 
-    #payment_type_id = Column(Integer, primary_key=True)
     payment_type_id : Mapped[int] = mapped_column(primary_key=True)
-    #payment_type_text = Column(String(20), nullable=False)
     payment_type_text : Mapped[str] = mapped_column(nullable=False)
 
     def __repr__(self):
@@ -57,27 +51,35 @@ class CoA(Base):
     """
     __tablename__ = 'coa'
 
-    #id = Column(Integer, primary_key=True)
     id : Mapped[int] = mapped_column(primary_key=True)
-    #account_title = Column(String(100), nullable=False)
     account_title : Mapped[str] = mapped_column(nullable=False)
-    #ledger_account = Column(String(15), nullable=False)
     ledger_account : Mapped[str] = mapped_column(nullable=False)
-    #alt_ledger_account = Column(String(15), nullable=False)
     alt_ledger_account : Mapped[str] = mapped_column(nullable=False)
-    #depth = Column(Integer, nullable=False)
     depth : Mapped[int] = mapped_column(nullable=False)
-    #balance = Column(String(12), nullable=False)
     balance : Mapped[str] = mapped_column(nullable=False)
-    #category = Column(Text, nullable=True)
     category : Mapped[str]
-    #dimension_1 = Column(Text, nullable=True)
     dimension_1 : Mapped[str]
-    #dimension_2 = Column(Text, nullable=True)
     dimension_2 : Mapped[str]
 
     def __repr__(self):
         return f"CoA: (id: {self.id}, Account Title: {self.account_title}, Account Number: {self.ledger_account}, alt_ledger_account: {self.alt_ledger_account}, depth: {self.depth}, balance: {self.balance}, category: {self.category}\n)"
+
+
+class Company(Base):
+    """Company codes class
+
+        :param Base: Metadata base object used by SQLAlchemy to wrap the PostgreSQL database
+        :type kind: sqlalchemy.ext.declarative.declarative_base
+    
+    """
+    __tablename__ = 'company'
+
+    id : Mapped[int] = mapped_column(primary_key=True)
+    company_number : Mapped[int] = mapped_column(nullable=False)
+    company_name : Mapped[str] = mapped_column(nullable=False)
+
+    def __repr__(self):
+        return f"Company Name: {self.company_name}; Company Number: {self.company_number}"
 
 #####
 # Execution Wrapper -- if this class is executed, any/all classes will be 
