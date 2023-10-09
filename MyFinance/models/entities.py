@@ -2,8 +2,7 @@ import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData, String, Text, create_engine)
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import (relationship, Mapped, mapped_column)
+from sqlalchemy.orm import (relationship, Mapped, mapped_column, declarative_base)
 
 from MyFinance.models.vendors import Vendors
 #from MyFinance.models.vouchers import Voucher

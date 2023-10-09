@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from MyFinance.models.user import User
 from MyFinance.models.vendors import Vendors
 from MyFinance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
-from MyFinance.models.entities import (ExternalAccounts, PaymentType, CoA)
+from MyFinance.models.entities import (ExternalAccounts, PaymentType, CoA, Company)
 from MyFinance.models.payables import (AccountsPayable, Liabilities, Periods)
 
 from flask import current_app
@@ -52,6 +52,7 @@ class PgUtils:
                 voucher_dict["payment_type"] = row.Voucher.payment_type.payment_type_text
                 voucher_dict["payment_source"] = row.Voucher.payment_source.account_name
                 voucher_dict["payment_ref"] = row.Voucher.payment_ref
+                voucher_dict["company_name"] = row.Voucher.company.company_name
                 for detail in row.Voucher.details:
                     voucher_line = {}
                     voucher_line["split_seq_number"] = detail.split_seq_number
@@ -64,6 +65,32 @@ class PgUtils:
                 voucher_dict["Splits"] = voucher_detail
 
         return voucher_dict
+    
+    def get_company(self,filter=None) -> list:
+        """gets the list of companies
+
+        :param filter: filter text, defaults to None
+        :type filter: str, optional
+        :return: a list of the companies
+        :rtype: list
+        """
+
+        company_list = []
+        try:
+            if filter == None:
+                with self.Session() as session: # type: ignore
+                    results = session.query(Company).order_by(Company.company_number)
+            else:
+                with self.Session() as session: # type: ignore
+                    results = session.query(Company).where(Company.company_name.ilike(f"%{filter}%"))
+            for row in results:
+                company = {}
+                company['company_name']=row.company_name
+                company['id']=row.id
+                company_list.append(company)
+        except Exception as ex:
+            print(ex.args[0])
+        return company_list
 
     def get_vendors(self,filter=None) -> list:
         """gets the list of vendors

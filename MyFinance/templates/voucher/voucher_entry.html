@@ -11,11 +11,15 @@ Voucher Entry
 <div class="container-md">
     <form action="/voucher/voucher_result" method="POST">
         <div class="row gx-2 gy-1">
-            <div class="col-md-4 form-floating">
+            <div class="col-md-3 form-floating">
                 {{ input_control('voucher_date', value=None,
                   modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
             </div>
-            <div class="col-md-8 form-floating">
+            <div class="col-md-3 form-floating">
+                {{ select_control('company', id='company', option_list=company_list, option_key='id', option_value='company_name',
+                    label='Company', helptext='Select the company to book the voucher to' )}}
+            </div>
+            <div class="col-md-6 form-floating">
                 {{ input_control('voucher_ref', value=None,
                   label='Voucher Reference', helptext='Enter identifying information from the voucher, such as the voucher or invoice number') }}
             </div>

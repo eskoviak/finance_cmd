@@ -1,13 +1,16 @@
+import sys
+sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
+
 from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData,
-                        String, Text)
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import (relationship, Mapped, mapped_column)
+                        String, Text, create_engine)
+from sqlalchemy.orm import (relationship, Mapped, mapped_column, declarative_base)
 
 Base = declarative_base(metadata=MetaData(schema='finance'))
-from MyFinance.models.entities import ExternalAccounts, PaymentType
+from MyFinance.models.entities import ExternalAccounts, PaymentType, Company
 from MyFinance.models.vendors import Vendors
 
 from flask import current_app
+import os
 
 class Voucher(Base):
     """Voucher Class
@@ -30,6 +33,8 @@ class Voucher(Base):
     payment_ref = Column(String(50), nullable=True)
     payment_source_id = Column(None, ForeignKey(ExternalAccounts.external_account_id))
     payment_source  = relationship(ExternalAccounts)
+    company_id = Column(None, ForeignKey(Company.id))
+    company = relationship(Company)
     details = relationship("VoucherDetail", back_populates="voucher")
 
     def __repr__(self):
@@ -73,3 +78,15 @@ class VoucherType(Base):
 
     def __repr__(self):
         return(f"VoucherType: (type_code: {self.type_code}, type_text: {self.type_text})")
+    
+#####
+# Execution Wrapper -- if this class is executed, any/all classes will be 
+# instantiated/modified
+#####
+if __name__ == '__main__':
+    try:
+        engine = create_engine(os.environ.get('PGURI')) #type: ignore
+        Base.metadata.create_all(engine)
+    except Exception as e:
+        print('Failed to connect to database.')
+        print('{0}'.format(e))

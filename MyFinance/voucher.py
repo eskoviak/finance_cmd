@@ -56,7 +56,8 @@ def enter_voucher():
         vendor_list=pg_utils.get_vendors(),
         account_list=pg_utils.get_external_accounts(),
         voucher_type_list=pg_utils.get_voucher_types(),
-        payment_type_list=pg_utils.get_payment_types()
+        payment_type_list=pg_utils.get_payment_types(),
+        company_list=pg_utils.get_company()
     )
 
 @bp.route("/voucher_result", methods=['POST', 'GET'])  # type: ignore
@@ -64,6 +65,7 @@ def voucher_result():
 
     if request.method == 'POST':
         result = request.form
+        print(result)
         voucher = Voucher(voucher_date=result["voucher_date"],
                           voucher_ref=result["voucher_ref"],
                           vendor_number=result["vendor"],
@@ -71,7 +73,9 @@ def voucher_result():
                           voucher_amt=result["voucher_amt"],
                           payment_type_id=result["payment_type"],
                           payment_source_id=result["pmt_account"],
-                          payment_ref=result["payment_ref"])
+                          payment_ref=result["payment_ref"],
+                          company_id=result["company"])
+                          
         pg_utils = PgUtils(current_app.config['PGURI'])
         ret_voucher = pg_utils.add_voucher(voucher)
         voucher = pg_utils.get_voucher(int(ret_voucher)) # type: ignore
