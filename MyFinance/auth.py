@@ -28,7 +28,7 @@ def register():
                 error = 'User exists'
             else:        
                 return redirect(url_for('auth.login'))
-        current_app.logger.warning('Error in register: {error}')
+        current_app.logger.warning(f'Error in register: {error}')
         flash(error)
     return render_template('auth/register.html',
         title='Regiser User',
@@ -52,7 +52,7 @@ def login():
             session['user_id'] = user['id']
             return redirect(url_for('home'))
         else:
-            current_app.logger.warning('Error in login: {error}')
+            current_app.logger.warning(f'Error in login: {error}')
             flash(error)
     return render_template('auth/login.html',
         title='Login',

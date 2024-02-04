@@ -1,51 +1,52 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-md navbar-light bg-light">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">MyFinance</a>
+        <a class="navbar-brand" href={{ url_for("home") }}>MyFinance</a>
+        <span>
+            {% if g.user == None %}
+            <a href={{ url_for("auth.login")}}>Login</a>
+            {% else %}
+            {{ g.user['username']}}
+            {% endif %}
+        </span>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link {% if title=='Home' %} active {% endif %}" aria-current="page" href={{ url_for("home") }}>Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link {% if title=='Voucher Entry' %} active {% endif %}" href={{ url_for("voucher.enter_voucher") }}>Enter Voucher</a>
-                </li>
-                <!--
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                        data-bs-toggle="dropdown" aria-expanded="false">
-                        Dropdown
+
+            <div class="nav nav-pills me-auto mb-2 mb-md-0">
+                <a class="nav-link" aria-current="page" href={{ url_for("home") }} role="button">Home</a>
+                <div class="nav-item dropend">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Action
                     </a>
+
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item nav-link" href={{ url_for("voucher.enter_voucher") }}>Enter
+                                Voucher</a></li>
+                        <li><a class="dropdown-item nav-link" href={{ url_for("voucher.enter_voucher") }}>Search for
+                                Voucher</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><a class="dropdown-item nav-link" href={{ url_for("payable.enter_payable") }}>Enter
+                                Account Payable</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item nav-link" href={{ url_for("liability.enter_liability") }}>Enter Liability</a></li>
                     </ul>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </li>
-                -->
-            </ul>
-
-            <div class="navbar-nav me-auto mb-2 mb-lg-0">
-                {% if g.user == None %}
-                <a href={{ url_for("auth.login")}}>Login</a>
-                {% else %}
-                {{ g.user['username']}}
-                {% endif %}
+                </div>
             </div>
-            <div class="navbar-nav me-auto mb-2 mb-lg-0">
+
+            <div class="navbar-nav me-auto mb-2 mb-md-0">
                 <a href={{ url_for("help") }}>Help</a>
             </div>
-            <form class="d-flex" action={{ url_for("voucher.search") }} method="post">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search_phrase">
+            <form class="d-flex" action={{ url_for("search.search_objects") }} method="post">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                    name="search_phrase">
                 <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
         </div>

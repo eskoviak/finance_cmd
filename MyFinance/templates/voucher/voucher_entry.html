@@ -7,102 +7,89 @@ Voucher Entry
 <p>{{ description }}</p>
 {% endblock %}
 {% block content %}
-<div class="container">
-
-<!-- Button trigger modal 
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Launch demo modal
-  </button>
--->  
-  <!-- Modal 
-  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  -->
-  
+{% from 'common/forms.html' import input as input_control, select as select_control %}
+<div class="container-md">
     <form action="/voucher/voucher_result" method="POST">
-        <div class="row gx-5">
-            <div class="col-auto form-floating">
-                <input type="text" id="voucher_date" class="form-control" name="voucher_date"
-                    placeholder="Transaction Date" autofocus required />
-                <label class="px-5" for="voucher_date">Transaction Date</label>
-                <div id="dateHelpBlock" class="form-text">
-                    MM/DD/YY HH:MM TZ
-                </div>                
+        <div class="row gx-2 gy-1">
+            <div class="col-md-3 form-floating">
+                {{ input_control('voucher_date', value=None,
+                  modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
             </div>
-            <div class="col-auto form-floating">
-                <input type="text" id="voucher_ref" class="form-control" name="voucher_ref"
-                    placeholder="Voucher Reference" />
-                <label class="px-5" for="voucher_ref">Voucher Reference</label>
-                <div id="voucherRefHelpBlock" class="form-text">
-                    Enter identifying information from the voucher, such as the voucher number.
-                </div>
+            <div class="col-md-3 form-floating">
+                {{ select_control('company', id='company', option_list=company_list, option_key='id', option_value='company_name',
+                    label='Company', helptext='Select the company to book the voucher to' )}}
+            </div>
+            <div class="col-md-6 form-floating">
+                {{ input_control('voucher_ref', value=None,
+                  label='Voucher Reference', helptext='Enter identifying information from the voucher, such as the voucher or invoice number') }}
             </div>
         </div>
 
-        <div class="row gx-5 py-3">
-            <div class="col-auto form-floating">
-                <select name="vendor" id="vendor-select" placeholder="Vendor" class="form-select">
-                    {% include 'voucher/vendor_select.html' %}
-                </select>
-                <label class="px-5" for="vendor-select">Vendor</label>
+        <div class="row gx-2 gy-1">
+            <div class="col-md-6 form-floating">
+                {{ select_control('vendor', id='vendor', option_list=vendor_list, option_key='vendor_number', option_value='vendor_short_desc', 
+                  label='Vendor', helptext='Enter the Vendor') }}
             </div>
-            <div class="col form-floating">
-                <select name="voucher_type" id="voucher-type-select" placeholder="Type" class="form-select">
-                    {% include 'voucher/voucher_type_select.html' %}
-                </select>
-                <label class="px-5" for="voucher-type-select">Voucher Type</label>
+            <div class="col-md-3 form-floating">
+                {{ select_control('voucher_type', id='voucher_type', option_list=voucher_type_list, option_key='type_code', option_value='type_text',
+                  label='Type', helptext='The type of the voucher') }}
             </div>
-            <div class="col-auto form-floating">
-                <input type="number" id="voucher_amt" name="voucher_amt" step="any" class="form-control"/>
-                <label class="px-5" for="voucher_amt">Amount</label>
+            <div class="col-md-3 form-floating">
+                {{ input_control('voucher_amt', type='number', value=None,
+                  label='Amount', helptext='The amount of the voucher' ) }}
             </div>
         </div>
 
-        <div class="row gx-5">
-            <div class="col-auto form-floating">
-                <select name="payment_type" id="voucher-pay-type-select" class="form-select">
-                    {% include 'voucher/payment_type_select.html' %}
-                </select>
-                <label class="px-5" for="voucher-pay-type-select">Payment Type</label>
+        <div class="row gx-2 gy-1">
+            <div class="col-md-4 form-floating">
+                {{ select_control('payment_type', id='voucher-pay-type-select', option_list=payment_type_list, option_key='payment_type_id', 
+                  option_value='payment_type_text', label='Pmt Type', helptext='The type of the payment')}}
             </div>
-            <div class="col-auto form-floating">
-                <select name="pmt_account" id="pmt-acct-select" class="form-select">
-                    {% include 'voucher/pmt_account_select.html' %}
-                </select>
-                <label class="px-5" for="pmt-acct-select">Payment Source</label>
+            <div class="col-md-4 form-floating">
+                {{ select_control('pmt_account', option_list=account_list, option_key='external_account_id', option_value='account_name',
+                    label='Payment Source', helptext='The source of the payment')}}
             </div>
         </div>
 
-        <div class="row gx-5 py-3">
-            <div class="col-auto form-floating">
-                <input type="text" id="payment_ref" name="payment_ref" class="form-control" placeholder="Payment Reference"/>
-                <label class="px-5" for="payment_ref" class="visually-hidden">Payment Reference</label>
-                <div id="paymentRefHelpBlock" class="form-text">
-                    Enter additional information, such as location, the nature of the service or the vendor for a generic vendor which will appear in the ledger.
-                </div>
+        <div class="row gx-2 gy-1">
+            <div class="col-md-8 form-floating">
+                {{ input_control('payment_ref', value=None, label='Payment Reference', 
+                  helptext='Enter additional information, such as location, the nature of the service or the vendor for a generic vendor which will appear in the ledger.') }}
             </div>
-        </div>
-
-        <div class="row gx-5">
-            <div>
+            <div class="col-md-4">
                 <input type="submit" value="Submit" class="btn btn-primary mb-3">
             </div>
-        </div>  
+        </div>
     </form>
+    <!--
+    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="..." class="rounded me-2" alt="...">
+                <strong class="me-auto">Bootstrap</strong>
+                <small>11 mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hello, world! This is a toast message.
+            </div>
+        </div>
+    </div>
+    -->
 </div>
+{% endblock %}
+{% block script %}
+<script>
+    const toastTrigger = document.getElementById('liveToastBtn')
+    const toastLiveExample = document.getElementById('liveToast')
+    if (toastTrigger) {
+        toastTrigger.addEventListener('click', () => {
+            const toast = new bootstrap.Toast(toastLiveExample)
+
+            toast.show()
+        })
+    }
+</script>
 {% endblock %}

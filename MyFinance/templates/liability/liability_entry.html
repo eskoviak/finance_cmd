@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}
+Voucher Entry
+{% endblock %}
+{% block header %}
+<h1>{{ title }}</h1>
+<p>{{ description }}</p>
+{% endblock %}
+{% block content %}
+{% from 'common/forms.html' import input as input_control, select as select_control %}
+<div class="container-md">
+    <form action="/liability/liability_result" method="POST">
+        <div class="row gx-2 gy-1">
+            <div class="col-md-4 form-floating">
+                {{ input_control('payment_voucher_id', value=None,
+                  modifiers='', label='Voucher', helptext='The voucher number (if known)') }}
+            </div>
+        </div>
+        <div class="row gx-2 gy-1">
+            <div class="col-md-4 form-floating">
+                {{ select_control('external_account_id', id='account_name', option_list=account_list, option_key='external_account_id', option_value='account_name',
+                  label='Payee', helptext='The account_id of the liability owner')  }}
+            </div>
+            <div class="col-md-4 form-floating">
+                {{ input_control('current_balance_dt', value=None,
+                  modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}
+            </div>
+            <div class="col-md-4 form-floating">
+                {{ input_control('current_balance_amt', value=None, 
+                  modifiers='required', label='Current Due',helptext='The ammount due') }}
+            </div>
+        </div>
+
+        <div class="row gx-2 gy-1">
+            <div class="col-md-4 form-floating">
+                {{ input_control('pmt_due_dt', value=None, 
+                  modifiers='required', label='Due Date', helptext='The date the payment is due')}}
+            </div>
+            <div class="col-md-4 form-floating">
+                {{ input_control('pmt_due_amt', value=None,
+                  modifiers='required', label='Amt Due', helptext='The amount due') }}
+            </div>
+            <div class="col-md-4 form-floating">
+                {{ input_control('period_int', value=None,
+                  label='Interest', helptext='The interest this period')}}
+            </div>
+        </div>
+        <input type="submit" value="Submit" class="btn btn-primary mb-3">
+    </form>
+</div>
+
+{% endblock %}

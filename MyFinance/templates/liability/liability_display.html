@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{{title}}</h1>
+<p>{{description}}</p>
+{% endblock %}
+{% block content %}
+{% from 'common/forms.html' import input as input_control, select as select_control, display %}
+<div class="container-md">
+    <div class="row">
+        <div class="col-2 gy-2">{{ display('Liablitiy_Id', liability['id']) }}</div>
+        <div class="col-4">{{ display('Vendor', liability['account_name']) }}</div>
+        <div class="col-4">{{ display('Original Amt', liability['original_amt']) }}</div>
+        <div class="col-2">{{ display('Voucher Id', liability['payment_voucher_id']) }}</div>        
+    </div>
+
+    <div class="row">
+        <div class="col-2 gy-2">{{ display('Current Bal $', liability['current_balance_amt']) }}</div>
+        <div class="col-3">{{ display('Current Bal Date', liability['current_balance_dt']) }}</div>
+        <div class="col-2">{{ display('Pmt $', liability['pmt_due_amt']) }}</div>
+        <div class="col-3">{{ display('Pmt Due Date', liability['pmt_due_dt']) }}</div>
+        <div class="col-2">{{ display('Interest', liability['period_int']) }}</div>
+    </div>
+</div>
+{% endblock %}
