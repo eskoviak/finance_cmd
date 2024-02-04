@@ -9,6 +9,7 @@ from MyFinance.models.vendors import Vendors
 
 #from sqlalchemy.orm import Session
 #from flask import current_app
+from datetime import datetime
 from pathlib import Path
 import os
 
@@ -79,6 +80,41 @@ class Company(Base):
 
     def __repr__(self):
         return f"Company Name: {self.company_name}; Company Number: {self.company_number}"
+    
+class RegisterCode(Base):
+    """RegisterCode Class -- used to indicate the type of entry in the register
+
+        :param Base: Metadata base object used by SQLAlchemy to wrap the PostgreSQL database
+        :type kind: sqlalchemy.ext.declarative.declarative_base
+      
+    """
+    __tablename__ = 'register_code'
+    code: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=False)
+
+
+class Register(Base):
+    """Register Class -- used to represent a register for cash based asset classes, such as a checking account,
+       to record transactions.
+
+        :param Base: Metadata base object used by SQLAlchemy to wrap the PostgreSQL database
+        :type kind: sqlalchemy.ext.declarative.declarative_base
+        
+    """
+    
+    __tablename__ = 'register'
+    
+    id : Mapped[int] = mapped_column(primary_key=True)
+    external_account_id : Mapped[int] = mapped_column(ForeignKey(ExternalAccounts.external_account_id))
+    code : Mapped[int] = mapped_column(ForeignKey(RegisterCode.code))
+    date : Mapped[datetime] = mapped_column(nullable=False)
+    description : Mapped[str] = mapped_column(nullable = True)
+    debit : Mapped[float] = mapped_column(nullable=True)
+    isFee : Mapped[bool] = mapped_column(default=False)
+    credit : Mapped[float] = mapped_column(nullable=True)
+    tran_no : Mapped[int] = mapped_column(nullable=True)
+    
+    
 
 #####
 # Execution Wrapper -- if this class is executed, any/all classes will be 
@@ -94,7 +130,7 @@ if __name__ == '__main__':
         #    s = line.split('=')
         #    config[s[0]] = s[1].replace("'",'').replace('\n', '')        
         #engine = create_engine(config['PGURI'])
-        engine = create_engine(os.environ.get('PGURI')) #type: ignore
+        engine = create_engine(os.environ.get('PG_LOCAL')+'finance') #type: ignore
         Base.metadata.create_all(engine)
     #except FileNotFoundError as fnfe:
     #    print(f'Config file open error: {fnfe.args}')
