@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from MyFinance.models.user import User
 from MyFinance.models.vendors import Vendors
 from MyFinance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
-from MyFinance.models.entities import (ExternalAccounts, PaymentType, CoA, Company)
+from MyFinance.models.entities import (ExternalAccounts, PaymentType, CoA, Company, RegisterCode, Register)
 from MyFinance.models.payables import (AccountsPayable, Liabilities, Periods)
 
 from flask import current_app
@@ -493,3 +493,26 @@ class PgUtils:
         except Exception as ex:
             current_app.logger.error(f'Error in get_period: {ex.args[0]}')
             return tuple()
+        
+    ######
+    ## Register
+    ######
+    def get_codes(self) -> list:
+        try:
+            code_list = []
+            with self.Session() as session:
+                stmt = select(RegisterCode.code, RegisterCode.name)
+                results = session.execute(stmt)
+                for row in results:
+                    entry = {}
+                    entry['code'] = row[0]
+                    entry['name'] = row[1]
+                    code_list.append(entry)
+            return code_list
+        except Exception as ex:
+            current_app.logger.error(f'Error get_codes: {ex.args[0]}')
+            return []
+            
+                    
+        
+        

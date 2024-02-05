@@ -114,6 +114,12 @@ class Register(Base):
     credit : Mapped[float] = mapped_column(nullable=True)
     tran_no : Mapped[int] = mapped_column(nullable=True)
     
+    def __repr__(self):
+        return f"""Id: {self.id}, Ext Acct Id: {self.external_account_id}, Code: {self.code}, Date: {self.date}
+Desc: {self.description}, Debit: {self.debit}, Fee: {self.isFee}, Credit: {self.credit}, Tran#: {self.tran_no}
+    
+        """
+    
     
 
 #####
