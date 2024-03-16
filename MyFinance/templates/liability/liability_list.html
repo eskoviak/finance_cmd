@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}
+Voucher Entry
+{% endblock %}
+{% block header %}
+<h1>{{ title }}</h1>
+<p>{{ description }}</p>
+{% endblock %}
+{% block content %}
+{% from 'common/forms.html' import input as input_control, select as select_control, display %}
+<div class="container-md">
+    <div class="row">
+        <div class="col-1 gy-2">Id</div>
+        <div class="col-3">Acct Name</div>
+        <div class="col-3">Inv Date</div>
+        <div class="col-1">Pmt Amt</div>
+        <div class="col-3">Pmt Due</div>
+        <div class="col-1">Pmt Inv #</div>
+    </div>
+    {% for liability in liability_list %}
+        <div class="row">
+            <div class="col-1">{{ liability.id }}</div>
+            <div class="col-3">{{ liability.account_name }}</div>
+            <div class="col-3">{{ liability.current_balance_dt }}</div>
+            <div class="col-1">{{ liability.pmt_due_amt }}</div>
+            <div class="col-3">{{ liability.pmt_due_dt }}</div>
+            <div class="col-1">{{ liability.payment_voucher_id }}</div>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

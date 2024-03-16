@@ -1,0 +1,8 @@
+README
+setup.py
+configuration_file_reader.egg-info/PKG-INFO
+configuration_file_reader.egg-info/SOURCES.txt
+configuration_file_reader.egg-info/dependency_links.txt
+configuration_file_reader.egg-info/top_level.txt
+utils/__init__.py
+utils/config.py

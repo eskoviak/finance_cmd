@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}
+Detail Entry
+{% endblock %}
+{% block header %}
+    <h1>{{title}}</h1>
+    <p>{{description}}</p>
+{% endblock%}
+{% block content %}
+<div class="container">
+    <form action="/voucher/detail_result" method="POST">
+        <div class="row gx-3">
+            <div class="col-3 form-floating">
+                <input type="text" id="voucher_number" class="form-control" name="voucher_number" value="{{voucher_number}}" readonly/>
+                <label class="px-2" for="voucher_number">Voucher</label>
+            </div>
+            <div class="col-2 form-floating">
+                <input type="text" id="split_seq_number" class="form-control" name="split_seq_number" value="{{split_seq_number}}" readonly/>
+                <label class="px-2" for="split_seq_number">Split</label>
+            </div>
+            <div class="col-5 form-floating">
+                <input type="text" id="account_number" class="form-control" name="account_number" autofocus required>
+                <label class="px-2" for="account_number">Ledger Acct</label>
+                <div id="legderAcctHelpText" class="form-text">
+                    <small>The ledger account to which this should be charged</small>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row gx-3">               
+            <div class="col-auto form-floating">
+                <input type="number" id="amount" class="form-control" name="amount" step="any" value="{{voucher_remain}}" required/>
+                <label class="px-2" for="amount">Amount</label>
+                <div id="splitAmtHelpText" class="form-text">
+                    <small>The amt to be charged to this split</small>
+                </div>
+            </div>
+            <div class="col-auto form-floating">
+                <input type="text" id="dimension_1" class="form-control" name="dimension_1" required/>
+                <label class="px-2" for="dimension_1">Dimension 1</label>
+                <div id="dim1HelpText" class="form-text">
+                    <small>Ledger Account Dim 1</small>
+                </div>
+            </div>
+            <div class="col-auto form-floating">
+                <input type="text" id="dimension_2" class="form-control" name="dimension_2"/>
+                <label class="px-2" for="dimension_2">Dimension 2</label>
+                <div id="dim2HelpText" class="form-text">
+                    <small>Ledger Account Dim 2</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gx-3">
+            <div class="col-auto form-floating">
+                <input type="text" id="memo" class="form-control" name="memo"/>
+                <label class="px-2" for="memo">Line Item Memo</label>
+                <div id="memoHelpText" class="form-text">
+                    <small>Amplifying info to include with this item</small>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <input type="submit" class="btn btn-primary mb-3" value="Submit">
+        </div>
+    </form>    
+    <form action="{{ url_for(".get_voucher", voucher_number=voucher_number) }}">
+        <input class="danger" type="submit" value="Cancel"/>
+    </form>
+</div>
+
+{% endblock %} 

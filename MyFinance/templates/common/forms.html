@@ -1,0 +1,31 @@
+{% macro input(name, value='', type='text', modifiers="", label='label', helptext='help') -%}
+    <input type="{{type}}" id="{{name}}" class="form-control" name="{{name}}" {% if type=='number' %}step="any"{% endif %} {{modifiers}} />
+    <label class="ps-2" for="{{name}}">{{label}}</label>
+    <div id="{{name}}HelpBlock" class="form-text">
+        <small>{{helptext}}</small>
+    </div>
+{%- endmacro %}
+
+{% macro select(name, id, option_list=None, option_key=None, option_value=None, label='label', helptext='help') -%}
+    <select name="{{name}}" id="{{id}}" class="form-select">
+        {% for item in option_list %}
+            <option value="{{item[option_key]}}">{{item[option_value]}}</option>
+        {% endfor %}
+    </select>
+    <label class="ps-2" for="{{id}}">{{label}}</label>
+    <div id="{{name}}HelpBlock" class="form-text">
+        <small>{{helptext}}</small>
+    </div>
+{%- endmacro %}
+
+{% macro display(label, value) -%}
+<div class="row g-0">
+    <div class="col-auto"><small>{{label}}</small></div>
+</div>
+<div class="row g-0">
+    <div class="col-auto">{{value}}</div>
+</div>
+{%- endmacro %}
+
+
+

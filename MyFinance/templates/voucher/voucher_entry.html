@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}
+Voucher Entry
+{% endblock %}
+{% block header %}
+<h1>{{ title }}</h1>
+<p>{{ description }}</p>
+{% endblock %}
+{% block content %}
+{% from 'common/forms.html' import input as input_control, select as select_control %}
+<div class="container-md">
+    <form action="/voucher/voucher_result" method="POST">
+        <div class="row gx-2 gy-1">
+            <div class="col-md-3 form-floating">
+                {{ input_control('voucher_date', value=None,
+                  modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
+            </div>
+            <div class="col-md-3 form-floating">
+                {{ select_control('company', id='company', option_list=company_list, option_key='id', option_value='company_name',
+                    label='Company', helptext='Select the company to book the voucher to' )}}
+            </div>
+            <div class="col-md-6 form-floating">
+                {{ input_control('voucher_ref', value=None,
+                  label='Voucher Reference', helptext='Enter identifying information from the voucher, such as the voucher or invoice number') }}
+            </div>
+        </div>
+
+        <div class="row gx-2 gy-1">
+            <div class="col-md-6 form-floating">
+                {{ select_control('vendor', id='vendor', option_list=vendor_list, option_key='vendor_number', option_value='vendor_short_desc', 
+                  label='Vendor', helptext='Enter the Vendor') }}
+            </div>
+            <div class="col-md-3 form-floating">
+                {{ select_control('voucher_type', id='voucher_type', option_list=voucher_type_list, option_key='type_code', option_value='type_text',
+                  label='Type', helptext='The type of the voucher') }}
+            </div>
+            <div class="col-md-3 form-floating">
+                {{ input_control('voucher_amt', type='number', value=None,
+                  label='Amount', helptext='The amount of the voucher' ) }}
+            </div>
+        </div>
+
+        <div class="row gx-2 gy-1">
+            <div class="col-md-4 form-floating">
+                {{ select_control('payment_type', id='voucher-pay-type-select', option_list=payment_type_list, option_key='payment_type_id', 
+                  option_value='payment_type_text', label='Pmt Type', helptext='The type of the payment')}}
+            </div>
+            <div class="col-md-4 form-floating">
+                {{ select_control('pmt_account', option_list=account_list, option_key='external_account_id', option_value='account_name',
+                    label='Payment Source', helptext='The source of the payment')}}
+            </div>
+        </div>
+
+        <div class="row gx-2 gy-1">
+            <div class="col-md-8 form-floating">
+                {{ input_control('payment_ref', value=None, label='Payment Reference', 
+                  helptext='Enter additional information, such as location, the nature of the service or the vendor for a generic vendor which will appear in the ledger.') }}
+            </div>
+            <div class="col-md-4">
+                <input type="submit" value="Submit" class="btn btn-primary mb-3">
+            </div>
+        </div>
+    </form>
+    <!--
+    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <img src="..." class="rounded me-2" alt="...">
+                <strong class="me-auto">Bootstrap</strong>
+                <small>11 mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hello, world! This is a toast message.
+            </div>
+        </div>
+    </div>
+    -->
+</div>
+{% endblock %}
+{% block script %}
+<script>
+    const toastTrigger = document.getElementById('liveToastBtn')
+    const toastLiveExample = document.getElementById('liveToast')
+    if (toastTrigger) {
+        toastTrigger.addEventListener('click', () => {
+            const toast = new bootstrap.Toast(toastLiveExample)
+
+            toast.show()
+        })
+    }
+</script>
+{% endblock %}

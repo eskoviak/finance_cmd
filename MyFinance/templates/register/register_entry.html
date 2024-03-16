@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}
+Register Entry
+{% endblock %}
+{% block header %}
+<h1>{{ title }}</h1>
+<p>{{ description }}</p>
+{% endblock %}
+{% block content %}
+{% from 'common/forms.html' import input as input_control, select as select_control %}
+<div class="container-md">
+    <form action="/register/register_result" method="POST">
+        <div class="row gx-2 gy-1">
+            <div class="col-md-3 form-floating">
+                {{ input_control('date', value=None,
+                  modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
+            </div>
+            <div class="col-md-3 form-floating">
+                {{ select_control('code', id='code', option_list=code_list, option_key='code', option_value='name',
+                    label='Entry Type', helptext='Select the code to apply to this register Entry' )}}
+            </div>
+            
+            <div class="col-md-6 form-floating">
+                {{ input_control('tran_no', value=None,
+                  label='Transaction No', helptext='Enter identifying information from the transaction, such as the voucher or invoice number.  If the entry is for a check, this MUST be the check number.') }}
+            </div>
+            <div class="row gx-2 gy-1">
+                <div class="col-md-4 form-floating">
+                    {{ select_control('pmt_account', option_list=account_list, option_key='external_account_id', option_value='account_name',
+                        label='Payment Source', helptext='The source of the payment')}}
+                </div>
+                <div class="col-md-8 form-floating">
+                    {{input_control('description', value=None,
+                      label='Description', helptext='Enter a description')}}
+                </div>                
+            </div>
+            <div class="row gx-2 gy-1">
+                <div class="col-md-3 form-floating">
+                    {{input_control('debit', value=None,
+                      label="Debit (-)", helptext='Debit Amt')}}
+                </div>
+                <div class="col-md-2 form-floating">
+                    {{input_control('isFee', value='N',
+                      label="Fee", helptext="")}}
+                </div>
+                <div class="col-md-3 form-floating">
+                    {{input_control('credit', value=None,
+                      label='Credit (+)', helptext='Credit Amt')}}
+                </div>
+                <div class="col-md-4 form-floating">
+                    <input type="submit" value="Submit" class="btn btn-primary mb-3">
+                </div>
+
+            </div>
+
+        </div>
+    </form>
+</div>
+{% endblock %}
+{% block script %}
+{% endblock %}

@@ -1,0 +1,9 @@
+<select name="payment_type" id="voucher-pay-type-select" class="form-select">
+    {% for ptype in payment_type_list %}
+        <option value="{{ptype['payment_type_id']}}" {% if ptype['payment_type_id'] == 6 %} selected {% endif %}>{{ptype['payment_type_text']}}</option>
+    {% endfor %}
+</select>
+<label class="ps-2" for="voucher-pay-type-select">Payment Type</label>
+<div id="paymentTypeHelpBlock" class="form-text">
+    <small>The type of the payment</small>
+</div>    

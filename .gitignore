@@ -11,6 +11,7 @@
 .DS_Store
 
 /vpython3.10
+/vpython3.11
 
 **/__pycache__
 *.pyc
@@ -20,7 +21,16 @@
 **/voucher_entry.sql
 
 **/.env
+**/.flaskenv
 
 .vscode
 
+**/build
+
+/instance
+
+**/helper.py
+
+**/doc_src/build
 /build
+**/*.gch

@@ -2,7 +2,7 @@ import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
 from flask import Flask, render_template, request
-from models_tst import Voucher, VoucherDetail
+from archive.models_tst import Voucher, VoucherDetail
 from pg_utils import PgUtils
 
 
@@ -77,14 +77,6 @@ def voucher_result():
         pg_utils = PgUtils()
         ret_voucher = pg_utils.add_voucher(voucher)
         voucher = pg_utils.get_voucher(int(ret_voucher))  # type: ignore
-        # get_voucher(ret_voucher)
-        # return render_template(
-        #    'voucher_result.html',
-        #    title="Voucher Entry Confirmation",
-        #    description="You entered the following data:",
-        #    result=result,
-        #    voucher_data=ret_voucher
-        # )
         return render_template(
             'voucher_display.html',
             title='Voucher Display',

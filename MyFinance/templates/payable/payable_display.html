@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block header %}
+<h1>{{title}}</h1>
+<p>{{description}}</p>
+{% endblock %}
+{% block content %}
+{% from 'common/forms.html' import input as input_control, select as select_control, display %}
+<div class="container-md">
+    <div class="row">
+        <div class="col-2 gy-2">{{ display('Payable Id', payable['id']) }}</div>
+        <div class="col-2">{{ display('Invoice Id', payable['invoice_id'])}}</div>
+        <div class="col-3">{{ display('Vendor', payable['vendor_short_desc']) }}</div>
+        <div class="col-3">{{ display('Stmt Date', payable['stmt_dt']) }}</div>
+        <div class="col-2">{{ display('Stmt Amt', payable['stmt_amt']) }}</div>
+    </div>
+    <div class="row">
+        <div class="col-4 gy-2">{{ display('Pmt Due Date', payable['payment_due_dt']) }}</div>
+        <div class="col-4">{{ display('Pmt Account', payable['payment_source']) }}</div>
+        <div class="col-2">{{ display('Pmt Voucher', payable['payment_voucher_id']) }}</div>
+    </div>
+    <div class="row justify-content-end">
+        <div class="col-auto">
+            <a class="btn button-outline-primary" href={{url_for('payable.edit_payable', payable_id=payable['id'])}}>Edit</a>
+        </div> 
+    </div>
+
+</div>
+{% endblock %}

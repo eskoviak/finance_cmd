@@ -1,0 +1,9 @@
+<select name="pmt_account" id="pmt-acct-select" class="form-select">
+    {% for account in account_list %}
+        <option value="{{account['external_account_id']}}">{{account['account_name']}}</option>
+    {% endfor %}
+</select>
+<label class="ps-2" for="pmt-acct-select">Payment Source</label>
+<div id="paymentAcctHelpBlock" class="form-text">
+    <small>The source of the payment</small>
+</div>
