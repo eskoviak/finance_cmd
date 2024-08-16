@@ -2,6 +2,9 @@
     <div class="container-fluid">
         <a class="navbar-brand" href={{ url_for("home") }}>MyFinance</a>
         <span>
+            <span class="danger">
+                {{ g.instance }}
+            </span>
             {% if g.user == None %}
             <a href={{ url_for("auth.login")}}>Login</a>
             {% else %}
@@ -47,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="navbar-nav me-auto mb-2 mb-md-0">
+            <div class="navbar-nav me-auto mb-2 mb-md-0">             
                 <a href={{ url_for("help") }}>Help</a>
             </div>
             <form class="d-flex" action={{ url_for("search.search_objects") }} method="post">

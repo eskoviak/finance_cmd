@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, current_app
 #from archive.models_tst import Voucher, VoucherDetail
 from MyFinance.utils.pg_utils import PgUtils
 import os
@@ -31,6 +31,7 @@ def create_app(test_config=None):
         # was 'config.py'
         # app.config.from_pyfile('config.py', silent=True)
         app.config['PGURI'] = os.environ.get('PGURI')
+        app.config['INSTANCE'] = os.environ.get('INSTANCE')
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
@@ -42,6 +43,7 @@ def create_app(test_config=None):
         return render_template(
             'home.html',
             title='Home',
+            instance = current_app.config['INSTANCE'],
             description='The MyFinance application home page'
         )
 

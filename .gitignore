@@ -12,6 +12,7 @@
 
 /vpython3.10
 /vpython3.11
+/vpython3.12
 
 **/__pycache__
 *.pyc

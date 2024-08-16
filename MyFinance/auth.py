@@ -62,6 +62,7 @@ def login():
 def load_logged_in_user():
     user_id = session.get('user_id')
     pg_utils = PgUtils(current_app.config['PGURI'])
+    g.instance = current_app.config['INSTANCE']
     if user_id == None:
         g.user = None
     else:
