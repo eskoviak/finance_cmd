@@ -78,6 +78,8 @@ Voucher Entry
         </div>
     </div>
 
+    <div class="result"></div>
+
 </div>
 {% endblock %}
 {% block script %}
@@ -89,6 +91,15 @@ Voucher Entry
             const toast = new bootstrap.Toast(toastLiveExample)
 
             toast.show()
+        })
+    }
+</script>
+<script>
+    const pmt_type_select = document.getElementById('voucher-pay-type-select');
+    const result = document.querySelector(".result");
+    if (pmt_type_select) {
+        pmt_type_select.addEventListener('change', () => {
+            result.textContent = `You selected ${event.target.value}`;
         })
     }
 </script>
