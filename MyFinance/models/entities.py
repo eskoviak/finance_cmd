@@ -27,6 +27,7 @@ class ExternalAccounts(Base):
     account_name : Mapped[str] = mapped_column(nullable=False)
     account_number : Mapped[str] = mapped_column(nullable=False)
     qualified : Mapped[str]
+    account_type : Mapped[str] = mapped_column(nullable=True)
 
 class PaymentType(Base):
     """PaymentType class represents the types of payment that can be made, such as Credit Card, Cash and ACH.
@@ -41,6 +42,20 @@ class PaymentType(Base):
 
     def __repr__(self):
         return(f"Payment Type: (payment_type_id: {self.payment_type_id}, payment_type_text: {self.payment_type_text})")
+    
+class PmtTypePmtSourceXREF(Base):
+    """The Payment Type to Allowed Payment Source cross-reference table
+
+    :param Base: _description_
+    :type Base: _type_
+    :return: _description_
+    :rtype: _type_
+    """
+    __tablename__ = "pmt_type_pmt_src_xref"
+    
+    id : Mapped[int] = mapped_column(primary_key=True)
+    payment_type_id : Mapped[int] = mapped_column(nullable=False)
+    external_account_id : Mapped[int] = mapped_column(nullable=False)
     
 class CoA(Base):
     """Chart of accounts class

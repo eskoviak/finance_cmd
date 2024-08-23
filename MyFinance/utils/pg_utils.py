@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session, sessionmaker
 from MyFinance.models.user import User
 from MyFinance.models.vendors import Vendors
 from MyFinance.models.vouchers import (Voucher, VoucherDetail, VoucherType)
-from MyFinance.models.entities import (ExternalAccounts, PaymentType, CoA, Company, RegisterCode, Register)
+from MyFinance.models.entities import (ExternalAccounts, PaymentType, PmtTypePmtSourceXREF, CoA, Company, RegisterCode, Register,PmtTypePmtSourceXREF)
 from MyFinance.models.payables import (AccountsPayable, Liabilities, Periods)
 
 from flask import current_app
@@ -95,8 +95,10 @@ class PgUtils:
     def get_vendors(self,filter=None) -> list:
         """gets the list of vendors
 
-        Returns:
-            dict: [{vendor_short_desc: vendor_number}, ...]
+        :param filter: filter string, defaults to None.
+        :type filter: str, optional
+        :return: a list of the companies
+        :rtype: list
         """
         vendor_list = []
         try:
@@ -120,22 +122,34 @@ class PgUtils:
 
         return vendor_list
 
-    def get_external_accounts(self) -> list:
+    def get_external_accounts(self, filter=None) -> list:
         """gets the list of external accounts
 
-        Returns:
-            disc: [{account_name: external_account_id}, ...]
+        :param filter: filter integer (id from payment_type_id), defaults to None
+        :type filter: str, optional
+        :return: a list of the accounts
+        :rtype: list
+        
         """
         account_list = []
+        
         try:
-            with self.Session.begin() as session:  # type: ignore
-                results = session.query(ExternalAccounts).order_by(ExternalAccounts.account_name)
+            if filter == None:
+                with self.Session.begin() as session:  # type: ignore
+                    results = session.query(ExternalAccounts).order_by(ExternalAccounts.account_name)
 
-                for row in results:
-                    account = {}
-                    account["account_name"] = row.account_name
-                    account["external_account_id"] = row.external_account_id
-                    account_list.append(account)
+                    for row in results:
+                        account = {}
+                        account["account_name"] = row.account_name
+                        account["external_account_id"] = row.external_account_id
+                        account_list.append(account)
+            else:
+                with self.Session.begin() as session:
+                    stmt = select(PmtTypePmtSourceXREF.payment_type_id, PmtTypePmtSourceXREF.external_account_id).where(PmtTypePmtSourceXREF.payment_type_id == filter)
+                    results = session.execute(stmt)
+                    
+                    for row in results:
+                        print(f'pmt_id" {row.payment_type_id} ext_account_id {row.external_account_id}')
         except Exception as ex:
             print(f"Exception in get_external_accounts: {ex.args[0]}")
             return account_list
