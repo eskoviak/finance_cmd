@@ -1,10 +1,14 @@
 import sys
-sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
+sys.path.append('/Users/edmundlskoviak/local-repos/MyFinance')
 
 from flask import Flask, render_template, request, redirect, url_for
 #from archive.models_tst import Voucher, VoucherDetail
 from MyFinance.utils.pg_utils import PgUtils
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 
 # The application factory
@@ -31,6 +35,7 @@ def create_app(test_config=None):
         # was 'config.py'
         # app.config.from_pyfile('config.py', silent=True)
         app.config['PGURI'] = os.environ.get('PGURI')
+        print(f"uri: {app.config['PGURI']}")
     else:
         # load the test config if passed in
         app.config.from_mapping(test_config)
