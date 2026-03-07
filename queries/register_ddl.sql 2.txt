@@ -1,3 +1,0 @@
-CREATE TABLE IS NOT EXISTS register (
-	id integer PRIMARY KEY,
-	external_account_id 
