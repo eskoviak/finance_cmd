@@ -1,4 +1,4 @@
-from MyFinance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import get_pg_utils
 
 #from MyFinance.models.vouchers import Voucher, VoucherDetail
 from MyFinance.models.entities import (Register, RegisterCode)
@@ -21,7 +21,7 @@ def enter_register():
         renders register_entry.html and which post back to /register_result
     """
     
-    pg_utils = PgUtils(current_app.config['PGURI'])
+    pg_utils = get_pg_utils()
     return render_template(
         'register/register_entry.html',
         title='Register Entry',

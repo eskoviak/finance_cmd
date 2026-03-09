@@ -1,7 +1,7 @@
 #import functools
 #import sys
 #sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
-from MyFinance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import get_pg_utils
 
 from MyFinance.models.vouchers import Voucher, VoucherDetail
 
@@ -17,7 +17,7 @@ bp = Blueprint('voucher', __name__, url_prefix='/voucher')
 @bp.route("<int:voucher_number>", methods=['GET'] ) # type: ignore
 def get_voucher(voucher_number):
     if request.method == 'GET':
-        pg_utils = PgUtils(current_app.config['PGURI'])
+        pg_utils = get_pg_utils()
         voucher_dict = pg_utils.get_voucher(voucher_number)
         if len(voucher_dict) > 0:
             try:
@@ -47,7 +47,7 @@ def enter_voucher():
     Returns:
         renders voucher_entry.html 
     """
-    pg_utils = PgUtils(current_app.config['PGURI'])
+    pg_utils = get_pg_utils()
     session['voucher_amt'] = 0
     return render_template(
         'voucher/voucher_entry.html',
@@ -76,7 +76,7 @@ def voucher_result():
                           payment_ref=result["payment_ref"],
                           company_id=result["company"])
                           
-        pg_utils = PgUtils(current_app.config['PGURI'])
+        pg_utils = get_pg_utils()
         ret_voucher = pg_utils.add_voucher(voucher)
         voucher = pg_utils.get_voucher(int(ret_voucher)) # type: ignore
         session['voucher_amt'] = voucher['voucher_amt']
@@ -92,7 +92,7 @@ def voucher_result():
 @bp.route("/detail_entry/<int:voucher_number>/<int:split_seq_number>", methods=['GET']) # type: ignore
 @login_required
 def detail_entry(voucher_number=None, split_seq_number=None):
-    pg_utils = PgUtils(current_app.config['PGURI'])
+    pg_utils = get_pg_utils()
     voucher_remain = 0
     if request.method == 'POST':
         result = request.form
@@ -122,7 +122,7 @@ def detail_result():
             dimension_2 = result["dimension_2"],
             memo = result["memo"]
         )
-        pg_utils = PgUtils(current_app.config['PGURI'])
+        pg_utils = get_pg_utils()
         pg_utils.add_voucher_details(voucher_detail)
         voucher = pg_utils.get_voucher(int(voucher_detail.voucher_number)) #type: ignore
         return render_template(

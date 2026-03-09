@@ -12,6 +12,11 @@ from flask import current_app
 import logging,inspect
 
 
+def get_pg_utils():
+    """Returns the shared PgUtils instance from the Flask app extensions."""
+    return current_app.extensions['pg_utils']
+
+
 class PgUtils:
     """This class encapsulates the various functions needed by the finance application
 
@@ -37,7 +42,7 @@ class PgUtils:
         Returns:
             A dict object
         """
-        with Session(create_engine(self.get_pg_uri())) as session:
+        with self.Session() as session:
             results = session.execute(select(Voucher).where(Voucher.voucher_number == voucher_number))
             voucher_dict = {}
             voucher_detail = []
@@ -77,17 +82,16 @@ class PgUtils:
 
         company_list = []
         try:
-            if filter == None:
-                with self.Session() as session: # type: ignore
+            with self.Session() as session:
+                if filter == None:
                     results = session.query(Company).order_by(Company.company_number)
-            else:
-                with self.Session() as session: # type: ignore
+                else:
                     results = session.query(Company).where(Company.company_name.ilike(f"%{filter}%"))
-            for row in results:
-                company = {}
-                company['company_name']=row.company_name
-                company['id']=row.id
-                company_list.append(company)
+                for row in results:
+                    company = {}
+                    company['company_name']=row.company_name
+                    company['id']=row.id
+                    company_list.append(company)
         except Exception as ex:
             print(ex.args[0])
         return company_list
@@ -100,20 +104,16 @@ class PgUtils:
         """
         vendor_list = []
         try:
-            if filter == None:
-                with self.Session() as session: # type: ignore
+            with self.Session() as session:
+                if filter == None:
                     results = session.query(Vendors).order_by(Vendors.vendor_short_desc)
-
-            else:
-                with self.Session() as session: #type: ignore
-                    results = session.query(Vendors).where(Vendors.vendor_short_desc.ilike(f"%{filter}%",))                
-                    #stmt = select(Vendors).where(Vendors.vendor_short_desc ILIKE f'%{filter}%')
-                    #results = session.execute(stmt)
-            for row in results:
-                vendor = {}
-                vendor["vendor_short_desc"] = row.vendor_short_desc
-                vendor["vendor_number"] = row.vendor_number
-                vendor_list.append(vendor)
+                else:
+                    results = session.query(Vendors).where(Vendors.vendor_short_desc.ilike(f"%{filter}%",))
+                for row in results:
+                    vendor = {}
+                    vendor["vendor_short_desc"] = row.vendor_short_desc
+                    vendor["vendor_number"] = row.vendor_number
+                    vendor_list.append(vendor)
         except Exception as ex:
             #current_app.logger.error(f'Error in get_vendors: {ex.args[0]}')
             print(ex.args[0])
@@ -150,9 +150,8 @@ class PgUtils:
         """
         voucher_types = []
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:  # type: ignore
+            with self.Session() as session:
                 results = session.query(VoucherType).order_by(VoucherType.type_text)
-
                 for row in results:
                     type = {}
                     type["type_text"] = row.type_text
@@ -172,9 +171,8 @@ class PgUtils:
         """
         payment_types = []
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:  # type: ignore
+            with self.Session() as session:
                 results = session.query(PaymentType).order_by(PaymentType.payment_type_text)
-
                 for row in results:
                     pmt_type = {}
                     pmt_type['payment_type_text'] = row.payment_type_text
@@ -188,7 +186,7 @@ class PgUtils:
     def add_voucher(self, Voucher):
 
         try:
-            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
+            with self.Session() as session:
                 session.add(Voucher)
                 session.commit()
                 session.refresh(Voucher)
@@ -199,7 +197,7 @@ class PgUtils:
 
     def add_voucher_details(self, VoucherDetail):
         try:
-            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
+            with self.Session() as session:
                 session.add(VoucherDetail)
                 session.commit()
                 session.refresh(VoucherDetail)
@@ -211,20 +209,20 @@ class PgUtils:
     def get_next_split_number(self, voucher_number : int):
 
         try:
-            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
+            with self.Session() as session:
                 result = session.query(VoucherDetail.id).where(VoucherDetail.voucher_number == voucher_number)
-                return len(result.all()) + 1 
+                return len(result.all()) + 1
         except (Exception):
             print(f"Exception in get_next_split_number: {Exception}")
             return -1
                 
     def get_detail_total(self, voucher_number : int):
         try:
-            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
+            with self.Session() as session:
                 result = session.query(func.sum(VoucherDetail.amount)).where(VoucherDetail.voucher_number==voucher_number)
                 if result.scalar() == None:
                     return 0
-                else: 
+                else:
                     return result.scalar()
         except Exception:
             print(f"Exception in get_detail_total: {Exception}")
@@ -243,7 +241,7 @@ class PgUtils:
         """
 
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:
+            with self.Session() as session:
                 # See if the user exists
                 results = session.query(User).where(User.username == username)
                 if len(results.all()) != 0:
@@ -269,7 +267,7 @@ class PgUtils:
         """
         user_dict = {}
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:
+            with self.Session() as session:
                 results = session.query(User).where(User.username == username)
                 for row in results:
                     user_dict['id'] = row.id
@@ -290,7 +288,7 @@ class PgUtils:
         """  
         user_dict = {}
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:
+            with self.Session() as session:
                 results = session.query(User).where(User.id == user_id)
                 for row in results:
                     user_dict['id'] = row.id
@@ -314,9 +312,8 @@ class PgUtils:
         """
         payable_dict = {}
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:
-                #results = session.query(AccountsPayable).where(AccountsPayable.id == payable_id)
-                stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id, 
+            with self.Session() as session:
+                stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id,
                         AccountsPayable.stmt_dt, AccountsPayable.stmt_amt, AccountsPayable.payment_due_dt,
                         ExternalAccounts.account_name,
                         AccountsPayable.payment_voucher_id).join(ExternalAccounts).join(Vendors).where(AccountsPayable.id == payable_id)
@@ -369,7 +366,7 @@ class PgUtils:
 
     def add_payable(self, payable : AccountsPayable) -> int:
         try:
-            with Session(create_engine(self.get_pg_uri())) as session: # type: ignore
+            with self.Session() as session:
                 session.add(payable)
                 session.commit()
                 session.refresh(payable)
@@ -392,11 +389,10 @@ class PgUtils:
         """
         liability_dict = {}
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:
-                #results = session.query(Liabilities).where(Liabilities.id == liability_id)
-                stmt = select(Liabilities.id, ExternalAccounts.account_name, Liabilities.original_amt, 
+            with self.Session() as session:
+                stmt = select(Liabilities.id, ExternalAccounts.account_name, Liabilities.original_amt,
                     Liabilities.current_balance_amt, Liabilities.current_balance_dt, Liabilities.pmt_due_amt,
-                    Liabilities.pmt_due_dt, Liabilities.payment_voucher_id, 
+                    Liabilities.pmt_due_dt, Liabilities.payment_voucher_id,
                     Liabilities.period_int).join(ExternalAccounts).where(Liabilities.id == liability_id)
                 results = session.execute(stmt)
                 for row in results:
@@ -423,8 +419,8 @@ class PgUtils:
         """        
         Liabilities_list = []
         try:
-            with Session(create_engine(self.get_pg_uri())) as session:
-                stmt = select(Liabilities.id, ExternalAccounts.account_name, Liabilities.original_amt, 
+            with self.Session() as session:
+                stmt = select(Liabilities.id, ExternalAccounts.account_name, Liabilities.original_amt,
                             Liabilities.current_balance_amt, Liabilities.current_balance_dt,
                             Liabilities.pmt_due_amt, Liabilities.pmt_due_dt, Liabilities.payment_voucher_id,
                             Liabilities.period_int).join(ExternalAccounts).where(ExternalAccounts.external_account_id == account_number)
@@ -441,7 +437,7 @@ class PgUtils:
                     tmp['pmt_due_dt'] = row.pmt_due_dt
                     tmp['payment_voucher_id'] = row.payment_voucher_id
                     tmp['period_int'] = row.period_int
-                    Liabilities_list.append(tmp)  
+                    Liabilities_list.append(tmp)
         except Exception as ex:
             current_app.logger.error(f'Error in get_liability_by_account: {ex.args[0]}')       
             #print(ex.args[0])     

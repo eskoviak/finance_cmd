@@ -2,7 +2,7 @@ import functools
 #import sys
 #sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
-from MyFinance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import get_pg_utils
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for, current_app
 )
@@ -15,7 +15,7 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        pg_utils = PgUtils(current_app.config['PGURI'])
+        pg_utils = get_pg_utils()
 
         error = None
         if not username:
@@ -40,7 +40,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        pg_utils = PgUtils(current_app.config['PGURI'])
+        pg_utils = get_pg_utils()
         user = pg_utils.get_user_by_name(username)
         error = None
         if len(user.keys()) == 0:
@@ -61,7 +61,7 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
-    pg_utils = PgUtils(current_app.config['PGURI'])
+    pg_utils = get_pg_utils()
     if user_id == None:
         g.user = None
     else:

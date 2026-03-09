@@ -40,6 +40,10 @@ def create_app(test_config=None):
         # load the test config if passed in
         app.config.from_mapping(test_config)
 
+    # Create a single shared PgUtils instance
+    if 'pg_utils' not in app.extensions:
+        app.extensions['pg_utils'] = PgUtils(app.config['PGURI'])
+
     # The Home page
     @app.route('/')
     @app.route('/home')
