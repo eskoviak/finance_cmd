@@ -1,4 +1,4 @@
-from MyFinance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import get_pg_utils
 
 from MyFinance.models.payables import AccountsPayable
 
@@ -16,7 +16,7 @@ bp = Blueprint('payable', __name__, url_prefix='/payable')
 @bp.route('<int:payable_id>', methods=['GET']) #type: ignore
 @login_required
 def get_payable(payable_id):
-            pg_utils = PgUtils(current_app.config['PGURI'])
+            pg_utils = get_pg_utils()
             payable_dict = pg_utils.get_payable(payable_id)
             if len(payable_dict) > 0:
                     return render_template(
@@ -40,7 +40,7 @@ def enter_payable():
         Enter the data for a payable
 
         """
-        pg_utils = PgUtils(current_app.config['PGURI'])
+        pg_utils = get_pg_utils()
         return render_template(
                 'payable/payable_entry.html',
                 title='Payable Entry',
@@ -60,7 +60,7 @@ def get_payable_by_vendor(vendor_number : int):
         
         <param vendor_number> : 
         """
-        pg_utils = PgUtils(current_app.config['PGURI'])
+        pg_utils = get_pg_utils()
         return render_template(
                 'payable/payable_list.html',
                 title = 'Payables',
@@ -90,7 +90,7 @@ def payable_result():
                         payment_due_dt=result['payment_due_dt'],
                         payment_source_id=result['payment_source'],
                         payment_voucher_id=pmt_voucher_id)
-                pg_utils = PgUtils(current_app.config['PGURI'])
+                pg_utils = get_pg_utils()
                 ret_payable = pg_utils.add_payable(payable)
                 payable = pg_utils.get_payable(ret_payable)
                 return render_template(

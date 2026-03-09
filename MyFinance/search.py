@@ -1,4 +1,4 @@
-from MyFinance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import get_pg_utils
 
 from MyFinance.models.payables import AccountsPayable
 
@@ -21,7 +21,7 @@ def search_objects():
         payable_list = []
         vendor_list = []
         ## is the search phrase a number? Must be an id
-        pg_utils = PgUtils(current_app.config['PGURI'])
+        pg_utils = get_pg_utils()
         try:
             if search_phrase.isdigit():
                 current_app.logger.info(f'{__module__} Search Phrase: {search_phrase}')

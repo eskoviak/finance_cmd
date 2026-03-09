@@ -1,4 +1,4 @@
-from MyFinance.utils.pg_utils import PgUtils
+from MyFinance.utils.pg_utils import get_pg_utils
 
 from MyFinance.models.payables import AccountsPayable,Liabilities
 
@@ -18,7 +18,7 @@ def enter_liability():
     :return: none
     :rtype: none
     """
-    pg_utils = PgUtils(current_app.config['PGURI'])
+    pg_utils = get_pg_utils()
     
     return render_template(
         'liability/liability_entry.html',
@@ -32,7 +32,7 @@ def enter_liability():
 def liability_result():
     if request.method == 'POST':
         results = request.form
-        pg_utils = PgUtils(current_app.config['PGURI']) 
+        pg_utils = get_pg_utils() 
         new_id = pg_utils.get_next_liability_id()
 
         ## Need to guard against empty string in int field
@@ -66,7 +66,7 @@ def liability_result():
 
 @bp.route('<int:liability_id>', methods=['GET']) #type: ignore
 def get_liability(liability_id):
-    pg_utils = PgUtils(current_app.config['PGURI'])
+    pg_utils = get_pg_utils()
     liability_dict = pg_utils.get_liability(liability_id)
     if len(liability_dict) > 0:
         return render_template(
@@ -85,7 +85,7 @@ def get_liability(liability_id):
 
 @bp.route('/liability/<int:account_number>', methods=['GET']) #type: ignore
 def get_liabiity_list(account_number):
-    pg_utils = PgUtils(current_app.config['PGURI'])
+    pg_utils = get_pg_utils()
     liability_list = pg_utils.get_liability_by_account(account_number)
     if len(liability_list) > 0:
         return render_template(

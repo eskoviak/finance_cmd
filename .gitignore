@@ -34,3 +34,5 @@
 **/doc_src/build
 /build
 **/*.gch
+
+**Notebooks
