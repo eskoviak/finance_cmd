@@ -1,0 +1,102 @@
+@startuml myfinance-data-class
+title: MyFinance Data Structure
+
+class finance.vendors <<(T, #00FF00) Table>> {
+	vendor_number : sequence not null
+	vendor_short_description : varchar(30) not null
+	vendor_address : varchar(60)
+	--
+	vendors_pkey : PRIMARY KEY, btree (vendor_number)
+
+}
+
+class finance.accounts_payable <<(T, #00FF00) Table>> {
+	id : integer not null
+	vendor_number : integer
+	stmt_dt : timestamp without time zone not null
+	payment_due_dt : timestamp without time zone not null
+	payment_source_id : integer
+	payment_voucher_id : integer
+	invoice_id : varchar(25)
+	--
+	accounts_payable_pkey : PRIMARY KEY, btree (id3)
+}
+
+class finance.voucher <<(T, #00FF00) Table>> {
+	voucher_number : integer not null
+	voucher_date : timestamp with time zone not null
+	voucher_ref : varchar(50)
+	voucher_amt : numeric(10,2) not null
+	voucher_type_id : integer
+	vender_number : integer
+	payment_type_id : integer
+	payment_ref : varchar(50)
+	payment_source_id : integer
+	company_id : integer not null
+	--
+	voucher_pkey : PRIMARY KEY, btree(voucher_number)
+	
+}
+
+class finance.vendors_vendor_number_seq <<(S, #0000FF) Sequence>> {
+	Type : integer
+	Start : 1
+	Minimim : 1
+	Maximum : 2147483547
+	Increment : 1
+	Cycles? : no
+	Cache : 1
+	--
+	Owned by finance.vendors.vendor_number
+}
+
+class finance.voucher_detail <<(T, #00FF00) Table>> {
+	id : sequence not null
+	voucher_number : integer 
+	split_seq_number : integer not null
+	account_number : varchar(10) not null
+	amount : numberic(2,10) not null
+	dimension_1 : varchar(20)
+	dimension_2 : varchar(20)
+	memo : text
+	--
+	voucher_detail_pkey : PRIMARY KEY, btree(id) 
+	
+}
+
+class finance.asset_transfer <<(T, #00FF00) Table>> {
+	id : sequence not null
+	transfer_date : timestamp with time zone not null
+	src_external_account_id : integer
+	tgt_external_account_id : integer
+	memo : text
+	--
+	asset_transfer_pkey : PRIMARY KEY, btree(id)
+}
+
+class finance.external_accounts <<(T, #00FF00) Table>> {
+	external_account_id : sequence not null
+	account_name : varchar(100)
+	account_number : varchar(30)
+	qualified : char(1)
+	account_type : char(2)
+	--
+	external_accounts_pkey : PRIMARY KEY, btree (exertnal_account_id)
+}
+
+
+accounts_payable --> vendors : accounts_payable_vendor_number_fkey\nref vendors(vendor_number)
+voucher --> vendors : voucher_vendor_number_fkey\nref vendors(vendor_number)
+voucher_detail "0..*" --* "1" voucher : voucher_detail_voucher_number_fkey\nref(voucher_number)
+vendors_vendor_number_seq ..> vendors : Owned by
+asset_transfer --> external_accounts : asset_transfer_src_external_account_id_fkey\nref external_accounts(external_account_id)
+asset_transfer --> external_accounts : asset_transfer_tgt_external_account_id_fkey\nref external_accounts(external_account_id)
+voucher --> external_accounts : voucher_payment_source_id_fkey\nref external_accounts(external_account_id)
+
+
+note as N1 
+	This structure is only shown once.  Any table with a sequence type
+	has an associated _seq table, <table name>_<column name>seq
+end note
+
+@enduml
