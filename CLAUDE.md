@@ -24,14 +24,22 @@ python -m unittest test.test_pg_utils
 python -m unittest test.test_pg_utils.TestPGUtils.test_get_voucher
 ```
 
-**Build documentation:**
+**Build Sphinx documentation:**
+
+** MAY BE DEPRECATED **
+** MkDocs shouild be used going forward **
 ```bash
 cd doc_src && make html
 ```
+## Application Data Structure
+
+![/docs/diagrams/MyFinance-data-class.puml](./docs/out/MyFinance-data-class/myfinance-data-class.png)
+
+# Current
+
+The application is primarily used currently used to enter 'voucher' information. (Tables finance.voucher and finance.voucher_detail) to capture money spent of goods and services (treating the household like a business), usually from a paper or electronic receipt.  
 
 ## Architecture
-
-### Application Structure
 
 - **`MyFinance/finance.py`** - Flask application factory. Creates the app, configures the PostgreSQL connection via `PGURI` environment variable, and registers all blueprints.
 
@@ -68,4 +76,11 @@ Jinja2 templates in `MyFinance/templates/` are organized by feature (auth/, vouc
 - Python 3.14
 - Flask 2.3.2 with Jinja2 templating
 - SQLAlchemy 2.0 with psycopg2-binary driver
-- PostgreSQL 16
+- PostgreSQL 18
+
+# Future
+
+These are listed in brain dump order.  We will discuss and organize
+
+1. Complete UI, such as transfer entry.  Also, 
+2. Automation:  When entering a Transfer or a Voucher, create a register entry in the appropriate account.

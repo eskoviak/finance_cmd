@@ -84,6 +84,22 @@ class finance.external_accounts <<(T, #00FF00) Table>> {
 	external_accounts_pkey : PRIMARY KEY, btree (exertnal_account_id)
 }
 
+class finance.register <<(T, #00FF00) Table>> {
+	id : sequence not null
+	external_account_id : integer
+	code : integer
+	date : timestamp with time zone not null
+	description : varchar(100)
+	debit : numeric(10,2)
+	isFee : boolean
+	credit : numeric(10,2)
+	tran_no : integer
+	reconciled : boolean
+	voucher : integer
+	--
+	register_pkey : PRIMARY KEY, btree(id)
+}
+
 
 accounts_payable --> vendors : accounts_payable_vendor_number_fkey\nref vendors(vendor_number)
 voucher --> vendors : voucher_vendor_number_fkey\nref vendors(vendor_number)
@@ -92,6 +108,8 @@ vendors_vendor_number_seq ..> vendors : Owned by
 asset_transfer --> external_accounts : asset_transfer_src_external_account_id_fkey\nref external_accounts(external_account_id)
 asset_transfer --> external_accounts : asset_transfer_tgt_external_account_id_fkey\nref external_accounts(external_account_id)
 voucher --> external_accounts : voucher_payment_source_id_fkey\nref external_accounts(external_account_id)
+register --> external_accounts : register_external_account_id_fkey\nref external_accounts(external_account_id)
+register --> voucher : register_voucher_fkey\nref voucher(voucher_number)
 
 
 note as N1 
