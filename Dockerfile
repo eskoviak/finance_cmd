@@ -5,9 +5,9 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Install runtime packages used by psycopg2 and TLS
+# Install runtime packages plus build tools for packages without prebuilt wheels.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends libpq5 ca-certificates \
+    && apt-get install -y --no-install-recommends build-essential libpq5 ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /app/requirements.txt

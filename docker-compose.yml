@@ -4,6 +4,8 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: myfinance-web
+    env_file:
+      - .env.docker
     ports:
       - "5010:5010"
     environment:
@@ -12,9 +14,6 @@ services:
       FLASK_DEBUG: "True"
       FLASK_RUN_PORT: "5010"
       FLASK_HOST: 0.0.0.0
-      # External DB host for this iteration.
-      # Use PGURI_DOCKER to avoid accidentally reusing a localhost URI from .env.
-      PGURI: ${PGURI_DOCKER:-postgresql+psycopg2://postgres:postgres@host.docker.internal:5432/postgres}
     extra_hosts:
       # Works on Docker Desktop (macOS/Windows) and Linux with recent Docker.
       - "host.docker.internal:host-gateway"

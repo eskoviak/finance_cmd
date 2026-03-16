@@ -1,1 +1,7 @@
-site_name: My Docs
+site_name: MyFinance Docs
+
+nav:
+  - Home: index.md
+  - Docker Runbook: docker_runbook.md
+  - Data Dictionary: data_dictionary.md
+  - Data Modeling Notes: data_modeling_notes.md

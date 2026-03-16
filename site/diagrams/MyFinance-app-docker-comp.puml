@@ -1,0 +1,75 @@
+@startuml
+' MyFinance Docker Composition - Framework
+
+title MyFinance Docker Composition
+
+skinparam backgroundColor #FDFDFB
+skinparam shadowing false
+skinparam defaultFontName Helvetica
+skinparam packageStyle rectangle
+skinparam linetype ortho
+
+legend right
+	== Diagram Notes ==
+	- Replace placeholders with real service names and ports.
+	- Keep runtime dependencies flowing top-down where possible.
+	- Group related resources inside boundaries.
+endlegend
+
+package "Host Environment" as Host {
+	frame "Docker Engine" as Docker {
+
+		package "Application Services" as AppServices {
+			component "web-app\n(Flask)" as WebApp
+			component "worker\n(optional)" as Worker
+		}
+
+		package "Data Services" as DataServices {
+			database "postgres\nfinance schema" as Postgres
+			component "redis\n(optional)" as Redis
+		}
+
+		package "Edge and Networking" as Net {
+			component "reverse-proxy\n(optional)" as Proxy
+			component "internal-network" as InternalNet
+			component "external-network\n(optional)" as ExternalNet
+		}
+
+		package "Persistent Storage" as Storage {
+			folder "pg-data-volume" as PgVolume
+			folder "app-config-volume\n(optional)" as AppVolume
+		}
+	}
+}
+
+actor "User Browser" as Browser
+
+' Core traffic
+Browser --> Proxy : HTTPS :443
+Proxy --> WebApp : HTTP :5010
+
+' Service dependencies
+WebApp --> Postgres : SQL
+WebApp --> Redis : Cache/Queue
+Worker --> Postgres : Read/Write
+Worker --> Redis : Jobs
+
+' Network and storage mappings
+WebApp --> InternalNet
+Worker --> InternalNet
+Postgres --> InternalNet
+Redis --> InternalNet
+Proxy --> ExternalNet
+
+Postgres --> PgVolume : /var/lib/postgresql/data
+WebApp --> AppVolume : /app/config
+
+' TODO placeholders
+note bottom of AppServices
+	TODO:
+	- Add concrete image tags.
+	- Add env files and secret mount points.
+	- Add health checks and startup ordering.
+end note
+
+@enduml
