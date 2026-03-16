@@ -20,6 +20,11 @@ Create a mapping routine to read the data From Excel (`/Users/edmundlskoviak/iCl
 1. CapOneRegister
 2. Sch_010z_Register
 
+The following will not be transfered:
+
+1. AMEX HYSA or Rewards Checking.  These have been (checking) or will be closed (HYSA).
+2. Amerirpise will be closed by end of march.
+
 | Excel Column Name | Transformatiom | finance.application | Notes |
 |--|--|--|--|
 | -- | -- |id : sequence not null| no mapping, handled by engine during insert |

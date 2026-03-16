@@ -19,7 +19,7 @@
 
 **/voucher_entry.sql
 
-**/.env
+**/.env**
 **/.flaskenv
 
 .vscode

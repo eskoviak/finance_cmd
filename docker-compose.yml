@@ -1,0 +1,54 @@
+services:
+  myfinance-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: myfinance-web
+    ports:
+      - "5010:5010"
+    environment:
+      FLASK_APP: MyFinance.finance
+      FLASK_ENV: development
+      FLASK_DEBUG: "True"
+      FLASK_RUN_PORT: "5010"
+      FLASK_HOST: 0.0.0.0
+      # External DB host for this iteration.
+      # Use PGURI_DOCKER to avoid accidentally reusing a localhost URI from .env.
+      PGURI: ${PGURI_DOCKER:-postgresql+psycopg2://postgres:postgres@host.docker.internal:5432/postgres}
+    extra_hosts:
+      # Works on Docker Desktop (macOS/Windows) and Linux with recent Docker.
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5010/home', timeout=5)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  # Future option: background worker using same image
+  # myfinance-worker:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: ["python", "-m", "MyFinance.worker"]
+  #   environment:
+  #     PGURI: ${PGURI}
+  #   profiles: ["future"]
+  #   depends_on:
+  #     - myfinance-web
+
+  # Future option: Redis cache/queue
+  # redis:
+  #   image: redis:7-alpine
+  #   profiles: ["future"]
+
+  # Future option: reverse proxy in front of Flask
+  # proxy:
+  #   image: caddy:2-alpine
+  #   profiles: ["future"]
+  #   ports:
+  #     - "80:80"
+  #     - "443:443"
+  #   depends_on:
+  #     - myfinance-web
