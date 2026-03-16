@@ -1,0 +1,14 @@
+.git
+.github
+.vscode
+.vpython3.13
+__pycache__
+*.py[cod]
+*.swp
+*.swo
+.DS_Store
+.env
+*.sqlite
+*.db
+build
+dist

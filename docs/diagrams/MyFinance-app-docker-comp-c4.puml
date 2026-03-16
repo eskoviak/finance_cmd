@@ -1,0 +1,39 @@
+@startuml MyFinance-app-docker-comp-c4.puml
+' MyFinance Docker Composition - C4 Framework
+
+!include <C4/C4_Container>
+
+LAYOUT_TOP_DOWN()
+
+title MyFinance Docker Composition (C4 Container Diagram)
+
+Person(user, "User", "Uses the web UI to manage finances")
+
+System_Boundary(myfinance, "MyFinance Platform") {
+  Container_Boundary(docker_host, "Docker Host") {
+    Container(web_app, "MyFinance Web", "Flask", "Main web application")
+
+    Container(proxy_future, "Reverse Proxy (Future)", "Nginx/Caddy", "Not currently deployed")
+    Container(worker_future, "Background Worker (Future)", "Python worker", "Not currently deployed")
+    Container(redis_future, "Redis (Future)", "Redis", "Not currently deployed")
+
+    Container_Ext(app_volume, "app-config-volume", "Docker Volume (optional)", "Application config and mounted files")
+  }
+}
+
+ContainerDb_Ext(postgres_host, "PostgreSQL (Host System)", "PostgreSQL 18", "External to MyFinance platform in this iteration")
+
+Rel(user, web_app, "Uses", "HTTP :5010")
+
+Rel(web_app, postgres_host, "Reads/Writes", "SQL")
+
+Rel(web_app, app_volume, "Loads app configuration")
+
+note right of web_app
+  TODO:
+  - Keep this high-level for now.
+  - Future components: reverse proxy, worker, and Redis.
+  - Add health checks and secrets when deployment design is finalized.
+end note
+
+@enduml
