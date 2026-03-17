@@ -53,7 +53,7 @@ def enter_voucher():
     selected_voucher_type = None
     for voucher_type in voucher_types:
         type_text = str(voucher_type.get('type_text', '')).strip().lower()
-        if type_text == 'paper':
+        if 'paper' in type_text:
             selected_voucher_type = voucher_type.get('type_code')
             break
 

@@ -13,51 +13,51 @@ Voucher Entry
         <div class="row gx-2 gy-1">
             <div class="col-md-3 form-floating">
                 {{ input_control('voucher_date', value=None,
-                  modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
+                                    modifiers='autofocus required tabindex="1"', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
             </div>
             <div class="col-md-3 form-floating">
                 {{ select_control('company', id='company', option_list=company_list, option_key='id', option_value='company_name',
-                    label='Company', helptext='Select the company to book the voucher to' )}}
+                                        label='Company', helptext='Select the company to book the voucher to', modifiers='tabindex="2"' )}}
             </div>
             <div class="col-md-6 form-floating">
                 {{ input_control('voucher_ref', value=None,
-                  label='Voucher Reference', helptext='Enter identifying information from the voucher, such as the voucher or invoice number') }}
+                                    modifiers='tabindex="3"', label='Voucher Reference', helptext='Enter identifying information from the voucher, such as the voucher or invoice number') }}
             </div>
         </div>
 
         <div class="row gx-2 gy-1">
             <div class="col-md-6 form-floating">
                 {{ select_control('vendor', id='vendor', option_list=vendor_list, option_key='vendor_number', option_value='vendor_short_desc', 
-                  label='Vendor', helptext='Enter the Vendor') }}
+                                    label='Vendor', helptext='Enter the Vendor', modifiers='tabindex="4"') }}
             </div>
             <div class="col-md-3 form-floating">
                 {{ select_control('voucher_type', id='voucher_type', option_list=voucher_type_list, option_key='type_code', option_value='type_text',
-                label='Type', helptext='The type of the voucher', selected_value=selected_voucher_type) }}
+                                label='Type', helptext='The type of the voucher', selected_value=selected_voucher_type, modifiers='tabindex="5"') }}
             </div>
             <div class="col-md-3 form-floating">
                 {{ input_control('voucher_amt', type='number', value=None,
-                  label='Amount', helptext='The amount of the voucher' ) }}
+                                    modifiers='tabindex="6"', label='Amount', helptext='The amount of the voucher' ) }}
             </div>
         </div>
 
         <div class="row gx-2 gy-1">
             <div class="col-md-4 form-floating">
                 {{ select_control('payment_type', id='voucher-pay-type-select', option_list=payment_type_list, option_key='payment_type_id', 
-                  option_value='payment_type_text', label='Pmt Type', helptext='The type of the payment')}}
+                  option_value='payment_type_text', label='Pmt Type', helptext='The type of the payment', modifiers='tabindex="7"')}}
             </div>
             <div class="col-md-4 form-floating">
                 {{ select_control('pmt_account', option_list=account_list, option_key='external_account_id', option_value='account_name',
-                    label='Payment Source', helptext='The source of the payment')}}
+                    label='Payment Source', helptext='The source of the payment', modifiers='tabindex="8"')}}
             </div>
         </div>
 
         <div class="row gx-2 gy-1">
             <div class="col-md-8 form-floating">
-                {{ input_control('payment_ref', value=None, label='Payment Reference', 
+                {{ input_control('payment_ref', value=None, modifiers='tabindex="9"', label='Payment Reference', 
                   helptext='Enter additional information, such as location, the nature of the service or the vendor for a generic vendor which will appear in the ledger.') }}
             </div>
             <div class="col-md-4">
-                <input type="submit" value="Submit" class="btn btn-primary mb-3">
+                <input type="submit" value="Submit" class="btn btn-primary mb-3" id="voucher-submit" tabindex="10">
             </div>
         </div>
     </form>
