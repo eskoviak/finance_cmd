@@ -30,3 +30,18 @@ $(BUILD)/vendorstest.o : $(SRC)/vendorstest.cpp
 
 vendors_sa : $(BUILD)/vendors.o $(BUILD)/vendorstest.o
 	$(CXX) $(CXX_STD) -o vendors_sa $?
+
+# =============================================================================
+# Database targets
+# =============================================================================
+PG_BIN  := /opt/homebrew/Cellar/postgresql@18/18.1_1/bin
+PG_CONN := -h localhost -p 5432 -U postgres -d finance
+
+.PHONY: refresh-test-db
+
+## Recreate finance_tst schema and load last-100-voucher subset from finance.
+## Reads PGPASSWORD from the environment (export it or prefix the make call).
+## Usage: PGPASSWORD='<pass>' make refresh-test-db
+refresh-test-db:
+	PGPASSWORD="$(PGPASSWORD)" $(PG_BIN)/psql $(PG_CONN) -f db/01_recreate_finance_tst.sql
+	PGPASSWORD="$(PGPASSWORD)" $(PG_BIN)/psql $(PG_CONN) -f db/02_load_finance_tst.sql

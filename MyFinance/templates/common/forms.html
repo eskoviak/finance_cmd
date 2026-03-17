@@ -6,10 +6,10 @@
     </div>
 {%- endmacro %}
 
-{% macro select(name, id, option_list=None, option_key=None, option_value=None, label='label', helptext='help') -%}
-    <select name="{{name}}" id="{{id}}" class="form-select">
+{% macro select(name, id, option_list=None, option_key=None, option_value=None, label='label', helptext='help', selected_value=None, modifiers='') -%}
+    <select name="{{name}}" id="{{id}}" class="form-select" {{modifiers}}>
         {% for item in option_list %}
-            <option value="{{item[option_key]}}">{{item[option_value]}}</option>
+            <option value="{{item[option_key]}}" {% if selected_value is not none and item[option_key]|string == selected_value|string %}selected{% endif %}>{{item[option_value]}}</option>
         {% endfor %}
     </select>
     <label class="ps-2" for="{{id}}">{{label}}</label>
