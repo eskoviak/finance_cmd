@@ -1,11 +1,11 @@
 import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
-from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData,
+from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer,
                         String, Text, create_engine)
-from sqlalchemy.orm import (relationship, Mapped, mapped_column, declarative_base)
+from sqlalchemy.orm import relationship
 
-Base = declarative_base(metadata=MetaData(schema='finance'))
+from MyFinance.models.base import Base
 from MyFinance.models.entities import ExternalAccounts, PaymentType, Company
 from MyFinance.models.vendors import Vendors
 

@@ -44,6 +44,19 @@ def create_app(test_config=None):
     if 'pg_utils' not in app.extensions:
         app.extensions['pg_utils'] = PgUtils(app.config['PGURI'])
 
+    @app.context_processor
+    def inject_environment_indicator():
+        flask_env = (os.environ.get('FLASK_ENV') or os.environ.get('FLASH_ENV') or '').strip().lower()
+        if flask_env in ('test', 'testing'):
+            return {
+                'environment_label': 'TECHTEST',
+                'environment_badge_class': 'bg-danger text-white'
+            }
+        return {
+            'environment_label': 'PRODUCTION',
+            'environment_badge_class': 'bg-success text-white'
+        }
+
     # The Home page
     @app.route('/')
     @app.route('/home')

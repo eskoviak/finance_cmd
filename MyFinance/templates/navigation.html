@@ -1,6 +1,7 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" href={{ url_for("home") }}>MyFinance</a>
+        <span class="badge {{ environment_badge_class }} me-2">{{ environment_label }}</span>
         <span>
             {% if g.user == None %}
             <a href={{ url_for("auth.login")}}>Login</a>

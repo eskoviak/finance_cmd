@@ -9,7 +9,7 @@ Voucher Entry
 {% block content %}
 {% from 'common/forms.html' import input as input_control, select as select_control %}
 <div class="container-md">
-    <form action="/voucher/voucher_result" method="POST">
+    <form action="/voucher/voucher_result" method="POST" id="voucher-entry-form">
         <div class="row gx-2 gy-1">
             <div class="col-md-3 form-floating">
                 {{ input_control('voucher_date', value=None,
@@ -32,7 +32,7 @@ Voucher Entry
             </div>
             <div class="col-md-3 form-floating">
                 {{ select_control('voucher_type', id='voucher_type', option_list=voucher_type_list, option_key='type_code', option_value='type_text',
-                  label='Type', helptext='The type of the voucher') }}
+                label='Type', helptext='The type of the voucher', selected_value=selected_voucher_type) }}
             </div>
             <div class="col-md-3 form-floating">
                 {{ input_control('voucher_amt', type='number', value=None,
@@ -82,6 +82,23 @@ Voucher Entry
 {% endblock %}
 {% block script %}
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const voucherDateInput = document.getElementById('voucher_date');
+        if (voucherDateInput) {
+            voucherDateInput.focus();
+        }
+
+        const voucherForm = document.getElementById('voucher-entry-form');
+        if (voucherForm) {
+            voucherForm.addEventListener('keydown', (event) => {
+                if (event.key === 'Enter' && event.target.tagName !== 'TEXTAREA') {
+                    event.preventDefault();
+                    voucherForm.requestSubmit();
+                }
+            });
+        }
+    });
+
     const toastTrigger = document.getElementById('liveToastBtn')
     const toastLiveExample = document.getElementById('liveToast')
     if (toastTrigger) {

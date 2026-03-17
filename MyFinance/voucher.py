@@ -49,13 +49,22 @@ def enter_voucher():
     """
     pg_utils = get_pg_utils()
     session['voucher_amt'] = 0
+    voucher_types = pg_utils.get_voucher_types()
+    selected_voucher_type = None
+    for voucher_type in voucher_types:
+        type_text = str(voucher_type.get('type_text', '')).strip().lower()
+        if type_text == 'paper':
+            selected_voucher_type = voucher_type.get('type_code')
+            break
+
     return render_template(
         'voucher/voucher_entry.html',
         title='Voucher Entry',
         description='Enter voucher data',
         vendor_list=pg_utils.get_vendors(),
         account_list=pg_utils.get_external_accounts(),
-        voucher_type_list=pg_utils.get_voucher_types(),
+        voucher_type_list=voucher_types,
+        selected_voucher_type=selected_voucher_type,
         payment_type_list=pg_utils.get_payment_types(),
         company_list=pg_utils.get_company()
     )

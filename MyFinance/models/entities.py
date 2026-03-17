@@ -1,8 +1,8 @@
 import sys
 sys.path.append('/Users/edmundlskoviak/Documents/repos/finance_cmd')
 
-from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, MetaData, String, Text, create_engine)
-from sqlalchemy.orm import (relationship, Mapped, mapped_column, declarative_base)
+from sqlalchemy import (Column, DateTime, Float, ForeignKey, Integer, String, Text, create_engine)
+from sqlalchemy.orm import (relationship, Mapped, mapped_column)
 
 from MyFinance.models.vendors import Vendors
 #from MyFinance.models.vouchers import Voucher
@@ -13,7 +13,7 @@ from datetime import datetime
 from pathlib import Path
 import os
 
-Base = declarative_base(metadata=MetaData(schema='finance'))
+from MyFinance.models.base import Base
 
 class ExternalAccounts(Base):
     """SQLAlchemy class to model the table `external_accounts`
