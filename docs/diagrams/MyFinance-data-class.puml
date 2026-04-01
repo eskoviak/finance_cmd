@@ -13,6 +13,7 @@ class finance.vendors <<(T, #00FF00) Table>> {
 class finance.accounts_payable <<(T, #00FF00) Table>> {
 	id : integer not null
 	vendor_number : integer
+	vendor_account_id : integer
 	stmt_dt : timestamp without time zone not null
 	payment_due_dt : timestamp without time zone not null
 	payment_source_id : integer
@@ -21,6 +22,11 @@ class finance.accounts_payable <<(T, #00FF00) Table>> {
 	--
 	accounts_payable_pkey : PRIMARY KEY, btree (id3)
 }
+
+note top of accounts_payable
+	New Fields:
+	 - vendor_account_id
+end note
 
 class finance.voucher <<(T, #00FF00) Table>> {
 	voucher_number : integer not null

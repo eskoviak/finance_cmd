@@ -1,28 +1,30 @@
-# Data Modeling Notes: MyFinance Application
+# Data Model and Dictionary: MyFinance Application
 
-**Revision History**
-| | |
-|--|--|
+## Revision History
+
+| Date | Change |
+| -- | -- |
 | 2026-03-10 | Original -- [Ed Skoviak](smtp://eskoviak@eskoviak.com) |
 | 2026-03-14 | Added Register map Excel --> finance.register -- [Ed Skoviak](smtp://eskoviak@eskoviak.com) |
+| 2026-03-31 | Updated and condensed in model notes -- [Ed Skoviak](smtp://eskoviak@eskoviak.com) |
 
-**Data Entities**
-| | |
-|---|---|
-| **PostgreSQL Database** | `finance` |
+## Data Entities
 
+| Data Store | Collection  |
+| --- | --- |
+| [PostgreSQL](out/MyFinance-data-class/myfinance-data-class.png) | `finance` |
 ---
 
-** Register Conversion
+## Register Conversion
 
 Create a mapping routine to read the data From Excel (`/Users/edmundlskoviak/iCloud/Documents/Excel/Banking.xlsx`) to insert into the finance.register table.  There are currently two tables to be converted:
 
 1. CapOneRegister
-2. Sch_010z_Register
+2. Sch_010_Register
 
 The following will not be transfered:
 
-1. AMEX HYSA or Rewards Checking.  These have been (checking) or will be closed (HYSA).
+1. AMEX HYSA or Rewards Checking.  These have been (Rewards Checking) or will be closed (HYSA).
 2. Amerirpise will be closed by end of march.
 
 | Excel Column Name | Transformatiom | finance.application | Notes |
@@ -62,3 +64,18 @@ This field represents the id of the transaction details, which points to differe
 | 16 | IRA Payout | asset_transfer  |
 | 17 | Advisor Fee | ??? is this 15 |
 
+The following will be used to update external_accounts.account_type
+
+| Code | Meaning and Usage |
+| -- | --- |
+| CH | Checking |
+| DB | Debit account |
+| BRK | Brokerage  Account |
+| SAV | Savings Account |
+| CC | Credit Card |
+| LN | Loan |
+| HSA  | Health Savings Account |
+| IRA | Individual Retirement Account |
+| INV | Investment Account (institutional ) |
+
+Currently, external_accounts also has revenue accounts (interest income, W2 Income, Pension Income, Other Revenue, etc.). Cleanup is necessary on this table as well, notably real account numbers (perhaps table need to be encrypted?)  Probably need to add Active column, a

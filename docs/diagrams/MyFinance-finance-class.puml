@@ -1,0 +1,29 @@
+@startuml Myfinance.finance
+title: MyFinance  Module Python Modules and Data Structures
+
+class finance<<(P, #00FF00) Python Module>> {
+    +create_app(test_config: dict = None) : Flask App
+}
+
+Note top of finance
+    create_app is the main entry point for the
+    MyFinance module. It initializes the Flask
+    application, sets up configurations, and
+    registers routes and blueprints.
+end note
+
+class auth <<(P, #00FF00) Python Module>> {
+    +register()
+    +login()
+    +load_logged_in_user()
+    +logout()
+}
+
+class liability <<(P, #00FF00) Python Module>>{
+    +enter_liability() : liability/liability_entry.html
+    +liability_result() : liability/liability_diplay.html
+    +get_liability() : liability/liability_display.html
+}
+
+
+@enduml
