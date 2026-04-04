@@ -68,3 +68,16 @@ The Apple cards need to be updated to have the correct account_type and numbers.
 |           ??    40102 | W2 Income                             | 040102                    | N         |    | N |
 |           ??    41102 | W2 Income                             | 040102                    | N         |    | N |
 
+State sql files for theses changes in
+
+```
+MyFinance
+  |
+  + db
+    |
+    + scripts
+      |
+      + 01_recreate_finance_tst.sql
+      + 02_load_finance_tst.sql
+      ...
+```    

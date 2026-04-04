@@ -83,7 +83,8 @@ CREATE TABLE finance_tst.external_accounts (
     account_name        character varying(100) NOT NULL,
     account_number      character varying(30)  NOT NULL,
     qualified           character varying(1),
-    account_type        character(2),
+    account_type        character varying(10),
+    active              boolean                DEFAULT true,
     CONSTRAINT external_accounts_pkey PRIMARY KEY (external_account_id)
 );
 
@@ -138,13 +139,16 @@ CREATE TABLE finance_tst.accounts_payable (
     payment_source_id  integer,
     payment_voucher_id integer,
     invoice_id         character varying(25),
+    vendor_account     integer,
     CONSTRAINT accounts_payable_pkey PRIMARY KEY (id),
     CONSTRAINT accounts_payable_payment_source_id_fkey  FOREIGN KEY (payment_source_id)
         REFERENCES finance_tst.external_accounts(external_account_id),
     CONSTRAINT accounts_payable_payment_voucher_id_fkey FOREIGN KEY (payment_voucher_id)
         REFERENCES finance_tst.voucher(voucher_number),
     CONSTRAINT accounts_payable_vendor_number_fkey      FOREIGN KEY (vendor_number)
-        REFERENCES finance_tst.vendors(vendor_number)
+        REFERENCES finance_tst.vendors(vendor_number),
+    CONSTRAINT accounts_payable_vendor_account_fkey     FOREIGN KEY (vendor_account)
+        REFERENCES finance_tst.external_accounts(external_account_id)
 );
 
 CREATE TABLE finance_tst.asset_transfer (

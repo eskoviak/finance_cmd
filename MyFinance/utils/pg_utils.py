@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine, select, text, func, Sequence
-from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.orm import Session, sessionmaker, aliased
 
 from MyFinance.models.user import User
 from MyFinance.models.vendors import Vendors
@@ -129,7 +129,7 @@ class PgUtils:
         account_list = []
         try:
             with self.Session.begin() as session:  # type: ignore
-                results = session.query(ExternalAccounts).order_by(ExternalAccounts.account_name)
+                results = session.query(ExternalAccounts).filter(ExternalAccounts.active == True).order_by(ExternalAccounts.account_name)
 
                 for row in results:
                     account = {}
@@ -313,10 +313,15 @@ class PgUtils:
         payable_dict = {}
         try:
             with self.Session() as session:
+                VendorAccount = aliased(ExternalAccounts)
                 stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id,
                         AccountsPayable.stmt_dt, AccountsPayable.stmt_amt, AccountsPayable.payment_due_dt,
                         ExternalAccounts.account_name,
-                        AccountsPayable.payment_voucher_id).join(ExternalAccounts).join(Vendors).where(AccountsPayable.id == payable_id)
+                        AccountsPayable.payment_voucher_id,
+                        AccountsPayable.vendor_account, VendorAccount.account_name.label('vendor_account_name')
+                        ).outerjoin(VendorAccount, AccountsPayable.vendor_account == VendorAccount.external_account_id)\
+                        .join(ExternalAccounts, AccountsPayable.payment_source_id == ExternalAccounts.external_account_id)\
+                        .join(Vendors).where(AccountsPayable.id == payable_id)
                 results = session.execute(stmt)
                 for row in results:
                     payable_dict['id'] = row.id
@@ -327,6 +332,8 @@ class PgUtils:
                     payable_dict['payment_due_dt'] = row.payment_due_dt
                     payable_dict['payment_source'] = row.account_name
                     payable_dict['payment_voucher_id'] = row.payment_voucher_id
+                    payable_dict['vendor_account'] = row.vendor_account
+                    payable_dict['vendor_account_name'] = row.vendor_account_name
         except Exception as ex:
             current_app.logger.error(f'Error in get_payable: {ex.args[0]}')
 
@@ -343,9 +350,14 @@ class PgUtils:
         payables_list = []
         try:
             with self.Session() as session:
+                VendorAccount = aliased(ExternalAccounts)
                 stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id,
                     AccountsPayable.stmt_dt, AccountsPayable.stmt_amt,AccountsPayable.payment_due_dt, ExternalAccounts.account_name,
-                    AccountsPayable.payment_voucher_id).join(ExternalAccounts).join(Vendors).where(AccountsPayable.vendor_number== vendor_number).order_by(AccountsPayable.payment_due_dt)
+                    AccountsPayable.payment_voucher_id,
+                    AccountsPayable.vendor_account, VendorAccount.account_name.label('vendor_account_name')
+                    ).outerjoin(VendorAccount, AccountsPayable.vendor_account == VendorAccount.external_account_id)\
+                    .join(ExternalAccounts, AccountsPayable.payment_source_id == ExternalAccounts.external_account_id)\
+                    .join(Vendors).where(AccountsPayable.vendor_number== vendor_number).order_by(AccountsPayable.payment_due_dt)
                 #print(stmt)
                 results = session.execute(stmt)
                 for row in results:
@@ -358,6 +370,8 @@ class PgUtils:
                     tmp['payment_due_dt'] = row.payment_due_dt
                     tmp['account_name'] = row.account_name
                     tmp['payment_voucher_id'] = row.payment_voucher_id
+                    tmp['vendor_account'] = row.vendor_account
+                    tmp['vendor_account_name'] = row.vendor_account_name
                     payables_list.append(tmp)        
         except Exception as ex:
             current_app.logger.error(f'{inspect.stack()[0][0].f_code.co_name}: {ex.args[0]}')

@@ -27,6 +27,8 @@ class ExternalAccounts(Base):
     account_name : Mapped[str] = mapped_column(nullable=False)
     account_number : Mapped[str] = mapped_column(nullable=False)
     qualified : Mapped[str]
+    account_type : Mapped[str]
+    active : Mapped[bool] = mapped_column(default=True)
 
 class PaymentType(Base):
     """PaymentType class represents the types of payment that can be made, such as Credit Card, Cash and ACH.

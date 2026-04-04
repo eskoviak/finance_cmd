@@ -14,9 +14,10 @@
         <div class="col-2">{{ display('Stmt Amt', payable['stmt_amt']) }}</div>
     </div>
     <div class="row">
-        <div class="col-4 gy-2">{{ display('Pmt Due Date', payable['payment_due_dt']) }}</div>
-        <div class="col-4">{{ display('Pmt Account', payable['payment_source']) }}</div>
-        <div class="col-2">{{ display('Pmt Voucher', payable['payment_voucher_id']) }}</div>
+        <div class="col-3 gy-2">{{ display('Vendor Account', payable['vendor_account_name']) }}</div>
+        <div class="col-3">{{ display('Pmt Due Date', payable['payment_due_dt']) }}</div>
+        <div class="col-3">{{ display('Pmt Account', payable['payment_source']) }}</div>
+        <div class="col-3">{{ display('Pmt Voucher', payable['payment_voucher_id']) }}</div>
     </div>
     <div class="row justify-content-end">
         <div class="col-auto">

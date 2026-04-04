@@ -82,6 +82,10 @@ def payable_result():
                         pmt_voucher_id = None
                 else:
                         pmt_voucher_id = int(result['payment_voucher_id'])
+                if result.get('vendor_account') == '' or result.get('vendor_account') is None:
+                        vendor_acct = None
+                else:
+                        vendor_acct = int(result['vendor_account'])
                 payable = AccountsPayable(
                         vendor_number=result['vendor'],
                         invoice_id = result['invoice_id'],
@@ -89,7 +93,8 @@ def payable_result():
                         stmt_amt=result['stmt_amt'],
                         payment_due_dt=result['payment_due_dt'],
                         payment_source_id=result['payment_source'],
-                        payment_voucher_id=pmt_voucher_id)
+                        payment_voucher_id=pmt_voucher_id,
+                        vendor_account=vendor_acct)
                 pg_utils = get_pg_utils()
                 ret_payable = pg_utils.add_payable(payable)
                 payable = pg_utils.get_payable(ret_payable)
