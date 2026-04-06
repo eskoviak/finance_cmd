@@ -78,4 +78,5 @@ The following will be used to update external_accounts.account_type
 | IRA | Individual Retirement Account |
 | INV | Investment Account (institutional ) |
 
-Currently, external_accounts also has revenue accounts (interest income, W2 Income, Pension Income, Other Revenue, etc.). Cleanup is necessary on this table as well, notably real account numbers (perhaps table need to be encrypted?)  Probably need to add Active column, a
+Currently, external_accounts also has revenue accounts (interest income, W2 Income, Pension Income, Other Revenue, etc.). Cleanup is necessary on this table as well, notably real account numbers (perhaps table need to be encrypted?)  Probably need to add Active column (This was completed with Issue 30).
+

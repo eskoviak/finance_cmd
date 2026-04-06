@@ -10,7 +10,7 @@ The Apple cards need to be updated to have the correct account_type and numbers.
 
 ### *TODO* how to correct account_numbers without compromising data security (full account numbers is no go)
 
-### *TODO* Once the `active` field is updated, the routine that build the account selector needs to be updated to only show active accounts.    
+### *TODO* Once the `active` field is updated, the routine that build the account selector needs to be updated to only show active accounts.   DONE 4/4/2026 as part of Issue 30 Closure.  Note: account_type field is boolean, not char(1) as shown here.
 
 
 | external_account_id |             account_name              |      account_number       | qualified | account_type | active |
@@ -75,9 +75,13 @@ MyFinance
   |
   + db
     |
+    + 01_recreate_finance_tst.sql
+    + 02_load_finance_tst.sql
+    |
     + scripts
       |
-      + 01_recreate_finance_tst.sql
-      + 02_load_finance_tst.sql
-      ...
+      + issue_30_alters.sql      
 ```    
+## Notes on external accounts
+
+There is some confusion (on my part) on the Apple account ID's.  When a virtual card is created, it is assigned an ID.  The problem is that the virtual card is not the same as the physical card.  So when a transaction comes in, it is assigned to the virtual card, not the physical card.  This needs to be fixed.  Example:  a transaction receipt with *5964 indicates that the apple-pay function will charge REI Capital One (22301).  I think the way to handle this is to create an alias account for each virtual card that points to the physical card.  Then the card number that appears on the receipt can be traced to the actual account.  ...
