@@ -1,6 +1,10 @@
-{% macro input(name, value='', type='text', modifiers="", label='label', helptext='help') -%}
+{% macro input(name, value='', type='text', modifiers="", label='label', helptext='help') -%}   
     <input type="{{type}}" id="{{name}}" class="form-control" name="{{name}}" {% if type=='number' %}step="any"{% endif %} {{modifiers}} />
-    <label class="ps-2" for="{{name}}">{{label}}</label>
+    {%if 'required' in modifiers %}
+        <label class="ps-2" for="{{label}}">{{label + ' *'}}</label>
+    {% else %}
+        <label class="ps-2" for="{{label}}">{{label}}</label>
+    {% endif %}
     <div id="{{name}}HelpBlock" class="form-text">
         <small>{{helptext}}</small>
     </div>

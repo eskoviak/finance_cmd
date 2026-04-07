@@ -13,7 +13,8 @@ Voucher Entry
         <div class="row gx-2 gy-1">
             <div class="col-md-3 form-floating">
                 {{ input_control('voucher_date', value=None,
-                                    modifiers='autofocus required tabindex="1"', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
+                                    modifiers='autofocus required tabindex="1"', label='Item Date',
+                                    helptext='MM/DD/YY HH:MM TZ') }}                
             </div>
             <div class="col-md-3 form-floating">
                 {{ select_control('company', id='company', option_list=company_list, option_key='id', option_value='company_name',
@@ -36,7 +37,7 @@ Voucher Entry
             </div>
             <div class="col-md-3 form-floating">
                 {{ input_control('voucher_amt', type='number', value=None,
-                                    modifiers='tabindex="6"', label='Amount', helptext='The amount of the voucher' ) }}
+                                    modifiers='requiredtabindex="6"', label='Amount', helptext='The amount of the voucher' ) }}
             </div>
         </div>
 
