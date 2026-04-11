@@ -80,3 +80,14 @@ The following will be used to update external_accounts.account_type
 
 Currently, external_accounts also has revenue accounts (interest income, W2 Income, Pension Income, Other Revenue, etc.). Cleanup is necessary on this table as well, notably real account numbers (perhaps table need to be encrypted?)  Probably need to add Active column (This was completed with Issue 30).
 
+## Data Cleanup `external_accounts` (Issue 42)
+
+There are a number of records (196) assigend to external_account_id 19970 (Capital One Debit). These also have a a payment_type_id of 10 (debit).  These should be 10207 (which is what appears on receipts).  There are also a few assigned to external_acocunt_id 17542, which is the base checking account.  They need to also be moved to 10207.  To correct:
+1. Add a new external_account_id for Capital One Debit (10207) at 
+2. Move all records with (external_account_id = 19970 AND payment_type_id = 10) to 10207
+3. Check that all records moved from 19970
+4. Repeat for external_account_id = 17542 and payment_type_id = 10.
+5. Check that all records moved from 17542
+6. Removed entry 19970 from external_accounts table.
+
+There are records of which match both cases in finance_tst.  Develop the scripts there and test.
