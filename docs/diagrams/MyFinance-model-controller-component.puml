@@ -1,0 +1,58 @@
+@startuml MyFinance-model-conroller-component
+title MyFinance - Model Controller Pattern
+
+together {
+	package "MyFinance.payable" {
+		class BP::Route <<py>> {
+			"/payable_id/<payable_id:int>"
+			"/payable/"
+			"/edit/payable_id/<payable_id:int>" {abstract}
+			"/payable_list/<vendor_number:int>
+			"/pyable_result/"
+		}
+	}
+
+	package "MyFinance.utils.payable"
+	{
+		class PayableUtils <<py>> {
+			payable_display.html get_payable(payable_id : int)
+			payable_entry.html enter_payable()
+			NULL edit_payable(payable_id: int) {abstract}
+			payable_list.html get_payable_by_vendor(vendor_number : int)
+			payable_display.html payable_result()
+		}
+	}
+}
+
+together {
+	package "MyFinance.utils.auth" {
+		class AuthUtils <<py>> {
+			register_html register()
+			login_html login()
+			home.html logout()
+			load_logged_in_user()
+		}
+	}
+
+	package "MyFinance.auth" {
+		class BP::Route <<py>> {
+			"/auth/register"
+			"/auth/login"
+			"/auth/logout"
+			load_logged_in_user()
+			login_required(view)
+		}
+	}	
+}
+
+package "MyFinance.utils.pg_utils" #22EE22 {
+	class PgUtils <<py>> {
+		dict get_payable(payable_id : int)
+	}	
+}
+
+MyFinance.utils.pg_utils.PgUtils --o MyFinance.utils.payable.PayableUtils : import get_pg_utils()
+MyFinance.payable --o MyFinance.utils.payable.PayableUtils : import PayableUtils
+MyFinance.utils.pg_utils.PgUtils --o MyFinance.utils.auth.AuthUtils : import get_pg_utils()
+MyFinance.auth --o MyFinance.utils.auth.AuthUtils : import AuthUtils
+@enduml
