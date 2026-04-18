@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine, select, text, func, Sequence
+from datetime import date, timedelta
 from sqlalchemy.orm import Session, sessionmaker, aliased
 
 from MyFinance.models.user import User
@@ -316,7 +317,7 @@ class PgUtils:
                 VendorAccount = aliased(ExternalAccounts)
                 stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id,
                         AccountsPayable.stmt_dt, AccountsPayable.stmt_amt, AccountsPayable.payment_due_dt,
-                        ExternalAccounts.account_name,
+                        AccountsPayable.payment_source_id, ExternalAccounts.account_name,
                         AccountsPayable.payment_voucher_id,
                         AccountsPayable.vendor_account, VendorAccount.account_name.label('vendor_account_name')
                         ).outerjoin(VendorAccount, AccountsPayable.vendor_account == VendorAccount.external_account_id)\
@@ -330,6 +331,7 @@ class PgUtils:
                     payable_dict['stmt_dt'] = row.stmt_dt
                     payable_dict['stmt_amt'] = row.stmt_amt
                     payable_dict['payment_due_dt'] = row.payment_due_dt
+                    payable_dict['payment_source_id'] = row.payment_source_id
                     payable_dict['payment_source'] = row.account_name
                     payable_dict['payment_voucher_id'] = row.payment_voucher_id
                     payable_dict['vendor_account'] = row.vendor_account
@@ -388,7 +390,70 @@ class PgUtils:
         except Exception as ex:
             current_app.logger.error(f'Error in add_payable: {ex.args[0]}')
             return 0
-        
+
+    def get_open_payables(self) -> list:
+        """Gets unpaid payables due within the next 20 days from today.
+
+        :return: list of open payable dicts
+        :rtype: list
+        """
+        payables_list = []
+        today = date.today()
+        window_end = today + timedelta(days=20)
+        try:
+            with self.Session() as session:
+                VendorAccount = aliased(ExternalAccounts)
+                stmt = select(AccountsPayable.id, Vendors.vendor_short_desc, AccountsPayable.invoice_id,
+                    AccountsPayable.stmt_dt, AccountsPayable.stmt_amt, AccountsPayable.payment_due_dt,
+                    ExternalAccounts.account_name,
+                    AccountsPayable.payment_voucher_id,
+                    AccountsPayable.vendor_account, VendorAccount.account_name.label('vendor_account_name')
+                    ).outerjoin(VendorAccount, AccountsPayable.vendor_account == VendorAccount.external_account_id)\
+                    .join(ExternalAccounts, AccountsPayable.payment_source_id == ExternalAccounts.external_account_id)\
+                    .join(Vendors)\
+                    .where(AccountsPayable.payment_voucher_id == None)\
+                    .where(AccountsPayable.payment_due_dt.between(today, window_end))\
+                    .order_by(AccountsPayable.payment_due_dt)
+                results = session.execute(stmt)
+                for row in results:
+                    tmp = {}
+                    tmp['id'] = row.id
+                    tmp['vendor'] = row.vendor_short_desc
+                    tmp['invoice_id'] = row.invoice_id
+                    tmp['stmt_dt'] = row.stmt_dt
+                    tmp['stmt_amt'] = row.stmt_amt
+                    tmp['payment_due_dt'] = row.payment_due_dt
+                    tmp['account_name'] = row.account_name
+                    tmp['payment_voucher_id'] = row.payment_voucher_id
+                    tmp['vendor_account'] = row.vendor_account
+                    tmp['vendor_account_name'] = row.vendor_account_name
+                    payables_list.append(tmp)
+        except Exception as ex:
+            current_app.logger.error(f'{inspect.stack()[0][0].f_code.co_name}: {ex.args[0]}')
+        return payables_list
+
+    def update_payable(self, payable_id: int, stmt_amt: float, payment_due_dt,
+                       payment_source_id: int, payment_voucher_id, invoice_id: str) -> int:
+        """Updates editable fields on an existing AccountsPayable record.
+
+        :return: payable_id on success, 0 on failure
+        :rtype: int
+        """
+        try:
+            with self.Session() as session:
+                payable = session.get(AccountsPayable, payable_id)
+                if payable is None:
+                    return 0
+                payable.stmt_amt = stmt_amt
+                payable.payment_due_dt = payment_due_dt
+                payable.payment_source_id = payment_source_id
+                payable.payment_voucher_id = payment_voucher_id if payment_voucher_id else None
+                payable.invoice_id = invoice_id
+                session.commit()
+                return payable_id
+        except Exception as ex:
+            current_app.logger.error(f'Error in update_payable: {ex.args[0]}')
+            return 0
 
     ######
     ## Liabilities

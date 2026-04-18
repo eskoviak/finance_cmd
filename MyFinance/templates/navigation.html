@@ -40,6 +40,7 @@
                         </li>
                         <li><a class="dropdown-item nav-link" href={{ url_for("payable.enter_payable") }}>Enter
                                 Account Payable</a></li>
+                        <li><a class="dropdown-item nav-link" href="#" data-bs-toggle="modal" data-bs-target="#findPayableModal">Find Payable &hellip;</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
@@ -59,3 +60,27 @@
         </div>
     </div>
 </nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('input[name="findMode"]').forEach(function (radio) {
+        radio.addEventListener('change', function () {
+            document.getElementById('findVendorInput').style.display = this.value === 'vendor' ? '' : 'none';
+            document.getElementById('findIdInput').style.display = this.value === 'id' ? '' : 'none';
+        });
+    });
+
+    document.getElementById('findPayableSubmit').addEventListener('click', function () {
+        var mode = document.querySelector('input[name="findMode"]:checked').value;
+        if (mode === 'vendor') {
+            var vendorId = document.getElementById('findVendorSelect').value;
+            window.location.href = '/payable/list/' + vendorId;
+        } else if (mode === 'open') {
+            window.location.href = '/payable/open';
+        } else if (mode === 'id') {
+            var id = document.getElementById('findPayableIdInput').value;
+            if (id) window.location.href = '/payable/' + id;
+        }
+    });
+});
+</script>

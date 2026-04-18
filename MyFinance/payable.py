@@ -22,6 +22,11 @@ def enter_payable():
 def edit_payable(payable_id):
     return PayableUtils.edit_payable(payable_id)
 
+@bp.route('/open', methods=['GET']) #type: ignore
+@login_required
+def get_open_payables():
+    return PayableUtils.get_open_payables()
+
 @bp.route('/list/<int:vendor_number>', methods=['GET']) #type: ignore
 def get_payable_by_vendor(vendor_number : int):
     """gets a list of payables by vendor
