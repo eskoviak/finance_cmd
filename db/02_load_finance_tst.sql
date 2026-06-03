@@ -37,8 +37,8 @@ FROM finance.vendors;
 
 \echo '== [5/7] Loading lookup: external_accounts (full) =='
 INSERT INTO finance_tst.external_accounts (
-    external_account_id, account_name, account_number, qualified, account_type)
-SELECT external_account_id, account_name, account_number, qualified, account_type
+    external_account_id, account_name, account_number, qualified, account_type, active)
+SELECT external_account_id, account_name, account_number, qualified, account_type, active
 FROM finance.external_accounts;
 
 \echo '== [6/7] Loading transactions =='
