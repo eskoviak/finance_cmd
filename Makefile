@@ -45,3 +45,4 @@ PG_CONN := -h localhost -p 5432 -U postgres -d finance
 refresh-test-db:
 	PGPASSWORD="$(PGPASSWORD)" $(PG_BIN)/psql $(PG_CONN) -f db/01_recreate_finance_tst.sql
 	PGPASSWORD="$(PGPASSWORD)" $(PG_BIN)/psql $(PG_CONN) -f db/02_load_finance_tst.sql
+	PGPASSWORD="$(PGPASSWORD)" $(PG_BIN)/psql $(PG_CONN) -f db/03_cleanup_external_accounts.sql

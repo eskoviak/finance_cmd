@@ -84,6 +84,7 @@ CREATE TABLE finance_tst.external_accounts (
     account_number      character varying(30)  NOT NULL,
     qualified           character varying(1),
     account_type        character(2),
+    active              boolean                DEFAULT true,
     CONSTRAINT external_accounts_pkey PRIMARY KEY (external_account_id)
 );
 
