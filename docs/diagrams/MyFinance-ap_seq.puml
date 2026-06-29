@@ -1,0 +1,37 @@
+@startuml MyFinance-ap-seq
+hide footbox
+title Accounts Payable Sequence Diagram
+
+actor "User" as user
+participant "MyFinance" as app
+participant "Finance" as db
+
+alt New Payable
+    user -> app: Enter Payable
+    activate app
+    app --> user: Enter Payable Screen
+    user -> app: Submit
+    app -> db: insert payable
+    app --> user: Payable Display
+    deactivate app
+    destroy app
+else Find Payable ...
+    user -> app: Find Payable
+    activate app
+    app -> user: Display Modal
+    note right of app
+      Options
+      1. By Vendor (vendor selection box)
+      2. By Open (no voucher assigned)
+      3. By Id 
+    end note
+
+    user -> app: Select Option
+    app -> db: Execute search payable
+    app --> user: Payable Display
+    deactivate app
+    destroy app
+end
+
+
+@enduml 

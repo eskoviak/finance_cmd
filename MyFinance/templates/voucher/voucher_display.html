@@ -11,8 +11,9 @@
             <div class="col-4">
                 <h3>Header</h3>
             </div>
-            <div class="col-3">
-                <a class="btn-outline-secondary" href={{url_for('voucher.enter_voucher')}}>New Voucher</a>
+            <div class="col-auto ms-auto d-flex justify-content-end gap-2">
+                <a class="btn btn-sm btn-primary" href={{url_for('voucher.enter_voucher')}} title="Add new voucher"><i class="bi bi-plus-lg fw-bold"></i></a>
+                <button class="btn btn-sm btn-secondary" disabled title="Edit voucher"><i class="bi bi-pencil-fill"></i></button>
             </div>
 
 
@@ -73,9 +74,8 @@
         <form method="POST" action="/voucher/detail_entry">
             <input type="hidden" id="id_voucher_number" name="voucher_number" value="{{data["voucher_number"]}}" />
             <input type="hidden" id="id_splits_seq" name="splits" value="{{data["Splits"]}}" />
-            <input type="submit" class="btn btn-outline-success"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .25rem; --bs-btn-font-size: .50rem;" value="+"
-                name="add_detail" />
+            <input type="submit" class="btn btn-sm" value="Add Detail Line"
+                name="add_detail" style="background-color: #90EE90; color: #006400; font-weight: bold;" />
         </form>
     </div>
 </div>

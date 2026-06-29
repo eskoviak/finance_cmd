@@ -45,6 +45,16 @@ def create_app(test_config=None):
         app.extensions['pg_utils'] = PgUtils(app.config['PGURI'])
 
     @app.context_processor
+    def inject_vendor_list():
+        try:
+            pg = app.extensions.get('pg_utils')
+            if pg:
+                return {'global_vendor_list': pg.get_vendors()}
+        except Exception:
+            pass
+        return {'global_vendor_list': []}
+
+    @app.context_processor
     def inject_environment_indicator():
         flask_env = (os.environ.get('FLASK_ENV') or os.environ.get('FLASH_ENV') or '').strip().lower()
         if flask_env in ('test', 'testing'):

@@ -13,7 +13,8 @@ Voucher Entry
         <div class="row gx-2 gy-1">
             <div class="col-md-3 form-floating">
                 {{ input_control('voucher_date', value=None,
-                                    modifiers='autofocus required tabindex="1"', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}                
+                                    modifiers='autofocus required tabindex="1"', label='Item Date',
+                                    helptext='MM/DD/YY HH:MM TZ') }}                
             </div>
             <div class="col-md-3 form-floating">
                 {{ select_control('company', id='company', option_list=company_list, option_key='id', option_value='company_name',
@@ -36,7 +37,7 @@ Voucher Entry
             </div>
             <div class="col-md-3 form-floating">
                 {{ input_control('voucher_amt', type='number', value=None,
-                                    modifiers='tabindex="6"', label='Amount', helptext='The amount of the voucher' ) }}
+                                    modifiers='requiredtabindex="6"', label='Amount', helptext='The amount of the voucher' ) }}
             </div>
         </div>
 
@@ -46,7 +47,7 @@ Voucher Entry
                   option_value='payment_type_text', label='Pmt Type', helptext='The type of the payment', modifiers='tabindex="7"')}}
             </div>
             <div class="col-md-4 form-floating">
-                {{ select_control('pmt_account', option_list=account_list, option_key='external_account_id', option_value='account_name',
+                {{ select_control('pmt_account', id='pmt_account', option_list=account_list, option_key='external_account_id', option_value='account_name',
                     label='Payment Source', helptext='The source of the payment', modifiers='tabindex="8"')}}
             </div>
         </div>
@@ -82,6 +83,48 @@ Voucher Entry
 {% endblock %}
 {% block script %}
 <script>
+    // Store full account list for filtering
+    const fullAccountList = {{ account_list | tojson }};
+
+    // Payment Type to account_type filter mapping
+    // TODO: Replace with database lookup table in future
+    // Key: payment_type_id, Value: array of account_type codes to include
+    const paymentTypeFilters = {
+        '2': ['CH', 'CC'],   // ACH - Checking and Credit Card
+        '6': ['CC'],         // Credit Card
+        '10': ['DB']         // Debit - Debit accounts
+    };
+
+    function filterPaymentSource(paymentTypeId) {
+        const pmtAccountSelect = document.getElementById('pmt_account');
+        const currentValue = pmtAccountSelect.value;
+
+        // Clear existing options
+        pmtAccountSelect.innerHTML = '';
+
+        // Get filter for selected payment type
+        const filters = paymentTypeFilters[paymentTypeId];
+
+        // Filter accounts or show all if no filter defined
+        const filteredAccounts = filters
+            ? fullAccountList.filter(acct => filters.includes(acct.account_type))
+            : fullAccountList;
+
+        // Populate filtered options
+        filteredAccounts.forEach(acct => {
+            const option = document.createElement('option');
+            option.value = acct.external_account_id;
+            option.textContent = acct.account_name;
+            pmtAccountSelect.appendChild(option);
+        });
+
+        // Try to restore previous selection if still valid
+        const optionExists = Array.from(pmtAccountSelect.options).some(opt => opt.value === currentValue);
+        if (optionExists) {
+            pmtAccountSelect.value = currentValue;
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const voucherDateInput = document.getElementById('voucher_date');
         if (voucherDateInput) {
@@ -95,6 +138,14 @@ Voucher Entry
                     event.preventDefault();
                     voucherForm.requestSubmit();
                 }
+            });
+        }
+
+        // Add payment type change listener
+        const payTypeSelect = document.getElementById('voucher-pay-type-select');
+        if (payTypeSelect) {
+            payTypeSelect.addEventListener('change', (event) => {
+                filterPaymentSource(event.target.value);
             });
         }
     });

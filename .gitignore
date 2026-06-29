@@ -34,6 +34,10 @@
 /build
 **/*.gch
 
+# Sym Links
 **Notebooks
+**Queries
 
 **.sfdx
+
+*.sublime-*

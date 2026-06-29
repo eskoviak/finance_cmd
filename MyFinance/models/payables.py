@@ -88,6 +88,7 @@ class AccountsPayable(Base):
     #payment_source = relationship(ExternalAccounts)
     #payment_voucher_id = Column(None, ForeignKey(Voucher.voucher_number))
     payment_voucher_id : Mapped[int] = mapped_column(ForeignKey(Voucher.voucher_number))
+    vendor_account: Mapped[int] = mapped_column(ForeignKey(ExternalAccounts.external_account_id), nullable=True)
     
 
     def __repr__(self):

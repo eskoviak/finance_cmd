@@ -24,15 +24,19 @@ Voucher Entry
         </div>
         {% endif %}
         <div class="row gx-2 gy-1">
-            <div class="col-md-4 form-floating">
+            <div class="col-md-3 form-floating">
                 {{ input_control('stmt_dt', value=None,
                   modifiers='autofocus required', label='Item Date', helptext='MM/DD/YY HH:MM TZ') }}
             </div>
-            <div class="col-md-4 form-floating">
+            <div class="col-md-3 form-floating">
                 {{ select_control('vendor', id='vendor', option_list=vendor_list, option_key='vendor_number', option_value='vendor_short_desc', 
                   label='Vendor', helptext='Enter the Vendor') }}                
             </div>
-            <div class="col-md-4 form-floating">
+            <div class="col-md-3 form-floating">
+                {{ select_control('vendor_account', id='vendor_account', option_list=account_list, option_key='external_account_id', option_value='account_name', 
+                  label='Vendor Account', helptext='Select specific account being paid') }}                
+            </div>
+            <div class="col-md-3 form-floating">
                 {{ input_control('invoice_id', value=None, label='Invoice',
                   helptext='The reference number on the invoice') }}
             </div>
