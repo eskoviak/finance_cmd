@@ -136,6 +136,7 @@ class PgUtils:
                     account = {}
                     account["account_name"] = row.account_name
                     account["external_account_id"] = row.external_account_id
+                    account["account_type"] = row.account_type
                     account_list.append(account)
         except Exception as ex:
             print(f"Exception in get_external_accounts: {ex.args[0]}")
