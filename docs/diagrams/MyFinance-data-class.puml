@@ -1,4 +1,4 @@
-@startuml myfinance-data-class
+@startuml MyFinance-data-class
 title: MyFinance Data Structure
 
 class finance.vendors <<(T, #00FF00) Table>> {

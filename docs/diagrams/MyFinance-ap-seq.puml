@@ -12,7 +12,7 @@ alt New Payable
     app --> user: Enter Payable Screen
     user -> app: Submit
     app -> db: insert payable
-    app --> user: Payable Display
+    app --> user: Payable Display (id)
     deactivate app
     destroy app
 else Find Payable ...
@@ -28,10 +28,29 @@ else Find Payable ...
 
     user -> app: Select Option
     app -> db: Execute search payable
-    app --> user: Payable Display
+    app --> user: Payable Display (id)
+
+
     deactivate app
     destroy app
 end
+
+alt New Voucher
+    user -> app: Create Voucher (payable_id)
+    activate app
+    app -> db: get payable details
+    db --> app: payable record
+    app -> app: create voucher record
+    app -> db: insert voucher
+    db --> app: voucher record with id
+    app --> user: Voucher Display (id)
+    app -> db: update payable.voucher_id = id
+    db --> app: payable record updated
+    app --> user: Payables updated
+    deactivate app
+    destroy app
+end 
+
 
 
 @enduml 
