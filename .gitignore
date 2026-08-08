@@ -43,4 +43,6 @@
 *.sublime-*
 *.code-*
 
+.claude
+
 plantuml.jar
