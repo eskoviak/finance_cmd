@@ -52,7 +52,8 @@ http://localhost:5010
 ## Normal Dev Cycle
 
 1. Pull or change code on host.
-2. Rebuild and restart app container.
+2. Stop container, if running
+3. Rebuild and restart app container.
 
 ```bash
 docker compose up -d --build --force-recreate myfinance-web
