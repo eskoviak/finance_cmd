@@ -33,8 +33,8 @@ Voucher Entry
                   label='Vendor', helptext='Enter the Vendor') }}                
             </div>
             <div class="col-md-3 form-floating">
-                {{ select_control('vendor_account', id='vendor_account', option_list=account_list, option_key='external_account_id', option_value='account_name', 
-                  label='Vendor Account', helptext='Select specific account being paid') }}                
+                {{ select_control('vendor_account', id='vendor_account', option_list=account_list, option_key='external_account_id', option_value='account_name',
+                  label='Vendor Account', helptext='Select specific account being paid', blank_option=True) }}
             </div>
             <div class="col-md-3 form-floating">
                 {{ input_control('invoice_id', value=None, label='Invoice',
@@ -67,4 +67,48 @@ Voucher Entry
     </form>
 </div>
 
+<!-- Blank Vendor Account Confirmation Modal -->
+<div class="modal fade" id="blankVendorAccountModal" tabindex="-1" aria-labelledby="blankVendorAccountModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="blankVendorAccountModalLabel">No Vendor Account Selected</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        You have not selected a Vendor Account. Are you sure you wish to leave it blank?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Go Back</button>
+        <button type="button" class="btn btn-primary" id="confirmBlankVendorAccount">Submit Anyway</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+<script>
+  (function () {
+    var form = document.querySelector('form[action="/payable/payable_result"]');
+    var vendorAccountSelect = document.getElementById('vendor_account');
+    var modalEl = document.getElementById('blankVendorAccountModal');
+    var modal = new bootstrap.Modal(modalEl);
+    var confirmed = false;
+
+    form.addEventListener('submit', function (event) {
+      if (!confirmed && vendorAccountSelect.value === '') {
+        event.preventDefault();
+        modal.show();
+      }
+    });
+
+    document.getElementById('confirmBlankVendorAccount').addEventListener('click', function () {
+      confirmed = true;
+      modal.hide();
+      form.submit();
+    });
+  })();
+</script>
 {% endblock %}

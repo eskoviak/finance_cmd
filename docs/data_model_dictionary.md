@@ -136,7 +136,22 @@ There is currently no support for this functionality in the application.  Transf
 
 ## Accounts Payable
 
-This table is currely used to track ACH transactions which have been set-up to autopay from Cash (CapOne) or added as an expense on a credit card account (CapOne 22301).  Ultimately, it should reflect all future payments (open AP) which are known and expected.  This has been implemented in the branch '30-database-changes' and tested on tech-test, but yet deployed to production.
+![Create AP Voucher](diagrams/out/MyFinance-ap-seq.png)
+
+This table is currely used to track ACH transactions which have been set-up to autopay from Cash (CapOne) or added as an expense on a credit card account (CapOne 22301).  Ultimately, it should reflect all future payments (open AP) which are known and expected.
+
+| Payable Entry Field | Target Table and Column | Notes | Description |
+| -- | -- | -- | -- |
+| id | payable.id | auto populated by sequence | not null |
+| paydate | payable.pay_date | timestamp with time zone | not null |
+| amount | payable.amount | numeric(10,2) | not null |
+| account_id | payable.account_id | integer | not null |
+| vendor_id | payable.vendor_id | integer | not null |
+| voucher_id | payable.voucher_id | integer | may be null |
+
+When a "payable" is received, the user will create an entry using the payable screen At a later time, the user may search for a payable, by vendor, id (payable) or get list of open payables.  After the payable is created **or** found, the user is given the option via modal dialog to create a voucher or do nothing.  Create a voucher creates a voucher for the payable using as much information as possible from the payable (specifically using `amount`, `vendor_id`, `account_id`). Once the voucher is created, the voucher field in the payable is updated with the id of the voucher that was created. Do nothing closes the modal dialog and returns the user to the payable search screen.
+
+
 
 
 ## Revenue Recognition
